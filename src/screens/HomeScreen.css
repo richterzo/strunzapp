@@ -15,8 +15,8 @@
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
   padding: 40px 20px 100px;
   position: relative;
-  touch-action: pan-y; /* CRITICAL: Enable touch scrolling */
-  touch-action: pan-y; /* CRITICAL: Enable touch scrolling */
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch; /* CRITICAL: Enable touch scrolling */
   /* NO overflow properties - let body scroll naturally */
 }
 
@@ -123,6 +123,8 @@
 @media (max-width: 640px) {
   .home-screen {
     padding: 24px 16px 80px; /* Extra bottom padding for mobile scroll */
+    touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch; /* CRITICAL: Re-apply for mobile */
   }
 
   .logo-container {

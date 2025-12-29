@@ -34,7 +34,9 @@ html, body {
 
 body {
   min-height: 100vh;
-  /* Prevent pull-to-refresh on mobile */
+  /* Enable smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Allow scroll but prevent pull-to-refresh */
   overscroll-behavior-y: contain;
   
   /* iOS safe areas */
