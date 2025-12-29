@@ -1,7 +1,6 @@
 /* Cyberpunk Street Underground - Fonts loaded in index.css */
 .home-screen {
   width: 100%;
-  min-height: 100vh; /* Ensures full height but allows growth */
   background: radial-gradient(
       circle at 20% 30%,
       rgba(0, 255, 240, 0.08) 0%,
@@ -13,31 +12,12 @@
       transparent 50%
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
-  padding: 40px 20px 60px;
-  position: relative;
+  padding: 40px 20px 100px; /* Extra padding bottom for mobile scroll */
   -webkit-overflow-scrolling: touch;
-  /* Removed display: flex to allow natural document flow */
+  /* NO min-height - let content grow naturally */
 }
 
-/* Scanlines effect - Static for better mobile performance */
-.home-screen::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 255, 240, 0.02) 2px,
-    rgba(0, 255, 240, 0.02) 4px
-  );
-  pointer-events: none;
-  opacity: 0.5;
-  /* Removed animation for better mobile performance */
-}
+/* Scanlines effect - Removed for mobile scroll compatibility */
 
 .home-content {
   width: 100%;
