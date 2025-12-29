@@ -25,7 +25,7 @@ export default function HomeScreen() {
       name: 'INTESA VINCENTE',
       description: 'Fai indovinare le parole al tuo compagno',
       route: '/intesa-vincente/setup',
-      image: '/images/games/intesa.png',
+      image: '/images/games/merda-vincente.png',
     },
   ]
 
