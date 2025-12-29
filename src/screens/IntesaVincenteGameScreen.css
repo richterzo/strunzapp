@@ -149,6 +149,81 @@
   color: #FFFFFF;
 }
 
+.rules-allowed,
+.rules-forbidden {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.rules-allowed {
+  background: rgba(0, 255, 100, 0.05);
+  border: 2px solid rgba(0, 255, 100, 0.2);
+}
+
+.rules-forbidden {
+  background: rgba(255, 0, 110, 0.05);
+  border: 2px solid rgba(255, 0, 110, 0.2);
+}
+
+.rules-subtitle {
+  font-size: 13px;
+  color: #00FFF0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+}
+
+.rules-allowed .rules-subtitle {
+  color: #00FF66;
+}
+
+.rules-forbidden .rules-subtitle {
+  color: #FF006E;
+}
+
+.rules-allowed p,
+.rules-forbidden p {
+  font-size: 14px;
+  color: #CCCCCC;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  margin: 6px 0;
+  padding-left: 0;
+}
+
+.rules-allowed p::before,
+.rules-forbidden p::before {
+  content: none;
+}
+
+.controls-info {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid rgba(0, 255, 240, 0.2);
+}
+
+.controls-info p {
+  font-size: 14px;
+  color: #00FFF0;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  margin: 8px 0;
+  padding-left: 0;
+  text-align: center;
+}
+
+.controls-info p::before {
+  content: none;
+}
+
+.controls-info strong {
+  color: #FFFFFF;
+  font-size: 15px;
+}
+
 .big-action-button {
   width: 100%;
   padding: 20px;
@@ -233,6 +308,83 @@
   color: #00FFF0;
   font-family: 'Orbitron', sans-serif;
   text-shadow: 0 0 30px rgba(0, 255, 240, 1);
+}
+
+.ready-instruction {
+  font-size: 16px;
+  color: #00FFF0;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Countdown Animation Screen */
+.countdown-screen {
+  background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+}
+
+.countdown-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.countdown-big {
+  font-size: clamp(120px, 30vw, 300px);
+  font-weight: 900;
+  color: #00FFF0;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 
+    0 0 60px rgba(0, 255, 240, 1),
+    0 0 120px rgba(0, 255, 240, 0.6),
+    0 0 180px rgba(0, 255, 240, 0.3);
+  animation: countdownPulse 1s ease-in-out;
+}
+
+.countdown-via {
+  font-size: clamp(80px, 20vw, 200px);
+  font-weight: 900;
+  color: #FF006E;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 
+    0 0 60px rgba(255, 0, 110, 1),
+    0 0 120px rgba(255, 0, 110, 0.6),
+    0 0 180px rgba(255, 0, 110, 0.3);
+  animation: viaExplosion 0.8s ease-out;
+}
+
+@keyframes countdownPulse {
+  0% { 
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% { 
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes viaExplosion {
+  0% { 
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% { 
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Playing Screen */

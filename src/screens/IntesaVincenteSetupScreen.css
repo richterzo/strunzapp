@@ -94,12 +94,30 @@
 .intesa-subtitle {
   font-size: 14px;
   color: #666666;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   letter-spacing: 3px;
   text-align: center;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.tv-show-info {
+  background: rgba(0, 255, 240, 0.05);
+  border: 2px solid rgba(0, 255, 240, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.tv-show-info p {
+  font-size: 15px;
+  color: #CCCCCC;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  margin: 8px 0;
+  line-height: 1.6;
 }
 
 .setup-section {

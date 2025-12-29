@@ -6,7 +6,8 @@ import './StronzoGameScreen.css'
 export default function StronzoGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { numPlayers, playerNames, categories, numStronzi, allWords } = location.state || {}
+  const { numPlayers, playerNames, categories, numStronzi, allWords } =
+    location.state || {}
 
   const [stronzi, setStronzi] = useState([])
   const [currentWord, setCurrentWord] = useState('')
@@ -30,13 +31,19 @@ export default function StronzoGameScreen() {
       const shuffled = [...players].sort(() => Math.random() - 0.5)
       const selectedStronzi = shuffled.slice(0, numStronzi)
       setStronzi(selectedStronzi)
-      
+
       // Try to get word from AI first
       let word = null
       if (openaiService.isConfigured()) {
         try {
-          const categoryName = categories && categories.length > 0 ? categories[0] : 'Generale'
-          const aiWords = await openaiService.generatePartyWords(categoryName, 'medio', 1, 'stronzo')
+          const categoryName =
+            categories && categories.length > 0 ? categories[0] : 'Generale'
+          const aiWords = await openaiService.generatePartyWords(
+            categoryName,
+            'medio',
+            1,
+            'stronzo'
+          )
           if (aiWords && aiWords.length > 0) {
             word = aiWords[0]
           }
@@ -44,12 +51,12 @@ export default function StronzoGameScreen() {
           console.warn('AI word generation failed, using fallback')
         }
       }
-      
+
       // Fallback to static words if AI failed
       if (!word) {
         word = allWords[Math.floor(Math.random() * allWords.length)]
       }
-      
+
       setCurrentWord(word)
       setUsedWords([word])
       setIsWordHidden(true)
@@ -61,16 +68,16 @@ export default function StronzoGameScreen() {
 
   const handlePlayerSeen = (playerIndex) => {
     if (gamePhase !== 'playing' || isTransitioning) return
-    
+
     // Vibrazione se supportata
     if (navigator.vibrate) {
       navigator.vibrate(50)
     }
-    
+
     setIsTransitioning(true)
     const newRevealed = [...revealedPlayers, playerIndex]
     setRevealedPlayers(newRevealed)
-    
+
     // Se tutti hanno visto, passa direttamente al prossimo turno
     if (newRevealed.length >= numPlayers) {
       setTimeout(() => {
@@ -80,7 +87,10 @@ export default function StronzoGameScreen() {
       // Passa al prossimo giocatore che non ha ancora visto
       setTimeout(() => {
         let nextIndex = (playerIndex + 1) % numPlayers
-        while (newRevealed.includes(nextIndex) && newRevealed.length < numPlayers) {
+        while (
+          newRevealed.includes(nextIndex) &&
+          newRevealed.length < numPlayers
+        ) {
           nextIndex = (nextIndex + 1) % numPlayers
         }
         setCurrentPlayerIndex(nextIndex)
@@ -92,12 +102,20 @@ export default function StronzoGameScreen() {
 
   const nextRound = async () => {
     let newWord = null
-    
+
     // Try AI first
     if (openaiService.isConfigured()) {
       try {
-        const categoryName = categories && categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : 'Generale'
-        const aiWords = await openaiService.generatePartyWords(categoryName, 'medio', 1, 'stronzo')
+        const categoryName =
+          categories && categories.length > 0
+            ? categories[Math.floor(Math.random() * categories.length)]
+            : 'Generale'
+        const aiWords = await openaiService.generatePartyWords(
+          categoryName,
+          'medio',
+          1,
+          'stronzo'
+        )
         if (aiWords && aiWords.length > 0 && !usedWords.includes(aiWords[0])) {
           newWord = aiWords[0]
         }
@@ -105,24 +123,27 @@ export default function StronzoGameScreen() {
         console.warn('AI word generation failed, using fallback')
       }
     }
-    
+
     // Fallback to static words if AI failed
     if (!newWord) {
-      let availableWords = allWords.filter(w => !usedWords.slice(-3).includes(w))
+      let availableWords = allWords.filter(
+        (w) => !usedWords.slice(-3).includes(w)
+      )
       if (availableWords.length === 0) {
         availableWords = allWords
       }
-      newWord = availableWords[Math.floor(Math.random() * availableWords.length)]
+      newWord =
+        availableWords[Math.floor(Math.random() * availableWords.length)]
     }
-    
+
     setCurrentWord(newWord)
-    setUsedWords(prev => [...prev, newWord].slice(-10)) // Mantieni solo ultime 10
+    setUsedWords((prev) => [...prev, newWord].slice(-10)) // Mantieni solo ultime 10
     setCurrentPlayerIndex(0)
     setRevealedPlayers([])
-    setRoundNumber(prev => prev + 1)
+    setRoundNumber((prev) => prev + 1)
     setIsWordHidden(true) // Nascondi la parola all'inizio del nuovo round
     setGamePhase('playing')
-    
+
     // Vibrazione se supportata
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100])
@@ -144,7 +165,6 @@ export default function StronzoGameScreen() {
     )
   }
 
-
   return (
     <div className="game-screen">
       <div className="game-content">
@@ -154,23 +174,29 @@ export default function StronzoGameScreen() {
             {revealedPlayers.length} / {numPlayers}
           </span>
         </div>
-        
+
         <div className="current-player-section">
           <h3 className="current-player-label">TURNO DI</h3>
-          <h2 className={`current-player-name ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+          <h2
+            className={`current-player-name ${
+              isTransitioning ? 'fade-out' : 'fade-in'
+            }`}
+          >
             {playerNames[currentPlayerIndex]}
           </h2>
         </div>
 
-        <div 
-          className={`word-section ${isTransitioning ? 'transitioning' : ''} ${isWordHidden ? 'hidden' : ''}`}
+        <div
+          className={`word-section ${isTransitioning ? 'transitioning' : ''} ${
+            isWordHidden ? 'hidden' : ''
+          }`}
         >
           {isStronzo(currentPlayerIndex) ? (
             <div className="stronzo-view">
               {isWordHidden ? (
                 <div className="word-hidden">
                   <p className="hide-hint">👆 TOCCA PER MOSTRARE</p>
-                  <button 
+                  <button
                     className="reveal-word-button"
                     onClick={() => setIsWordHidden(false)}
                     onTouchStart={() => setIsWordHidden(false)}
@@ -180,14 +206,16 @@ export default function StronzoGameScreen() {
                 </div>
               ) : (
                 <div className="stronzo-revealed">
-                  <img 
-                    src="/images/games/impostore.png" 
-                    alt="Stronzo Impostore" 
+                  <img
+                    src="/images/games/impostore.png"
+                    alt="Stronzo Impostore"
                     className="stronzo-logo"
                   />
-                  <p className="stronzo-hint">Non sai la parola. Fingi di saperla!</p>
+                  <p className="stronzo-hint">
+                    Non sai la parola. Fingi di saperla!
+                  </p>
                   <p className="stronzo-warning">⚠️ Non farti scoprire!</p>
-                  <button 
+                  <button
                     className="hide-word-button"
                     onClick={() => setIsWordHidden(true)}
                     onTouchStart={() => setIsWordHidden(true)}
@@ -203,7 +231,7 @@ export default function StronzoGameScreen() {
               {isWordHidden ? (
                 <div className="word-hidden">
                   <p className="hide-hint">👆 TOCCA PER MOSTRARE</p>
-                  <button 
+                  <button
                     className="reveal-word-button"
                     onClick={() => setIsWordHidden(false)}
                     onTouchStart={() => setIsWordHidden(false)}
@@ -213,10 +241,14 @@ export default function StronzoGameScreen() {
                 </div>
               ) : (
                 <div>
-                  <h1 className={`word-display ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+                  <h1
+                    className={`word-display ${
+                      isTransitioning ? 'fade-out' : 'fade-in'
+                    }`}
+                  >
                     {currentWord}
                   </h1>
-                  <button 
+                  <button
                     className="hide-word-button"
                     onClick={() => setIsWordHidden(true)}
                     onTouchStart={() => setIsWordHidden(true)}
@@ -251,7 +283,9 @@ export default function StronzoGameScreen() {
             {playerNames.map((name, index) => (
               <div
                 key={index}
-                className={`player-chip ${index === currentPlayerIndex ? 'active' : ''} ${revealedPlayers.includes(index) ? 'seen' : ''}`}
+                className={`player-chip ${
+                  index === currentPlayerIndex ? 'active' : ''
+                } ${revealedPlayers.includes(index) ? 'seen' : ''}`}
               >
                 {name}
               </div>
@@ -262,4 +296,3 @@ export default function StronzoGameScreen() {
     </div>
   )
 }
-

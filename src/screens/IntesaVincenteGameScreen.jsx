@@ -18,7 +18,10 @@ export default function IntesaVincenteGameScreen() {
   const [scores, setScores] = useState(Array(pairs.length).fill(0))
   const [currentRoundScore, setCurrentRoundScore] = useState(0)
   const [isWordVisible, setIsWordVisible] = useState(false)
+  const [countdown, setCountdown] = useState(3)
+  const [showCountdown, setShowCountdown] = useState(false)
   const timerRef = useRef(null)
+  const countdownRef = useRef(null)
 
   const currentPair = pairs[currentPairIndex]
   const currentWord = words[currentWordIndex]
@@ -31,7 +34,12 @@ export default function IntesaVincenteGameScreen() {
 
     // Generate initial pool of words (100 words) - try AI first
     const loadInitialWords = async () => {
-      const generatedWords = await getRandomWordsWithAI(categories, difficulty, 100, openaiService)
+      const generatedWords = await getRandomWordsWithAI(
+        categories,
+        difficulty,
+        100,
+        openaiService
+      )
       setWords(generatedWords)
     }
     loadInitialWords()
@@ -41,7 +49,12 @@ export default function IntesaVincenteGameScreen() {
   useEffect(() => {
     if (words.length > 0 && currentWordIndex >= words.length - 10) {
       const loadMoreWords = async () => {
-        const moreWords = await getRandomWordsWithAI(categories, difficulty, 50, openaiService)
+        const moreWords = await getRandomWordsWithAI(
+          categories,
+          difficulty,
+          50,
+          openaiService
+        )
         setWords((prev) => [...prev, ...moreWords])
       }
       loadMoreWords()
@@ -57,7 +70,10 @@ export default function IntesaVincenteGameScreen() {
       handleTimeUp()
     }
 
-    return () => clearTimeout(timerRef.current)
+    return () => {
+      clearTimeout(timerRef.current)
+      clearInterval(countdownRef.current)
+    }
   }, [timeLeft, gamePhase])
 
   const handleStartRound = async () => {
@@ -67,13 +83,34 @@ export default function IntesaVincenteGameScreen() {
     setTimeLeft(timePerRound)
 
     // Generate initial pool of words (100 words) - try AI first
-    const generatedWords = await getRandomWordsWithAI(categories, difficulty, 100, openaiService)
+    const generatedWords = await getRandomWordsWithAI(
+      categories,
+      difficulty,
+      100,
+      openaiService
+    )
     setWords(generatedWords)
   }
 
   const handleReady = () => {
-    setGamePhase('playing')
-    setIsWordVisible(true)
+    setShowCountdown(true)
+    setCountdown(3)
+    
+    // Start countdown
+    countdownRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(countdownRef.current)
+          setTimeout(() => {
+            setShowCountdown(false)
+            setGamePhase('playing')
+            setIsWordVisible(true)
+          }, 800) // Wait a bit after "VIA!"
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
   }
 
   const handleCorrect = () => {
@@ -135,27 +172,37 @@ export default function IntesaVincenteGameScreen() {
           </div>
 
           <div className="instructions-box">
-            <h3 className="instructions-title">COME FUNZIONA</h3>
+            <h3 className="instructions-title">📺 REGOLE DEL GIOCO</h3>
             <ul className="instructions-list">
               <li>
-                <strong>{currentPair.player1}</strong> tiene il telefono
+                👤 <strong>{currentPair.player1}</strong> tiene il telefono e fa indovinare
               </li>
               <li>
-                <strong>{currentPair.player2}</strong> deve indovinare
+                🎯 <strong>{currentPair.player2}</strong> deve indovinare le parole
               </li>
               <li>
-                ⏱️ Hai <strong>{timePerRound} secondi</strong> per indovinare
-                più parole possibili
-              </li>
-              <li>
-                🎯 Non c'è limite! Vai a <strong>RECORD</strong>!
-              </li>
-              <li>Usa sinonimi, descrizioni, gesti - NO parole contenute!</li>
-              <li>
-                Premi <strong>✓</strong> se indovina, <strong>→</strong> per
-                passare
+                ⏱️ Avete <strong>{timePerRound} secondi</strong> per fare RECORD!
               </li>
             </ul>
+            
+            <div className="rules-allowed">
+              <h4 className="rules-subtitle">✅ PUOI:</h4>
+              <p>• Usare <strong>sinonimi</strong> e <strong>perifrasi</strong></p>
+              <p>• Fare <strong>gesti</strong> e <strong>mimiche</strong></p>
+              <p>• Dare <strong>indizi</strong> e <strong>descrizioni</strong></p>
+            </div>
+            
+            <div className="rules-forbidden">
+              <h4 className="rules-subtitle">❌ NON PUOI:</h4>
+              <p>• Dire parole <strong>contenute</strong> nella parola</p>
+              <p>• Dire parole <strong>derivate</strong> o <strong>traduzioni</strong></p>
+              <p>• Fare <strong>assonanze</strong> o <strong>rime</strong></p>
+            </div>
+
+            <div className="controls-info">
+              <p>Premi <strong>✓ CORRETTO</strong> se indovina</p>
+              <p>Premi <strong>→ PASSA</strong> per saltare</p>
+            </div>
           </div>
 
           <button className="big-action-button" onClick={handleStartRound}>
@@ -166,7 +213,23 @@ export default function IntesaVincenteGameScreen() {
     )
   }
 
-  if (gamePhase === 'ready') {
+  if (gamePhase === 'ready' || showCountdown) {
+    if (showCountdown) {
+      return (
+        <div className="intesa-game-screen countdown-screen">
+          <div className="intesa-game-content">
+            <div className="countdown-animation">
+              {countdown > 0 ? (
+                <h1 className="countdown-big">{countdown}</h1>
+              ) : (
+                <h1 className="countdown-via">VIA!</h1>
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    }
+    
     return (
       <div className="intesa-game-screen">
         <div className="intesa-game-content ready-screen">
@@ -175,11 +238,11 @@ export default function IntesaVincenteGameScreen() {
             {currentPair.player1}, tieni il telefono in modo che{' '}
             {currentPair.player2} non veda
           </p>
-          <div className="countdown-circle">
-            <span className="countdown-number">3</span>
-          </div>
+          <p className="ready-instruction">
+            📺 Come nella trasmissione TV!
+          </p>
           <button className="big-action-button" onClick={handleReady}>
-            VAI!
+            INIZIA IL COUNTDOWN!
           </button>
         </div>
       </div>
