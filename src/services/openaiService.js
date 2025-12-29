@@ -200,22 +200,49 @@ ${difficultyLevel === 10 ? '🐉 DOMANDA DA DRAGONE! Deve essere la domanda più
 Se anche UNA SOLA risposta è NO → RICREA la domanda!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-FORMATO OUTPUT (SOLO JSON, niente altro testo):
+📋 ESEMPI DI FORMATO CORRETTO (Few-shot learning):
+
+ESEMPIO 1 - Livello 2/10, Facile, Storia:
 {
   "question": "In che anno Cristoforo Colombo scoprì l'America?",
-  "options": [
-    "1492",
-    "1498",
-    "1485",
-    "1490",
-    "1502"
-  ],
+  "options": ["1492", "1498", "1485", "1490", "1502"],
   "correctAnswer": 0,
-  "difficultyLevel": ${difficultyLevel},
-  "difficultyName": "${difficultyData.name}",
-  "category": "${selectedCategory}",
+  "difficultyLevel": 2,
+  "difficultyName": "Facile",
+  "category": "Storia",
   "explanation": "Cristoforo Colombo sbarcò nelle Americhe il 12 ottobre 1492, credendo di aver raggiunto le Indie."
 }
+
+ESEMPIO 2 - Livello 5/10, Medio, Scienza:
+{
+  "question": "Quale gas costituisce circa il 78% dell'atmosfera terrestre?",
+  "options": ["Azoto", "Ossigeno", "Anidride carbonica", "Argon", "Idrogeno"],
+  "correctAnswer": 0,
+  "difficultyLevel": 5,
+  "difficultyName": "Medio",
+  "category": "Scienza",
+  "explanation": "L'azoto (N₂) costituisce circa il 78% dell'atmosfera terrestre, seguito dall'ossigeno al 21%."
+}
+
+ESEMPIO 3 - Livello 8/10, Esperto, Letteratura:
+{
+  "question": "In quale anno venne pubblicato per la prima volta 'Ulisse' di James Joyce?",
+  "options": ["1922", "1920", "1925", "1918", "1924"],
+  "correctAnswer": 0,
+  "difficultyLevel": 8,
+  "difficultyName": "Esperto",
+  "category": "Letteratura",
+  "explanation": "Il romanzo 'Ulisse' di James Joyce fu pubblicato per la prima volta a Parigi nel 1922 da Sylvia Beach."
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 ORA GENERA LA TUA DOMANDA CON QUESTI PARAMETRI ESATTI:
+- Categoria: "${selectedCategory}"
+- Livello difficoltà: ${difficultyLevel}/10
+- Nome difficoltà: "${difficultyData.name}"
+
+RISPONDI CON UN SINGOLO OGGETTO JSON (SOLO JSON, niente testo extra):
 
 IMPORTANTE: 
 - Rispondi ESCLUSIVAMENTE con l'oggetto JSON
@@ -236,30 +263,35 @@ IMPORTANTE:
           messages: [
             {
               role: 'system',
-              content: `Sei un esperto creatore di quiz professionali stile "Chi vuol essere milionario" / "Dragon Quiz".
+              content: `Sei un esperto creatore di quiz professionali stile "Chi vuol essere milionario".
 
-COMPETENZE CHIAVE:
-✓ Difficoltà PRECISA e QUANTIFICABILE al livello richiesto
-✓ Opzioni di risposta PERFETTAMENTE BILANCIATE senza hint
-✓ Controllo qualità rigoroso (ortografia, stile, lunghezza)
-✓ Zero indizi grammaticali o di formato
-✓ Credibilità equivalente per tutte le opzioni
+TUO RUOLO:
+Generi domande a difficoltà calibrata con opzioni di risposta perfettamente bilanciate.
 
-PROCESSO:
-1. Crea la domanda
-2. AUTO-VALIDA con checklist rigorosa
-3. Se qualcosa non va → RICREA
-4. Solo quando PERFETTA → rispondi
+COMPETENZE:
+- Difficoltà PRECISA al livello richiesto (da 1 a 10)
+- Opzioni equivalenti in lunghezza e stile (zero indizi)
+- Ortografia e punteggiatura impeccabili
+- Contenuti accurati e verificabili
 
-Rispondi ESCLUSIVAMENTE con JSON valido, niente altro testo.`,
+PROCESSO OBBLIGATORIO:
+1. Leggi categoria, difficoltà e requisiti
+2. Crea domanda + 5 opzioni bilanciate
+3. AUTO-VALIDA: lunghezza simile? stile coerente? zero hint? difficoltà esatta?
+4. Se QUALCOSA non va → RICREA da zero
+5. Solo quando PERFETTA → genera JSON
+
+OUTPUT:
+SOLO oggetto JSON valido. Zero testo aggiuntivo. Zero markdown.`,
             },
             {
               role: 'user',
               content: prompt,
             },
           ],
-          temperature: 0.9, // Higher for more variety
-          max_tokens: 500,
+          temperature: 0.7, // Balanced: creative but consistent
+          max_tokens: 600, // Enough for detailed questions
+          response_format: { type: "json_object" }, // Force JSON output
         }),
       })
 
