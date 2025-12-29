@@ -184,21 +184,66 @@
   color: #CCCCCC;
 }
 
-@media (max-width: 480px) {
-  .home-screen {
-    padding: 30px 15px;
+/* Tablet optimization */
+@media (max-width: 768px) {
+  .home-title {
+    font-size: clamp(38px, 9vw, 64px);
+    letter-spacing: clamp(2px, 1vw, 6px);
   }
   
   .game-card {
-    padding: 35px 25px;
+    padding: 32px 28px;
   }
+}
 
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .home-screen {
+    padding: 20px 16px;
+  }
+  
   .home-title {
-    letter-spacing: 5px;
+    font-size: clamp(32px, 8vw, 54px);
+    letter-spacing: clamp(2px, 0.8vw, 4px);
+    margin-bottom: 16px;
   }
 
   .home-subtitle {
-    margin-bottom: 60px;
-    letter-spacing: 5px;
+    font-size: 11px;
+    margin-bottom: 50px;
+    letter-spacing: 4px;
+  }
+  
+  .game-card {
+    padding: 28px 20px;
+    min-height: 120px;
+  }
+
+  .game-name {
+    font-size: clamp(24px, 6vw, 40px);
+    letter-spacing: 2px;
+  }
+
+  .game-description {
+    font-size: 12px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  .home-screen {
+    padding: 16px 12px;
+  }
+
+  .home-title {
+    font-size: clamp(28px, 7vw, 48px);
+  }
+
+  .games-container {
+    gap: 16px;
+  }
+
+  .game-card {
+    padding: 24px 16px;
   }
 }

@@ -624,26 +624,176 @@
   font-weight: 600;
 }
 
-@media (max-width: 480px) {
-  .game-header {
-    flex-direction: column;
-    gap: 14px;
-  }
-  
+/* Tablet optimization */
+@media (max-width: 768px) {
   .word-section {
     padding: 50px 25px;
     min-height: 270px;
   }
-  
-  .players-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 
   .word-display {
-    font-size: clamp(32px, 9vw, 64px);
+    font-size: clamp(36px, 9vw, 64px);
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .game-screen {
+    padding: 16px;
+  }
+
+  .game-header {
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 25px;
+  }
+
+  .round-badge,
+  .progress-indicator {
+    padding: 8px 16px;
+    font-size: 10px;
+    min-height: 36px;
+  }
+
+  .current-player-section {
+    margin-bottom: 30px;
+  }
+
+  .current-player-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
   }
 
   .current-player-name {
-    font-size: clamp(28px, 7vw, 48px);
+    font-size: clamp(24px, 6vw, 44px);
+    letter-spacing: 2px;
+  }
+  
+  .word-section {
+    padding: 35px 18px;
+    min-height: 240px;
+    border-width: 3px;
+  }
+
+  .word-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+  }
+
+  .word-display {
+    font-size: clamp(28px, 8vw, 52px);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .hide-hint {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .reveal-word-button,
+  .hide-word-button {
+    padding: 14px 28px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    min-width: 180px;
+    min-height: 48px;
+  }
+
+  .stronzo-icon {
+    font-size: 60px;
+  }
+
+  .stronzo-text {
+    font-size: clamp(24px, 5.5vw, 40px);
+    letter-spacing: 2px;
+  }
+
+  .stronzo-hint {
+    font-size: 13px;
+  }
+
+  .stronzo-warning {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .action-buttons-container {
+    gap: 14px;
+    margin-bottom: 25px;
+  }
+
+  .seen-button {
+    font-size: 15px;
+    padding: 18px;
+    letter-spacing: 2px;
+    max-width: 280px;
+    min-height: 54px;
+  }
+
+  .new-game-button {
+    font-size: 12px;
+    padding: 16px;
+    max-width: 280px;
+    min-height: 48px;
+  }
+
+  .players-list {
+    margin-top: 25px;
+  }
+
+  .players-list-title {
+    font-size: 9px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+  
+  .players-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .player-chip {
+    padding: 12px;
+    font-size: 11px;
+    min-height: 44px;
+  }
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 3px;
+  }
+
+  .loading-text {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  .game-screen {
+    padding: 12px;
+  }
+
+  .word-section {
+    padding: 30px 16px;
+    min-height: 220px;
+  }
+
+  .word-display {
+    font-size: clamp(24px, 7vw, 44px);
+  }
+
+  .players-grid {
+    gap: 8px;
+  }
+
+  .player-chip {
+    padding: 10px;
+    font-size: 10px;
   }
 }

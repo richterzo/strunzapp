@@ -291,33 +291,120 @@
   transform: translateY(-1px);
 }
 
-@media (max-width: 480px) {
+/* Tablet optimization */
+@media (max-width: 768px) {
   .setup-content {
-    padding: 10px;
+    padding: 15px 10px;
+  }
+
+  .setup-title {
+    font-size: clamp(36px, 7.5vw, 56px);
+    margin-bottom: 45px;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .setup-screen {
+    padding: 16px;
+  }
+
+  .setup-content {
+    padding: 0;
+  }
+
+  .back-button {
+    padding: 10px 18px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    min-height: 40px;
+  }
+  
+  .setup-title {
+    font-size: clamp(28px, 7vw, 48px);
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+  }
+
+  .setup-section {
+    margin-bottom: 35px;
+  }
+
+  .section-title {
+    font-size: 9px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+
+  .num-button {
+    width: 48px;
+    height: 48px;
+    font-size: 26px;
+    min-height: 48px;
+  }
+
+  .num-input {
+    width: 80px;
+    height: 48px;
+    font-size: 22px;
+    min-height: 48px;
+  }
+
+  .num-players-container {
+    gap: 16px;
+  }
+
+  .name-input {
+    padding: 16px;
+    font-size: 15px;
+    min-height: 50px;
+  }
+
+  .names-container {
+    gap: 12px;
   }
   
   .categories-container {
     flex-direction: column;
+    gap: 12px;
   }
   
   .category-button {
     width: 100%;
+    padding: 14px 24px;
+    font-size: 11px;
+    min-height: 48px;
+  }
+
+  .start-button {
+    padding: 20px;
+    font-size: 15px;
+    letter-spacing: 3px;
+    margin-top: 35px;
+    min-height: 56px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  .setup-screen {
+    padding: 12px;
   }
 
   .setup-title {
-    font-size: clamp(36px, 8vw, 56px);
-    letter-spacing: 4px;
+    font-size: clamp(24px, 6.5vw, 42px);
+    margin-bottom: 35px;
   }
 
   .num-button {
-    width: 55px;
-    height: 55px;
+    width: 44px;
+    height: 44px;
     font-size: 24px;
   }
 
   .num-input {
-    width: 90px;
-    height: 55px;
-    font-size: 22px;
+    width: 70px;
+    height: 44px;
+    font-size: 20px;
   }
 }

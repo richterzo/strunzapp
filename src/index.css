@@ -1,3 +1,21 @@
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  
+  /* Mobile optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Touch-friendly */
+  -webkit-tap-highlight-color: rgba(0, 255, 240, 0.2);
+  -webkit-touch-callout: none;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,33 +23,66 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
   background: #000000;
-  color: #ffffff;
   overflow-x: hidden;
+  
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior: none;
 }
 
 #root {
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
 }
 
-/* Font stile graffiti underground */
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Rubik+Wet+Paint&family=Bungee&family=Graduate&family=Orbitron:wght@900&family=Black+Ops+One&family=Staatliches&display=swap');
-
-/* Miglioramenti touch per mobile */
-button, input {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+/* Mobile-optimized scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Prevenire zoom su input focus (mobile) */
-input, textarea, select {
-  font-size: 16px !important;
+/* Improve button touch targets on mobile */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  min-height: 44px; /* iOS recommended minimum */
+  touch-action: manipulation; /* Prevent double-tap zoom */
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Improve input focus on mobile */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  /* Prevent zoom on iOS */
+  font-size: 16px;
+}
+
+/* Prevent text selection on buttons */
+button,
+.game-card,
+.category-button,
+.answer-button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Smooth scrolling */
@@ -39,3 +90,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Improved mobile viewport */
+@viewport {
+  width: device-width;
+  zoom: 1;
+}
+
+/* Safe area insets for notch devices */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}

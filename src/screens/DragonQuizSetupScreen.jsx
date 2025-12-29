@@ -18,13 +18,23 @@ export default function DragonQuizSetupScreen() {
   const handleNumPlayersChange = (delta) => {
     const newNum = Math.max(1, Math.min(10, numPlayers + delta))
     setNumPlayers(newNum)
-    setPlayerNames(Array.from({ length: newNum }, (_, i) => playerNames[i] || `Giocatore ${i + 1}`))
+    setPlayerNames(
+      Array.from(
+        { length: newNum },
+        (_, i) => playerNames[i] || `Giocatore ${i + 1}`
+      )
+    )
   }
 
   const handleNumTeamsChange = (delta) => {
     const newNum = Math.max(2, Math.min(4, numTeams + delta))
     setNumTeams(newNum)
-    setTeamNames(Array.from({ length: newNum }, (_, i) => teamNames[i] || `Squadra ${i + 1}`))
+    setTeamNames(
+      Array.from(
+        { length: newNum },
+        (_, i) => teamNames[i] || `Squadra ${i + 1}`
+      )
+    )
   }
 
   const handlePlayerNameChange = (index, value) => {
@@ -40,9 +50,9 @@ export default function DragonQuizSetupScreen() {
   }
 
   const toggleCategory = (category) => {
-    setSelectedCategories(prev =>
+    setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(c => c !== category)
+        ? prev.filter((c) => c !== category)
         : [...prev, category]
     )
   }
@@ -60,7 +70,9 @@ export default function DragonQuizSetupScreen() {
     }
 
     if (!openaiService.isConfigured()) {
-      setError('⚠️ API Key OpenAI non configurata. Aggiungi VITE_OPENAI_API_KEY al file .env')
+      setError(
+        '⚠️ API Key OpenAI non configurata. Aggiungi VITE_OPENAI_API_KEY al file .env'
+      )
       return
     }
 
@@ -81,7 +93,10 @@ export default function DragonQuizSetupScreen() {
           numPlayers: gameMode === 'single' ? numPlayers : numTeams,
           playerNames: gameMode === 'single' ? playerNames : teamNames,
           questions,
-          categories: selectedCategories.length > 0 ? selectedCategories : QUIZ_CONFIG.CATEGORIES,
+          categories:
+            selectedCategories.length > 0
+              ? selectedCategories
+              : QUIZ_CONFIG.CATEGORIES,
         },
       })
     } catch (err) {
@@ -142,7 +157,10 @@ export default function DragonQuizSetupScreen() {
           <div className="setup-section">
             <h3 className="section-title">GIOCATORI</h3>
             <div className="num-players-container">
-              <button className="num-button" onClick={() => handleNumPlayersChange(-1)}>
+              <button
+                className="num-button"
+                onClick={() => handleNumPlayersChange(-1)}
+              >
                 −
               </button>
               <input
@@ -152,12 +170,20 @@ export default function DragonQuizSetupScreen() {
                 onChange={(e) => {
                   const val = parseInt(e.target.value) || 1
                   setNumPlayers(Math.max(1, Math.min(10, val)))
-                  setPlayerNames(Array.from({ length: val }, (_, i) => playerNames[i] || `Giocatore ${i + 1}`))
+                  setPlayerNames(
+                    Array.from(
+                      { length: val },
+                      (_, i) => playerNames[i] || `Giocatore ${i + 1}`
+                    )
+                  )
                 }}
                 min="1"
                 max="10"
               />
-              <button className="num-button" onClick={() => handleNumPlayersChange(1)}>
+              <button
+                className="num-button"
+                onClick={() => handleNumPlayersChange(1)}
+              >
                 +
               </button>
             </div>
@@ -166,7 +192,10 @@ export default function DragonQuizSetupScreen() {
           <div className="setup-section">
             <h3 className="section-title">SQUADRE</h3>
             <div className="num-players-container">
-              <button className="num-button" onClick={() => handleNumTeamsChange(-1)}>
+              <button
+                className="num-button"
+                onClick={() => handleNumTeamsChange(-1)}
+              >
                 −
               </button>
               <input
@@ -176,12 +205,20 @@ export default function DragonQuizSetupScreen() {
                 onChange={(e) => {
                   const val = parseInt(e.target.value) || 2
                   setNumTeams(Math.max(2, Math.min(4, val)))
-                  setTeamNames(Array.from({ length: val }, (_, i) => teamNames[i] || `Squadra ${i + 1}`))
+                  setTeamNames(
+                    Array.from(
+                      { length: val },
+                      (_, i) => teamNames[i] || `Squadra ${i + 1}`
+                    )
+                  )
                 }}
                 min="2"
                 max="4"
               />
-              <button className="num-button" onClick={() => handleNumTeamsChange(1)}>
+              <button
+                className="num-button"
+                onClick={() => handleNumTeamsChange(1)}
+              >
                 +
               </button>
             </div>
@@ -200,7 +237,9 @@ export default function DragonQuizSetupScreen() {
                   className="name-input"
                   placeholder={`Giocatore ${index + 1}`}
                   value={name}
-                  onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                  onChange={(e) =>
+                    handlePlayerNameChange(index, e.target.value)
+                  }
                 />
               ))}
             </div>
@@ -226,12 +265,16 @@ export default function DragonQuizSetupScreen() {
         {/* Categories */}
         <div className="setup-section">
           <h3 className="section-title">CATEGORIE (opzionale)</h3>
-          <p className="section-subtitle">Lascia vuoto per tutte le categorie</p>
+          <p className="section-subtitle">
+            Lascia vuoto per tutte le categorie
+          </p>
           <div className="categories-container">
             {QUIZ_CONFIG.CATEGORIES.map((category) => (
               <button
                 key={category}
-                className={`category-button ${selectedCategories.includes(category) ? 'active' : ''}`}
+                className={`category-button ${
+                  selectedCategories.includes(category) ? 'active' : ''
+                }`}
                 onClick={() => toggleCategory(category)}
               >
                 {category}
@@ -252,4 +295,3 @@ export default function DragonQuizSetupScreen() {
     </div>
   )
 }
-

@@ -20,23 +20,43 @@ export class OpenAIService {
 
     const difficultiesPerQuestion = this.calculateDifficultyProgression(numQuestions)
     const categoriesStr = categories.length > 0 ? categories.join(', ') : 'cultura generale'
+    
+    // Distribute questions across selected categories
+    const categoryDistribution = this.distributeCategoriesAcrossQuestions(numQuestions, categories)
 
-    const prompt = `Genera esattamente ${numQuestions} domande di quiz in italiano con difficoltà crescente.
+    const prompt = `Genera esattamente ${numQuestions} domande di quiz in italiano con difficoltà PROGRESSIVAMENTE CRESCENTE.
 
-Categorie: ${categoriesStr}
+CATEGORIE RICHIESTE: ${categoriesStr}
 
-Difficoltà per ogni domanda:
-${difficultiesPerQuestion.map((d, i) => `Domanda ${i + 1}: ${d}`).join('\n')}
+DISTRIBUZIONE E DIFFICOLTÀ:
+${difficultiesPerQuestion.map((d, i) => {
+  const cat = categoryDistribution[i] || 'cultura generale'
+  return `Domanda ${i + 1}: ${d.toUpperCase()} - Categoria: ${cat}`
+}).join('\n')}
 
-IMPORTANTE:
-- Le prime domande devono essere FACILI
-- Le ultime domande devono essere MOLTO DIFFICILI (livello esperto)
-- Ogni domanda deve avere 4 opzioni di risposta
-- Una sola risposta corretta
-- Le opzioni devono essere plausibili
-- Aggiungi una breve spiegazione della risposta corretta
+REGOLE FONDAMENTALI:
+1. DIFFICOLTÀ PROGRESSIVA:
+   - Domande 1-2: FACILI (conoscenze basilari, fatti noti)
+   - Domande 3-4: MEDIE (richiedono un po' di cultura)
+   - Domande 5-6: DIFFICILI (dettagli specifici)
+   - Domande 7-8: MOLTO DIFFICILI (conoscenze approfondite)
+   - Domande 9-10: ESPERTO (dettagli oscuri, date precise, fatti rari)
 
-Rispondi SOLO con un JSON array valido in questo formato:
+2. OPZIONI DI RISPOSTA:
+   - 4 opzioni plausibili e ben bilanciate
+   - Evita opzioni ovviamente sbagliate
+   - Distribuisci la risposta corretta casualmente (A, B, C, D)
+
+3. QUALITÀ:
+   - Domande chiare e precise
+   - Evita ambiguità
+   - Spiegazioni concise ma informative
+
+4. VARIETÀ:
+   - Usa tutte le categorie richieste equamente
+   - Varia il tipo di domande (date, persone, luoghi, eventi, concetti)
+
+FORMATO OUTPUT (SOLO JSON, niente altro testo):
 [
   {
     "question": "Testo della domanda",
@@ -44,11 +64,11 @@ Rispondi SOLO con un JSON array valido in questo formato:
     "correctAnswer": 0,
     "difficulty": "facile",
     "category": "Storia",
-    "explanation": "Spiegazione della risposta"
+    "explanation": "Spiegazione breve e chiara"
   }
 ]
 
-NON aggiungere testo prima o dopo il JSON.`
+IMPORTANTE: Rispondi ESCLUSIVAMENTE con il JSON array, senza markdown, senza testo aggiuntivo.`
 
     try {
       const response = await fetch(this.apiUrl, {
@@ -121,6 +141,26 @@ NON aggiungere testo prima o dopo il JSON.`
     }
 
     return progression
+  }
+
+  /**
+   * Distribute categories evenly across questions
+   * @param {number} numQuestions 
+   * @param {Array<string>} categories 
+   * @returns {Array<string>}
+   */
+  distributeCategoriesAcrossQuestions(numQuestions, categories) {
+    if (!categories || categories.length === 0) {
+      return Array(numQuestions).fill('cultura generale')
+    }
+
+    const distribution = []
+    for (let i = 0; i < numQuestions; i++) {
+      distribution.push(categories[i % categories.length])
+    }
+
+    // Shuffle to avoid predictable pattern
+    return distribution.sort(() => Math.random() - 0.5)
   }
 
   /**
