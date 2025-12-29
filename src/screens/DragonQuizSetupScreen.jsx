@@ -112,9 +112,7 @@ export default function DragonQuizSetupScreen() {
     }
 
     if (!openaiService.isConfigured()) {
-      setError(
-        '⚠️ Servizio non disponibile. Contatta l\'amministratore.'
-      )
+      setError("⚠️ Servizio non disponibile. Contatta l'amministratore.")
       return
     }
 

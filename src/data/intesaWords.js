@@ -250,7 +250,7 @@ export function getRandomWords(categories, difficulty, count) {
  * @param {Object} openaiService - OpenAI service instance (optional)
  * @returns {Promise<Array>} Array of word objects
  */
-export async function getRandomWordsWithAI(categories, difficulty, count, openaiService = null) {
+export async function getRandomWordsWithAI(categories, difficulty, count, openaiService = null, usedWords = []) {
   // Try AI first if service is available and configured
   if (openaiService && openaiService.isConfigured()) {
     try {
@@ -267,11 +267,14 @@ export async function getRandomWordsWithAI(categories, difficulty, count, openai
         
         if (aiWords && Array.isArray(aiWords)) {
           aiWords.forEach(word => {
-            allAIWords.push({
-              word,
-              category,
-              difficulty
-            })
+            // Only add if not already used
+            if (!usedWords.includes(word)) {
+              allAIWords.push({
+                word,
+                category,
+                difficulty
+              })
+            }
           })
         }
       }
@@ -281,11 +284,13 @@ export async function getRandomWordsWithAI(categories, difficulty, count, openai
         return allAIWords.slice(0, count).sort(() => Math.random() - 0.5)
       }
     } catch (error) {
-      console.warn('AI word generation failed, using fallback:', error)
+      console.warn('Generazione parole fallita, uso fallback:', error)
     }
   }
   
-  // Fallback to static words
-  return getRandomWords(categories, difficulty, count)
+  // Fallback to static words (also filter by used words)
+  const staticWords = getRandomWords(categories, difficulty, count * 2) // Get extra to filter
+  const filtered = staticWords.filter(w => !usedWords.includes(w.word))
+  return filtered.length >= count ? filtered.slice(0, count) : staticWords.slice(0, count)
 }
 

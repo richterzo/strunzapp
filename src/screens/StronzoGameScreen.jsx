@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import openaiService from '../services/openaiService'
+import { getUsedWords, saveWord } from '../utils/wordsMemory'
 import './StronzoGameScreen.css'
 
 export default function StronzoGameScreen() {
@@ -32,6 +33,10 @@ export default function StronzoGameScreen() {
       const selectedStronzi = shuffled.slice(0, numStronzi)
       setStronzi(selectedStronzi)
 
+      // Get historical words to avoid
+      const historicalWords = getUsedWords('stronzo')
+      console.log(`📚 Stronzo: Caricate ${historicalWords.length} parole dalla cronologia`)
+
       // Try to get word from AI first
       let word = null
       if (openaiService.isConfigured()) {
@@ -44,23 +49,30 @@ export default function StronzoGameScreen() {
             1,
             'stronzo'
           )
-          if (aiWords && aiWords.length > 0) {
+          if (aiWords && aiWords.length > 0 && !historicalWords.includes(aiWords[0])) {
             word = aiWords[0]
           }
         } catch (error) {
-          console.warn('AI word generation failed, using fallback')
+          console.warn('Generazione parola fallita, uso fallback')
         }
       }
 
       // Fallback to static words if AI failed
       if (!word) {
-        word = allWords[Math.floor(Math.random() * allWords.length)]
+        const availableWords = allWords.filter(w => !historicalWords.includes(w))
+        const wordsToUse = availableWords.length > 0 ? availableWords : allWords
+        word = wordsToUse[Math.floor(Math.random() * wordsToUse.length)]
       }
 
+      // Save to history
+      saveWord('stronzo', word)
+      
       setCurrentWord(word)
       setUsedWords([word])
       setIsWordHidden(true)
       setGamePhase('playing')
+      
+      console.log(`✅ Stronzo: Parola selezionata "${word}"`)
     }
 
     initGame()
@@ -103,6 +115,10 @@ export default function StronzoGameScreen() {
   const nextRound = async () => {
     let newWord = null
 
+    // Get all used words (session + history)
+    const historicalWords = getUsedWords('stronzo')
+    const allUsedWords = [...new Set([...usedWords, ...historicalWords])]
+
     // Try AI first
     if (openaiService.isConfigured()) {
       try {
@@ -116,38 +132,44 @@ export default function StronzoGameScreen() {
           1,
           'stronzo'
         )
-        if (aiWords && aiWords.length > 0 && !usedWords.includes(aiWords[0])) {
+        if (aiWords && aiWords.length > 0 && !allUsedWords.includes(aiWords[0])) {
           newWord = aiWords[0]
         }
       } catch (error) {
-        console.warn('AI word generation failed, using fallback')
+        console.warn('Generazione parola fallita, uso fallback')
       }
     }
 
     // Fallback to static words if AI failed
     if (!newWord) {
       let availableWords = allWords.filter(
-        (w) => !usedWords.slice(-3).includes(w)
+        (w) => !allUsedWords.includes(w)
       )
       if (availableWords.length === 0) {
+        // If all words used, reset and use all
         availableWords = allWords
       }
       newWord =
         availableWords[Math.floor(Math.random() * availableWords.length)]
     }
 
+    // Save to history
+    saveWord('stronzo', newWord)
+
     setCurrentWord(newWord)
-    setUsedWords((prev) => [...prev, newWord].slice(-10)) // Mantieni solo ultime 10
+    setUsedWords((prev) => [...prev, newWord].slice(-10))
     setCurrentPlayerIndex(0)
     setRevealedPlayers([])
     setRoundNumber((prev) => prev + 1)
-    setIsWordHidden(true) // Nascondi la parola all'inizio del nuovo round
+    setIsWordHidden(true)
     setGamePhase('playing')
 
     // Vibrazione se supportata
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100])
     }
+    
+    console.log(`✅ Stronzo Round ${roundNumber + 1}: Nuova parola "${newWord}"`)
   }
 
   const isStronzo = (playerIndex) => {

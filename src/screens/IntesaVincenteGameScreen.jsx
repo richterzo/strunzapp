@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getRandomWords, getRandomWordsWithAI } from '../data/intesaWords'
 import openaiService from '../services/openaiService'
+import { getUsedWords, saveWord } from '../utils/wordsMemory'
 import './IntesaVincenteGameScreen.css'
 
 export default function IntesaVincenteGameScreen() {
@@ -36,11 +37,15 @@ export default function IntesaVincenteGameScreen() {
 
     // Generate initial pool of words (100 words) - try AI first
     const loadInitialWords = async () => {
+      const historicalWords = getUsedWords('intesa')
+      console.log(`📚 Intesa: Caricate ${historicalWords.length} parole dalla cronologia`)
+      
       const generatedWords = await getRandomWordsWithAI(
         categories,
         difficulty,
         100,
-        openaiService
+        openaiService,
+        historicalWords.map(w => w) // Pass historical words to avoid
       )
       setWords(generatedWords)
     }
@@ -51,11 +56,13 @@ export default function IntesaVincenteGameScreen() {
   useEffect(() => {
     if (words.length > 0 && currentWordIndex >= words.length - 10) {
       const loadMoreWords = async () => {
+        const historicalWords = getUsedWords('intesa')
         const moreWords = await getRandomWordsWithAI(
           categories,
           difficulty,
           50,
-          openaiService
+          openaiService,
+          historicalWords.map(w => w)
         )
         setWords((prev) => [...prev, ...moreWords])
       }
@@ -86,11 +93,13 @@ export default function IntesaVincenteGameScreen() {
     setPassesUsed(0) // Reset passes
 
     // Generate initial pool of words (100 words) - try AI first
+    const historicalWords = getUsedWords('intesa')
     const generatedWords = await getRandomWordsWithAI(
       categories,
       difficulty,
       100,
-      openaiService
+      openaiService,
+      historicalWords.map(w => w)
     )
     setWords(generatedWords)
   }
@@ -119,6 +128,11 @@ export default function IntesaVincenteGameScreen() {
   const handleCorrect = () => {
     if (navigator.vibrate) {
       navigator.vibrate(50)
+    }
+
+    // Save word to history
+    if (currentWord && currentWord.word) {
+      saveWord('intesa', currentWord.word)
     }
 
     setCurrentRoundScore((prev) => prev + 1)

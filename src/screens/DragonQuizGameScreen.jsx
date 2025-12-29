@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG } from '../config/api'
 import openaiService from '../services/openaiService'
+import { getUsedQuestions, saveQuestion, getNextCategory } from '../utils/quizMemory'
 import './DragonQuizGameScreen.css'
 
 export default function DragonQuizGameScreen() {
@@ -21,6 +22,7 @@ export default function DragonQuizGameScreen() {
   ) // selectPlayer, loading, question, result, final
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [usedQuestions, setUsedQuestions] = useState([])
+  const [globalUsedQuestions, setGlobalUsedQuestions] = useState([]) // From localStorage
   const [loadingError, setLoadingError] = useState(null)
   const [selectedPlayerInTeam, setSelectedPlayerInTeam] = useState(null) // Index of player in current team
 
@@ -28,6 +30,13 @@ export default function DragonQuizGameScreen() {
   const getCurrentDifficultyLevel = () => {
     return currentQuestionNumber // Question 1 = Level 1, Question 10 = Level 10
   }
+
+  // Initialize global used questions from localStorage
+  useEffect(() => {
+    const historicalQuestions = getUsedQuestions()
+    setGlobalUsedQuestions(historicalQuestions)
+    console.log(`📚 Caricate ${historicalQuestions.length} domande dalla cronologia`)
+  }, [])
 
   // Load question for current player
   // This triggers whenever currentPlayerIndex changes, ensuring each player gets a different question
@@ -63,16 +72,32 @@ export default function DragonQuizGameScreen() {
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
+      
+      // Combine session questions + global history to avoid ALL repeats
+      const allUsedQuestions = [...new Set([...usedQuestions, ...globalUsedQuestions])]
+      
+      // Get next category using smart rotation (ensures variety)
+      const nextCategory = getNextCategory(categories)
+      
+      console.log(`🎯 Generando domanda - Livello: ${difficultyLevel}, Categoria: ${nextCategory}`)
+      console.log(`📝 Domande da evitare: ${allUsedQuestions.length}`)
+      
       const question = await openaiService.generateSingleQuestion(
         difficultyLevel,
-        categories,
-        usedQuestions
+        [nextCategory], // Use single rotated category for maximum variety
+        allUsedQuestions
       )
 
+      // Save to localStorage for future sessions
+      saveQuestion(question.question, question.category)
+      
       setCurrentQuestion(question)
       setUsedQuestions((prev) => [...prev, question.question])
+      setGlobalUsedQuestions((prev) => [...prev, question.question]) // Update global list too
       setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
       setGamePhase('question')
+      
+      console.log(`✅ Domanda generata: "${question.question.substring(0, 50)}..."`)
     } catch (error) {
       console.error('Error loading question:', error)
       setLoadingError(error.message || 'Errore nel caricamento della domanda')
@@ -222,20 +247,21 @@ export default function DragonQuizGameScreen() {
   if (gamePhase === 'loading') {
     const difficultyLevel = getCurrentDifficultyLevel()
     const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS[difficultyLevel - 1]
-    const progress = ((currentQuestionNumber - 1) / QUIZ_CONFIG.NUM_QUESTIONS) * 100
-    
+    const progress =
+      ((currentQuestionNumber - 1) / QUIZ_CONFIG.NUM_QUESTIONS) * 100
+
     return (
       <div className="game-screen">
         <div className="game-content">
           <div className="loading-container">
-            <img 
-              src="/images/games/dragonquiz.png" 
-              alt="Dragon Quiz" 
+            <img
+              src="/images/games/dragonquiz.png"
+              alt="Dragon Quiz"
               className="loading-dragon"
             />
             <div className="loading-progress-container">
               <div className="loading-progress-bar">
-                <div 
+                <div
                   className="loading-progress-fill"
                   style={{ width: `${progress}%` }}
                 ></div>
