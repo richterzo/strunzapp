@@ -620,7 +620,7 @@ IMPORTANTE:
     const categoryMapping = {
       personali: 'Personali',
       filosofiche: 'Filosofiche',
-      scottanti: 'Scottanti',
+      scottanti: 'Piccanti',
       scomode: 'Scomode'
     }
 
@@ -657,31 +657,37 @@ OUTPUT: Solo JSON con questa struttura:
   "question": "La domanda"
 }
 
-ESEMPI DI BUONE DOMANDE (MAI BANALI):
+ESEMPI CATEGORIA PERSONALI (introspettive):
+- "In quale momento preciso hai capito che un'amicizia era finita?"
+- "Quando è stata l'ultima volta che hai pianto da solo?"
+- "C'è qualcuno a cui vorresti dire 'avevi ragione' ma non lo farai mai?"
+- "Quale versione di te stesso del passato vorresti incontrare?"
 
-SITUAZIONALI/ETICHE:
-- "Hai mai approfittato del lavoro di qualcuno senza dargli credito?"
-- "Quando è stata l'ultima volta che hai preferito non sapere la verità?"
-- "Hai mai difeso qualcuno pubblicamente e criticato privatamente?"
-- "Ti è mai capitato di non fermare qualcuno che stava facendo un errore?"
+ESEMPI CATEGORIA FILOSOFICHE (esistenziali):
+- "Se scoprissi di avere solo un anno di vita, cosa cambieresti domani?"
+- "Preferiresti sapere quando morirai o come morirai?"
+- "Se potessi rivivere un solo giorno della tua vita, quale sceglieresti?"
+- "Vale la pena vivere una vita felice ma insignificante?"
 
-MORALI/SCELTE:
-- "Quale regola hai infranto e non ti sei mai pentito?"
-- "Hai mai lasciato che qualcun altro si prendesse la colpa al posto tuo?"
-- "Quando hai mentito per evitare una conseguenza scomoda?"
-- "C'è qualcosa che hai fatto e che non faresti mai sapere ai tuoi genitori?"
+ESEMPI CATEGORIA PICCANTI (sessuali/intime):
+- "Hai mai fantasticato su qualcuno presente in questa stanza?"
+- "Qual è stato il momento più imbarazzante durante un rapporto sessuale?"
+- "Hai mai finto un orgasmo? Per quanto tempo?"
+- "Con chi qui avresti voluto provare qualcosa ma non hai mai osato?"
 
-RELAZIONALI/CONCRETE:
-- "Hai mai tagliato i ponti con qualcuno senza spiegazioni?"
-- "Qual è stata la volta in cui hai tradito la fiducia di qualcuno?"
-- "Hai mai finto di non vedere qualcuno per strada per evitarlo?"
-- "Ti sei mai vendicato in modo che l'altra persona non se ne accorgesse?"
+ESEMPI CATEGORIA SCOMODE (imbarazzanti):
+- "Qual è la cosa più strana che hai fatto quando eri completamente solo?"
+- "Quale scusa ridicola hai usato per evitare qualcuno?"
+- "Quando hai scoperto qualcosa di imbarazzante su un genitore?"
+- "Hai mai cercato il nome di un ex su internet più volte in un giorno?"
 
-VINCOLI CRITICI:
-- VIETATO usare parola "segreto" (troppo ripetitiva)
-- VIETATO domande su "cosa pensi di", "qual è il tuo più grande"
-- OGNI domanda deve riferirsi a SITUAZIONE CONCRETA passata
-- OGNI domanda deve implicare AZIONE o SCELTA reale
+VINCOLI ASSOLUTI:
+- VIETATO: segreto, sogni, paure generiche, obiettivi
+- VIETATO: "cosa pensi di", "come ti senti se"
+- VIETATO: domande astratte o filosofiche generiche
+- OBBLIGATORIO: dettagli specifici, tempi precisi, persone concrete
+- OBBLIGATORIO: domande che facciano pensare "cazzo, questa è bella"
+- OGNI domanda deve essere UNICA, SPECIFICA, MEMORABILE
 
 GENERA 1 DOMANDA UNICA E NON BANALE per la categoria ${categoryMapping[category]}.
 In italiano. Senza spiegazioni. Solo la domanda nel JSON.`

@@ -23,9 +23,9 @@ export default function StrunzateSetupScreen() {
     },
     { 
       id: 'scottanti', 
-      name: 'Scottanti', 
+      name: 'Piccanti', 
       icon: '🔥',
-      description: 'Domande provocatorie e audaci'
+      description: 'Domande sessuali e intime'
     },
     { 
       id: 'scomode', 
