@@ -5,7 +5,6 @@ import './StrunzateSetupScreen.css'
 
 export default function StrunzateSetupScreen() {
   const navigate = useNavigate()
-  const [numQuestions, setNumQuestions] = useState(10)
   const [selectedCategories, setSelectedCategories] = useState(['personali'])
   const [error, setError] = useState('')
 
@@ -36,11 +35,6 @@ export default function StrunzateSetupScreen() {
     },
   ]
 
-  const handleNumQuestionsChange = (delta) => {
-    const newNum = Math.max(5, Math.min(30, numQuestions + delta))
-    setNumQuestions(newNum)
-  }
-
   const toggleCategory = (categoryId) => {
     setSelectedCategories(prev => {
       if (prev.includes(categoryId)) {
@@ -67,7 +61,6 @@ export default function StrunzateSetupScreen() {
 
     navigate('/strunzate/game', {
       state: {
-        numQuestions,
         categories: selectedCategories,
       },
     })
@@ -94,27 +87,6 @@ export default function StrunzateSetupScreen() {
             <li>💡 Non esistono risposte giuste o sbagliate</li>
             <li>🔥 Più sei autentico, più la conversazione sarà <strong>memorabile</strong></li>
           </ul>
-        </div>
-
-        {/* Number of Questions */}
-        <div className="setup-section">
-          <h3 className="section-title">NUMERO DOMANDE</h3>
-          <div className="num-questions-container">
-            <button 
-              className="num-button" 
-              onClick={() => handleNumQuestionsChange(-5)}
-            >
-              -
-            </button>
-            <span className="num-display">{numQuestions}</span>
-            <button 
-              className="num-button" 
-              onClick={() => handleNumQuestionsChange(5)}
-            >
-              +
-            </button>
-          </div>
-          <p className="section-hint">Da 5 a 30 domande</p>
         </div>
 
         {/* Categories */}

@@ -6,12 +6,12 @@ import './StrunzateGameScreen.css'
 export default function StrunzateGameScreen() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { numQuestions, categories } = location.state || {}
+  const { categories } = location.state || {}
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [questionCount, setQuestionCount] = useState(0)
 
   const categoryNames = {
     personali: 'Personali',
@@ -28,12 +28,12 @@ export default function StrunzateGameScreen() {
   }
 
   useEffect(() => {
-    if (!numQuestions || !categories) {
+    if (!categories) {
       navigate('/strunzate/setup')
       return
     }
     loadQuestion()
-  }, [currentQuestionIndex])
+  }, [])
 
   const loadQuestion = async () => {
     setIsLoading(true)
@@ -46,6 +46,7 @@ export default function StrunzateGameScreen() {
       const question = await openaiService.generateStrunzateQuestion(category)
       
       setCurrentQuestion({ ...question, category })
+      setQuestionCount(prev => prev + 1)
       setIsLoading(false)
     } catch (err) {
       console.error('Error loading question:', err)
@@ -55,19 +56,14 @@ export default function StrunzateGameScreen() {
   }
 
   const handleNext = () => {
-    if (currentQuestionIndex < numQuestions - 1) {
-      setCurrentQuestionIndex(prev => prev + 1)
-    } else {
-      // Game finished
-      navigate('/')
-    }
+    loadQuestion()
   }
 
   const handleSkip = () => {
-    handleNext()
+    loadQuestion()
   }
 
-  if (!numQuestions || !categories) {
+  if (!categories) {
     return null
   }
 
@@ -80,13 +76,7 @@ export default function StrunzateGameScreen() {
 
         <div className="progress-container">
           <div className="progress-text">
-            Domanda {currentQuestionIndex + 1} di {numQuestions}
-          </div>
-          <div className="progress-bar">
-            <div 
-              className="progress-fill" 
-              style={{ width: `${((currentQuestionIndex + 1) / numQuestions) * 100}%` }}
-            />
+            Domanda #{questionCount}
           </div>
         </div>
 
@@ -114,29 +104,13 @@ export default function StrunzateGameScreen() {
               <h2 className="question-text">{currentQuestion.question}</h2>
             </div>
 
-            {currentQuestion.context && (
-              <div className="context-box">
-                <p className="context-text">{currentQuestion.context}</p>
-              </div>
-            )}
-
             <div className="action-buttons">
               <button className="skip-button" onClick={handleSkip}>
                 SALTA
               </button>
               <button className="next-button" onClick={handleNext}>
-                {currentQuestionIndex < numQuestions - 1 ? 'PROSSIMA' : 'FINE'}
+                PROSSIMA
               </button>
-            </div>
-
-            <div className="hints-box">
-              <p className="hints-title">💡 Suggerimenti:</p>
-              <ul className="hints-list">
-                <li>Prenditi il tempo per riflettere</li>
-                <li>Non ci sono risposte giuste o sbagliate</li>
-                <li>Sii autentico e onesto</li>
-                <li>Ascolta attivamente le risposte degli altri</li>
-              </ul>
             </div>
           </div>
         ) : null}

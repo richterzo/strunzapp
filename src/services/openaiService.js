@@ -640,8 +640,7 @@ REGOLE PER LA DOMANDA:
 
 OUTPUT: Solo JSON con questa struttura:
 {
-  "question": "La domanda",
-  "context": "Breve contesto o spunto di riflessione (opzionale, max 50 parole)"
+  "question": "La domanda"
 }
 
 ESEMPI CATEGORIA "${category}":
@@ -677,8 +676,7 @@ ESEMPI CATEGORIA "${category}":
       const result = JSON.parse(data.choices[0].message.content)
 
       return {
-        question: result.question,
-        context: result.context || null
+        question: result.question
       }
     } catch (error) {
       console.error('Error generating Strunzate question:', error)
