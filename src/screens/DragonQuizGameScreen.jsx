@@ -79,10 +79,11 @@ export default function DragonQuizGameScreen() {
       return
     }
     // Load question from pre-loaded round questions
-    if (gamePhase === 'loading' && roundQuestions.length > 0) {
+    // IMPORTANTE: Verifica che roundQuestions abbia domande E che currentQuestion sia null
+    if (gamePhase === 'loading' && roundQuestions.length > 0 && !currentQuestion) {
       loadNextQuestion()
     }
-  }, [currentPlayerIndex, gamePhase, roundQuestions])
+  }, [currentPlayerIndex, gamePhase, roundQuestions, currentQuestion])
 
   const handlePlayerSelection = (playerIndex) => {
     setSelectedPlayerInTeam(playerIndex)
@@ -93,10 +94,20 @@ export default function DragonQuizGameScreen() {
   const loadRoundQuestions = async () => {
     if (gamePhase === 'final') return
 
-    setGamePhase('loading')
-    setCurrentQuestion(null) // Clear current question to prevent flash
+    // FLUSH COMPLETO: azzera tutto PRIMA di iniziare
+    setCurrentQuestion(null)
+    setSelectedAnswer(null)
+    setShowResult(false)
+    setRoundQuestions([])
     setLoadingError(null)
     setLoadingProgress(0)
+    setQuestionsGenerated(0)
+    
+    // Solo DOPO il flush, imposta loading
+    setGamePhase('loading')
+    
+    // Piccolo delay per assicurare che React faccia il flush del render
+    await new Promise(resolve => setTimeout(resolve, 50))
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
@@ -262,11 +273,17 @@ export default function DragonQuizGameScreen() {
         setGamePhase('final')
         return
       }
+      
+      // FLUSH COMPLETO prima del nuovo round
+      setCurrentQuestion(null)
+      setRoundQuestions([])
+      setSelectedAnswer(null)
+      setShowResult(false)
+      setLoadingProgress(0)
+      setQuestionsGenerated(0)
+      
       // Move to next question round (increase difficulty)
       setCurrentQuestionNumber((prev) => prev + 1)
-      // Clear round questions and current question to trigger reload
-      setRoundQuestions([])
-      setCurrentQuestion(null) // Prevent flash of old question
       setCurrentPlayerIndex(0)
       // Will trigger loadRoundQuestions in useEffect
       return
