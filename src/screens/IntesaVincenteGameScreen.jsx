@@ -6,13 +6,13 @@ import './IntesaVincenteGameScreen.css'
 export default function IntesaVincenteGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { pairs, numWords, timePerWord, difficulty, categories } = location.state || {}
+  const { pairs, timePerRound, difficulty, categories } = location.state || {}
 
   const [currentPairIndex, setCurrentPairIndex] = useState(0)
   const [currentPlayer, setCurrentPlayer] = useState(1) // 1 or 2
   const [words, setWords] = useState([])
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(timePerWord)
+  const [timeLeft, setTimeLeft] = useState(timePerRound)
   const [gamePhase, setGamePhase] = useState('instructions') // instructions, ready, playing, roundEnd, final
   const [scores, setScores] = useState(Array(pairs.length).fill(0))
   const [currentRoundScore, setCurrentRoundScore] = useState(0)
@@ -28,10 +28,18 @@ export default function IntesaVincenteGameScreen() {
       return
     }
     
-    // Generate words for this round
-    const generatedWords = getRandomWords(categories, difficulty, numWords)
+    // Generate initial pool of words (100 words)
+    const generatedWords = getRandomWords(categories, difficulty, 100)
     setWords(generatedWords)
   }, [currentPairIndex])
+  
+  // Auto-generate more words when running low
+  useEffect(() => {
+    if (words.length > 0 && currentWordIndex >= words.length - 10) {
+      const moreWords = getRandomWords(categories, difficulty, 50)
+      setWords(prev => [...prev, ...moreWords])
+    }
+  }, [currentWordIndex, words.length, categories, difficulty])
 
   useEffect(() => {
     if (gamePhase === 'playing' && timeLeft > 0) {
@@ -49,10 +57,10 @@ export default function IntesaVincenteGameScreen() {
     setGamePhase('ready')
     setCurrentRoundScore(0)
     setCurrentWordIndex(0)
-    setTimeLeft(timePerWord)
+    setTimeLeft(timePerRound)
     
-    // Generate new words for this pair
-    const generatedWords = getRandomWords(categories, difficulty, numWords)
+    // Generate initial pool of words (100 words)
+    const generatedWords = getRandomWords(categories, difficulty, 100)
     setWords(generatedWords)
   }
 
@@ -67,20 +75,11 @@ export default function IntesaVincenteGameScreen() {
     }
     
     setCurrentRoundScore(prev => prev + 1)
-    
-    if (currentWordIndex >= words.length - 1) {
-      handleTimeUp()
-    } else {
-      setCurrentWordIndex(prev => prev + 1)
-    }
+    setCurrentWordIndex(prev => prev + 1)
   }
 
   const handleSkip = () => {
-    if (currentWordIndex >= words.length - 1) {
-      handleTimeUp()
-    } else {
-      setCurrentWordIndex(prev => prev + 1)
-    }
+    setCurrentWordIndex(prev => prev + 1)
   }
 
   const handleTimeUp = () => {
@@ -133,7 +132,8 @@ export default function IntesaVincenteGameScreen() {
             <ul className="instructions-list">
               <li><strong>{currentPair.player1}</strong> tiene il telefono</li>
               <li><strong>{currentPair.player2}</strong> deve indovinare</li>
-              <li>Fai indovinare il maggior numero di parole in <strong>{timePerWord} secondi</strong></li>
+              <li>⏱️ Hai <strong>{timePerRound} secondi</strong> per indovinare più parole possibili</li>
+              <li>🎯 Non c'è limite! Vai a <strong>RECORD</strong>!</li>
               <li>Usa sinonimi, descrizioni, gesti - NO parole contenute!</li>
               <li>Premi <strong>✓</strong> se indovina, <strong>→</strong> per passare</li>
             </ul>
@@ -165,8 +165,6 @@ export default function IntesaVincenteGameScreen() {
   }
 
   if (gamePhase === 'playing') {
-    const progressPercent = ((currentWordIndex + 1) / words.length) * 100
-
     return (
       <div className="intesa-game-screen playing">
         <div className="game-header-bar">
@@ -174,13 +172,10 @@ export default function IntesaVincenteGameScreen() {
             <span className={`timer-value ${timeLeft <= 10 ? 'warning' : ''}`}>{timeLeft}</span>
           </div>
           <div className="score-display">
-            <span className="score-label">PAROLE:</span>
-            <span className="score-value">{currentRoundScore}/{words.length}</span>
+            <span className="score-label">RECORD:</span>
+            <span className="score-value">{currentRoundScore}</span>
+            <span className="score-fire">🔥</span>
           </div>
-        </div>
-
-        <div className="progress-bar-intesa">
-          <div className="progress-fill-intesa" style={{ width: `${progressPercent}%` }}></div>
         </div>
 
         <div className="word-display-container">

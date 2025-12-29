@@ -7,7 +7,8 @@ import './DragonQuizGameScreen.css'
 export default function DragonQuizGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { gameMode, numPlayers, playerNames, teams, categories } = location.state || {}
+  const { gameMode, numPlayers, playerNames, teams, categories } =
+    location.state || {}
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1) // 1 to 10
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
@@ -15,7 +16,9 @@ export default function DragonQuizGameScreen() {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
   const [timeLeft, setTimeLeft] = useState(QUIZ_CONFIG.TIME_PER_QUESTION)
-  const [gamePhase, setGamePhase] = useState(gameMode === 'teams' ? 'selectPlayer' : 'loading') // selectPlayer, loading, question, result, final
+  const [gamePhase, setGamePhase] = useState(
+    gameMode === 'teams' ? 'selectPlayer' : 'loading'
+  ) // selectPlayer, loading, question, result, final
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [usedQuestions, setUsedQuestions] = useState([])
   const [loadingError, setLoadingError] = useState(null)
@@ -145,7 +148,7 @@ export default function DragonQuizGameScreen() {
     }
 
     setCurrentPlayerIndex(nextPlayerIndex)
-    
+
     // In team mode, go to player selection
     if (gameMode === 'teams') {
       setGamePhase('selectPlayer')
@@ -172,12 +175,17 @@ export default function DragonQuizGameScreen() {
             <h2 className="selection-title">TURNO DI</h2>
             <h1 className="team-name">{currentTeam.name}</h1>
             <p className="selection-subtitle">Chi risponde a questa domanda?</p>
-            
+
             <div className="difficulty-info">
               <span className="difficulty-label">Livello</span>
-              <span className="difficulty-value">{getCurrentDifficultyLevel()}/10</span>
+              <span className="difficulty-value">
+                {getCurrentDifficultyLevel()}/10
+              </span>
               <span className="difficulty-name">
-                {QUIZ_CONFIG.DIFFICULTY_LEVELS[getCurrentDifficultyLevel() - 1]?.name}
+                {
+                  QUIZ_CONFIG.DIFFICULTY_LEVELS[getCurrentDifficultyLevel() - 1]
+                    ?.name
+                }
               </span>
             </div>
 

@@ -13,7 +13,7 @@ export default function DragonQuizSetupScreen() {
   const [teamNames, setTeamNames] = useState(['Squadra 1', 'Squadra 2'])
   const [teams, setTeams] = useState([
     { name: 'Squadra 1', players: ['Giocatore 1'] },
-    { name: 'Squadra 2', players: ['Giocatore 2'] }
+    { name: 'Squadra 2', players: ['Giocatore 2'] },
   ])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [error, setError] = useState('')
@@ -35,7 +35,11 @@ export default function DragonQuizSetupScreen() {
     setTeams(
       Array.from(
         { length: newNum },
-        (_, i) => teams[i] || { name: `Squadra ${i + 1}`, players: [`Giocatore ${i + 1}`] }
+        (_, i) =>
+          teams[i] || {
+            name: `Squadra ${i + 1}`,
+            players: [`Giocatore ${i + 1}`],
+          }
       )
     )
   }
@@ -100,7 +104,7 @@ export default function DragonQuizSetupScreen() {
         return
       }
       // Check that each team has at least 1 player
-      const emptyTeams = teams.filter(team => team.players.length === 0)
+      const emptyTeams = teams.filter((team) => team.players.length === 0)
       if (emptyTeams.length > 0) {
         setError('Ogni squadra deve avere almeno 1 giocatore')
         return
@@ -121,7 +125,8 @@ export default function DragonQuizSetupScreen() {
       state: {
         gameMode,
         numPlayers: gameMode === 'single' ? numPlayers : teams.length,
-        playerNames: gameMode === 'single' ? playerNames : teams.map(t => t.name),
+        playerNames:
+          gameMode === 'single' ? playerNames : teams.map((t) => t.name),
         teams: gameMode === 'teams' ? teams : null,
         categories:
           selectedCategories.length > 0
@@ -266,7 +271,9 @@ export default function DragonQuizSetupScreen() {
                     className="team-name-input"
                     placeholder={`Squadra ${teamIndex + 1}`}
                     value={team.name}
-                    onChange={(e) => handleTeamNameChangeNew(teamIndex, e.target.value)}
+                    onChange={(e) =>
+                      handleTeamNameChangeNew(teamIndex, e.target.value)
+                    }
                   />
                   <div className="team-players">
                     {team.players.map((player, playerIndex) => (
@@ -277,13 +284,19 @@ export default function DragonQuizSetupScreen() {
                           placeholder={`Giocatore ${playerIndex + 1}`}
                           value={player}
                           onChange={(e) =>
-                            handleTeamPlayerNameChange(teamIndex, playerIndex, e.target.value)
+                            handleTeamPlayerNameChange(
+                              teamIndex,
+                              playerIndex,
+                              e.target.value
+                            )
                           }
                         />
                         {team.players.length > 1 && (
                           <button
                             className="remove-player-button"
-                            onClick={() => removePlayerFromTeam(teamIndex, playerIndex)}
+                            onClick={() =>
+                              removePlayerFromTeam(teamIndex, playerIndex)
+                            }
                           >
                             ×
                           </button>

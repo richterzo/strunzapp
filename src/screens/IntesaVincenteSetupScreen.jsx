@@ -6,8 +6,7 @@ export default function IntesaVincenteSetupScreen() {
   const navigate = useNavigate()
   const [numPairs, setNumPairs] = useState(1)
   const [pairs, setPairs] = useState([{ player1: 'Giocatore 1', player2: 'Giocatore 2' }])
-  const [numWords, setNumWords] = useState(10)
-  const [timePerWord, setTimePerWord] = useState(60)
+  const [timePerRound, setTimePerRound] = useState(60)
   const [difficulty, setDifficulty] = useState('medio')
   const [categories, setCategories] = useState(['Generale'])
 
@@ -55,8 +54,7 @@ export default function IntesaVincenteSetupScreen() {
     navigate('/intesa-vincente/game', {
       state: {
         pairs,
-        numWords,
-        timePerWord,
+        timePerRound,
         difficulty,
         categories: categories.length > 0 ? categories : CATEGORIES
       }
@@ -116,29 +114,16 @@ export default function IntesaVincenteSetupScreen() {
           </div>
         </div>
 
-        {/* Number of Words */}
+        {/* Time per Round */}
         <div className="setup-section">
-          <h3 className="section-title">PAROLE PER TURNO</h3>
+          <h3 className="section-title">TEMPO PER TURNO</h3>
+          <p className="section-description">⏱️ Indovina più parole possibili prima dello scadere del tempo!</p>
           <div className="counter-control">
-            <button className="counter-button" onClick={() => setNumWords(Math.max(5, numWords - 5))}>
+            <button className="counter-button" onClick={() => setTimePerRound(Math.max(30, timePerRound - 15))}>
               −
             </button>
-            <span className="counter-value">{numWords}</span>
-            <button className="counter-button" onClick={() => setNumWords(Math.min(30, numWords + 5))}>
-              +
-            </button>
-          </div>
-        </div>
-
-        {/* Time per Word */}
-        <div className="setup-section">
-          <h3 className="section-title">TEMPO (secondi)</h3>
-          <div className="counter-control">
-            <button className="counter-button" onClick={() => setTimePerWord(Math.max(30, timePerWord - 15))}>
-              −
-            </button>
-            <span className="counter-value">{timePerWord}s</span>
-            <button className="counter-button" onClick={() => setTimePerWord(Math.min(120, timePerWord + 15))}>
+            <span className="counter-value">{timePerRound}s</span>
+            <button className="counter-button" onClick={() => setTimePerRound(Math.min(120, timePerRound + 15))}>
               +
             </button>
           </div>

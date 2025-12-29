@@ -284,6 +284,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  position: relative;
 }
 
 .score-label {
@@ -300,6 +301,29 @@
   color: #00FFF0;
   font-family: 'Orbitron', sans-serif;
   text-shadow: 0 0 20px rgba(0, 255, 240, 0.6);
+  animation: scoreGlow 2s ease-in-out infinite;
+}
+
+.score-fire {
+  position: absolute;
+  top: -5px;
+  right: -20px;
+  font-size: 20px;
+  animation: firePulse 1s ease-in-out infinite;
+}
+
+@keyframes scoreGlow {
+  0%, 100% { 
+    text-shadow: 0 0 20px rgba(0, 255, 240, 0.6);
+  }
+  50% { 
+    text-shadow: 0 0 30px rgba(0, 255, 240, 1);
+  }
+}
+
+@keyframes firePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
 .progress-bar-intesa {
@@ -581,7 +605,49 @@
   border-color: #00FFF0;
 }
 
-/* Mobile */
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .game-header-bar {
+    padding: 15px;
+  }
+
+  .timer-display {
+    width: 75px;
+    height: 75px;
+  }
+
+  .timer-value {
+    font-size: 30px;
+  }
+
+  .score-value {
+    font-size: 32px;
+  }
+
+  .main-word {
+    font-size: clamp(32px, 9vw, 64px);
+    padding: 20px;
+  }
+
+  .action-buttons-row {
+    gap: 2px;
+  }
+
+  .skip-button,
+  .correct-button {
+    padding: 35px 20px;
+    min-height: 110px;
+  }
+
+  .button-icon {
+    font-size: 40px;
+  }
+
+  .button-label {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 480px) {
   .intesa-game-title {
     font-size: clamp(24px, 6vw, 36px);
@@ -594,23 +660,178 @@
 
   .player-box {
     width: 100%;
+    padding: 16px 24px;
   }
 
   .plus-sign {
     transform: rotate(90deg);
   }
 
-  .main-word {
-    font-size: clamp(28px, 8vw, 56px);
+  .game-header-bar {
+    padding: 12px;
+    gap: 12px;
   }
 
   .timer-display {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
   }
 
   .timer-value {
+    font-size: 26px;
+  }
+
+  .score-display {
+    align-items: flex-end;
+  }
+
+  .score-label {
+    font-size: 10px;
+  }
+
+  .score-value {
     font-size: 28px;
+  }
+
+  .score-fire {
+    right: -15px;
+    font-size: 18px;
+  }
+
+  .word-display-container {
+    min-height: calc(100vh - 280px);
+    padding: 30px 15px;
+  }
+
+  .category-tag {
+    font-size: 11px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+  }
+
+  .main-word {
+    font-size: clamp(28px, 8vw, 56px);
+    letter-spacing: 2px;
+  }
+
+  .action-buttons-row {
+    gap: 0;
+  }
+
+  .skip-button,
+  .correct-button {
+    padding: 30px 15px;
+    min-height: 100px;
+    font-size: 16px;
+  }
+
+  .button-icon {
+    font-size: 36px;
+  }
+
+  .button-label {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .instructions-list {
+    font-size: 14px;
+  }
+
+  .instructions-list li {
+    font-size: 14px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+
+  .big-action-button {
+    padding: 18px;
+    font-size: 16px;
+  }
+
+  .ready-title {
+    font-size: clamp(40px, 9vw, 64px);
+  }
+
+  .ready-subtitle {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .countdown-circle {
+    width: 120px;
+    height: 120px;
+  }
+
+  .countdown-number {
+    font-size: 60px;
+  }
+
+  .result-score-box {
+    padding: 30px;
+  }
+
+  .result-score {
+    font-size: 56px;
+  }
+
+  .result-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .timer-display {
+    width: 60px;
+    height: 60px;
+  }
+
+  .timer-value {
+    font-size: 24px;
+  }
+
+  .score-value {
+    font-size: 24px;
+  }
+
+  .main-word {
+    font-size: clamp(24px, 7vw, 48px);
+  }
+
+  .skip-button,
+  .correct-button {
+    padding: 25px 12px;
+    min-height: 90px;
+  }
+
+  .button-icon {
+    font-size: 32px;
+  }
+
+  .button-label {
+    font-size: 12px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .word-display-container {
+    min-height: auto;
+    padding: 20px 15px;
+  }
+
+  .main-word {
+    font-size: clamp(24px, 6vw, 48px);
+  }
+
+  .action-buttons-row {
+    position: relative;
+  }
+
+  .skip-button,
+  .correct-button {
+    min-height: 80px;
+    padding: 20px 15px;
   }
 }
 
