@@ -6,9 +6,9 @@
   top: 0;
   left: 0;
   background: rgba(10, 10, 10, 0.95);
-  border: 2px solid #00FFF0;
+  border: 2px solid #FF6B00;
   padding: 12px 24px;
-  color: #00FFF0;
+  color: #FF6B00;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -17,15 +17,15 @@
   text-transform: uppercase;
   font-family: 'Rajdhani', sans-serif;
   z-index: 9999; /* Always on top */
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
   backdrop-filter: blur(10px);
 }
 
 .back-button:hover {
-  border-color: #00FFF0;
+  border-color: #FF6B00;
   color: #FFFFFF;
   transform: translateX(-3px);
-  box-shadow: 0 0 30px rgba(0, 255, 240, 0.6);
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.6);
 }
 
 .back-button:active {
@@ -46,7 +46,7 @@
   width: 120px;
   height: 120px;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.4));
+  filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.4));
   animation: float 3s ease-in-out infinite;
 }
 
@@ -57,24 +57,24 @@
 
 /* Rules Box */
 .rules-box {
-  background: linear-gradient(135deg, rgba(0, 255, 240, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
-  border: 2px solid rgba(0, 255, 240, 0.3);
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
+  border: 2px solid rgba(255, 107, 0, 0.3);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 30px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 255, 240, 0.1);
+  box-shadow: 0 8px 32px rgba(255, 107, 0, 0.1);
 }
 
 .rules-title {
   font-size: 18px;
   font-weight: 700;
-  color: #00FFF0;
+  color: #FF6B00;
   margin-bottom: 15px;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0, 255, 240, 0.5);
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
 }
 
 .rules-list {
@@ -159,12 +159,12 @@
 }
 
 .mode-button.active {
-  border-color: #00FFF0;
-  background: rgba(0, 255, 240, 0.05);
-  color: #00FFF0;
+  border-color: #FF6B00;
+  background: rgba(255, 107, 0, 0.05);
+  color: #FF6B00;
   box-shadow: 
-    0 0 25px rgba(0, 255, 240, 0.3),
-    inset 0 0 30px rgba(0, 255, 240, 0.05);
+    0 0 25px rgba(255, 107, 0, 0.3),
+    inset 0 0 30px rgba(255, 107, 0, 0.05);
 }
 
 .section-subtitle {
@@ -181,12 +181,12 @@
   text-align: center;
   margin-top: 30px;
   padding: 20px;
-  background: rgba(0, 255, 240, 0.03);
-  border: 1px solid rgba(0, 255, 240, 0.2);
+  background: rgba(255, 107, 0, 0.03);
+  border: 1px solid rgba(255, 107, 0, 0.2);
   border-radius: 8px;
   font-family: 'Rajdhani', sans-serif;
   font-size: 12px;
-  color: #00FFF0;
+  color: #FF6B00;
   letter-spacing: 1px;
 }
 
@@ -208,23 +208,23 @@
 }
 
 .team-config {
-  background: rgba(0, 255, 240, 0.03);
-  border: 2px solid rgba(0, 255, 240, 0.2);
+  background: rgba(255, 107, 0, 0.03);
+  border: 2px solid rgba(255, 107, 0, 0.2);
   border-radius: 8px;
   padding: 20px;
   transition: all 0.3s ease;
 }
 
 .team-config:hover {
-  border-color: rgba(0, 255, 240, 0.4);
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.1);
+  border-color: rgba(255, 107, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.1);
 }
 
 .team-name-input {
   width: 100%;
   background: rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(0, 255, 240, 0.3);
-  color: #00FFF0;
+  border: 2px solid rgba(255, 107, 0, 0.3);
+  color: #FF6B00;
   padding: 12px 16px;
   font-size: 16px;
   font-weight: 700;
@@ -236,8 +236,8 @@
 
 .team-name-input:focus {
   outline: none;
-  border-color: #00FFF0;
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  border-color: #FF6B00;
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
 }
 
 .team-players {
@@ -255,7 +255,7 @@
 .team-player-input {
   flex: 1;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 255, 240, 0.2);
+  border: 1px solid rgba(255, 107, 0, 0.2);
   color: #FFFFFF;
   padding: 10px 14px;
   font-size: 14px;
@@ -266,8 +266,8 @@
 
 .team-player-input:focus {
   outline: none;
-  border-color: rgba(0, 255, 240, 0.5);
-  box-shadow: 0 0 15px rgba(0, 255, 240, 0.2);
+  border-color: rgba(255, 107, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
 }
 
 .remove-player-button {
@@ -294,9 +294,9 @@
 
 .add-player-button {
   width: 100%;
-  background: rgba(0, 255, 240, 0.05);
-  border: 2px dashed rgba(0, 255, 240, 0.3);
-  color: #00FFF0;
+  background: rgba(255, 107, 0, 0.05);
+  border: 2px dashed rgba(255, 107, 0, 0.3);
+  color: #FF6B00;
   padding: 10px;
   font-size: 13px;
   font-weight: 600;
@@ -309,8 +309,8 @@
 }
 
 .add-player-button:hover {
-  background: rgba(0, 255, 240, 0.1);
-  border-color: rgba(0, 255, 240, 0.5);
+  background: rgba(255, 107, 0, 0.1);
+  border-color: rgba(255, 107, 0, 0.5);
   border-style: solid;
 }
 
@@ -330,8 +330,8 @@
 }
 
 .option-card {
-  background: linear-gradient(135deg, rgba(0, 255, 240, 0.05), rgba(255, 0, 255, 0.05));
-  border: 2px solid rgba(0, 255, 240, 0.3);
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.05), rgba(255, 0, 255, 0.05));
+  border: 2px solid rgba(255, 107, 0, 0.3);
   border-radius: 15px;
   padding: 20px;
   display: flex;
@@ -342,8 +342,8 @@
 }
 
 .option-card:hover {
-  border-color: #00FFF0;
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  border-color: #FF6B00;
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
   transform: translateY(-2px);
 }
 
@@ -404,14 +404,14 @@
 }
 
 .toggle-button.active {
-  background: linear-gradient(135deg, #00FFF0, #00DDCC);
-  border-color: #00FFF0;
+  background: linear-gradient(135deg, #FF6B00, #00DDCC);
+  border-color: #FF6B00;
   color: #000000;
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.5);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
 }
 
 .toggle-button.active:hover {
-  box-shadow: 0 0 30px rgba(0, 255, 240, 0.7);
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.7);
 }
 
 /* Mobile optimization */
