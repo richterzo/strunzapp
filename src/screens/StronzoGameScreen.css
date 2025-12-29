@@ -12,7 +12,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* Allow vertical scroll, hide horizontal */
+  overflow-y: auto;
 }
 
 /* Scanlines effect */
