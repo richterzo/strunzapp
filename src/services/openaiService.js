@@ -143,8 +143,62 @@ REQUISITI ASSOLUTI:
 9. La domanda DEVE essere DIVERSA da quelle già usate
 10. Stile Dragon Quiz - difficoltà progressiva da Base a Dragone
 
+⚠️ REGOLE CRITICHE PER EVITARE INDIZI NELLE RISPOSTE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ LUNGHEZZA SIMILE: Tutte le 5 opzioni devono avere lunghezza comparabile
+  ❌ NO: "Roma", "La capitale della Francia fondata dai Romani nel 52 a.C."
+  ✅ SI: "Roma", "Parigi", "Berlino", "Madrid", "Londra"
+
+✓ STILE COERENTE: Tutte le opzioni devono avere lo stesso formato
+  ❌ NO: "1492", "Nel 1519", "1776", "L'anno 1804"
+  ✅ SI: "1492", "1519", "1776", "1804", "1607"
+
+✓ DETTAGLIO UNIFORME: Stesso livello di dettaglio per tutte
+  ❌ NO: "Leonardo da Vinci (1452-1519, pittore italiano)", "Michelangelo"
+  ✅ SI: "Leonardo da Vinci", "Michelangelo Buonarroti", "Raffaello Sanzio"
+
+✓ NO PATTERN GRAMMATICALI: Evita concordanze che rivelano la risposta
+  ❌ NO: Domanda "Quale è la capitale?" → "Roma" (femminile singolare)
+  ✅ SI: Riformula per evitare hint grammaticali
+
+✓ NO "TUTTE/NESSUNA DELLE PRECEDENTI": Evita questi trucchi ovvi
+  ❌ NO: opzione "Tutte le precedenti" quando è vera
+  ✅ SI: Opzioni specifiche e concrete
+
+✓ NO RIPETIZIONI SOSPETTE: Non ripetere parole chiave solo nella risposta giusta
+  ❌ NO: Domanda su "fotosintesi" → risposta corretta unica con "fotosintesi"
+  ✅ SI: Distribuisci termini tecnici in modo bilanciato
+
+✓ CREDIBILITÀ EQUIVALENTE: Ogni opzione deve sembrare potenzialmente corretta
+  ❌ NO: "1492", "1493", "1494", "Anno scorso", "2025"
+  ✅ SI: "1492", "1493", "1485", "1498", "1490"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 QUALITÀ DELLE RISPOSTE:
+- Ortografia perfetta (NO errori di battitura)
+- Punteggiatura corretta
+- Maiuscole/minuscole coerenti
+- NO spazi extra o caratteri strani
+- NO numeri romani mescolati con arabi senza motivo
+- Formattazione uniforme (es. tutti con o tutti senza articolo)
+
 ${difficultyLevel >= 8 ? 'ATTENZIONE: Livello ultra-difficile! La domanda deve essere quasi impossibile da indovinare!' : ''}
 ${difficultyLevel === 10 ? '🐉 DOMANDA DA DRAGONE! Deve essere la domanda più difficile possibile, quasi impossibile!' : ''}
+
+🔍 PROCESSO DI AUTO-VALIDAZIONE (esegui mentalmente PRIMA di rispondere):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ✓ Le 5 opzioni hanno lunghezza simile? (max differenza: 50%)
+2. ✓ Tutte le opzioni hanno lo stesso formato/stile?
+3. ✓ Nessuna opzione ha dettagli extra che la rendono sospetta?
+4. ✓ Nessuna concordanza grammaticale rivela la risposta?
+5. ✓ La difficoltà è ESATTAMENTE quella del livello ${difficultyLevel}/10?
+6. ✓ Tutte le opzioni sono storicamente/scientificamente plausibili?
+7. ✓ Nessun errore di ortografia o battitura?
+8. ✓ La spiegazione è accurata e dettagliata?
+
+Se anche UNA SOLA risposta è NO → RICREA la domanda!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 FORMATO OUTPUT (SOLO JSON, niente altro testo):
 {
@@ -182,7 +236,22 @@ IMPORTANTE:
           messages: [
             {
               role: 'system',
-              content: 'Sei un esperto creatore di quiz educativi. Generi domande accurate, interessanti e con difficoltà PRECISA e QUANTIFICABILE. La difficoltà deve essere ESATTAMENTE quella richiesta. Rispondi SOLO con JSON valido, senza testo aggiuntivo.',
+              content: `Sei un esperto creatore di quiz professionali stile "Chi vuol essere milionario" / "Dragon Quiz".
+
+COMPETENZE CHIAVE:
+✓ Difficoltà PRECISA e QUANTIFICABILE al livello richiesto
+✓ Opzioni di risposta PERFETTAMENTE BILANCIATE senza hint
+✓ Controllo qualità rigoroso (ortografia, stile, lunghezza)
+✓ Zero indizi grammaticali o di formato
+✓ Credibilità equivalente per tutte le opzioni
+
+PROCESSO:
+1. Crea la domanda
+2. AUTO-VALIDA con checklist rigorosa
+3. Se qualcosa non va → RICREA
+4. Solo quando PERFETTA → rispondi
+
+Rispondi ESCLUSIVAMENTE con JSON valido, niente altro testo.`,
             },
             {
               role: 'user',
