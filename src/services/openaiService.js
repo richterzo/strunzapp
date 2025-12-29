@@ -24,23 +24,48 @@ export class OpenAIService {
     // Distribute questions across selected categories
     const categoryDistribution = this.distributeCategoriesAcrossQuestions(numQuestions, categories)
 
-    const prompt = `Genera esattamente ${numQuestions} domande di quiz in italiano con difficoltà PROGRESSIVAMENTE CRESCENTE.
+    const prompt = `Genera esattamente ${numQuestions} domande di quiz in italiano con difficoltà PROGRESSIVAMENTE CRESCENTE da PRINCIPIANTE a LEGGENDA.
 
 CATEGORIE RICHIESTE: ${categoriesStr}
 
-DISTRIBUZIONE E DIFFICOLTÀ:
+SCALA DIFFICOLTÀ (1-10):
 ${difficultiesPerQuestion.map((d, i) => {
   const cat = categoryDistribution[i] || 'cultura generale'
-  return `Domanda ${i + 1}: ${d.toUpperCase()} - Categoria: ${cat}`
+  return `Domanda ${i + 1}: Livello ${d.level}/10 - ${d.name.toUpperCase()} - Categoria: ${cat}`
 }).join('\n')}
 
-REGOLE FONDAMENTALI:
-1. DIFFICOLTÀ PROGRESSIVA:
-   - Domande 1-2: FACILI (conoscenze basilari, fatti noti)
-   - Domande 3-4: MEDIE (richiedono un po' di cultura)
-   - Domande 5-6: DIFFICILI (dettagli specifici)
-   - Domande 7-8: MOLTO DIFFICILI (conoscenze approfondite)
-   - Domande 9-10: ESPERTO (dettagli oscuri, date precise, fatti rari)
+REGOLE FONDAMENTALI PER DIFFICOLTÀ:
+
+Livello 1-2 (PRINCIPIANTE/FACILE):
+- Conoscenze comuni e basilari
+- Fatti universalmente noti
+- Domande che tutti dovrebbero sapere
+- Esempio: "Qual è la capitale d'Italia?"
+
+Livello 3-4 (BASE/INTERMEDIO):
+- Cultura generale di base
+- Richiede un minimo di istruzione
+- Fatti abbastanza noti
+- Esempio: "In che anno è caduto il Muro di Berlino?"
+
+Livello 5-6 (MEDIO/AVANZATO):
+- Richiede cultura media-alta
+- Dettagli specifici ma non oscuri
+- Conoscenze settoriali
+- Esempio: "Chi ha dipinto 'La Persistenza della Memoria'?"
+
+Livello 7-8 (DIFFICILE/ESPERTO):
+- Richiede conoscenze approfondite
+- Dettagli specifici e date precise
+- Fatti meno conosciuti
+- Esempio: "In che anno è stata fondata l'UNESCO?"
+
+Livello 9-10 (MAESTRO/LEGGENDA):
+- Conoscenze molto specialistiche
+- Dettagli oscuri e rari
+- Richiede expertise nel campo
+- Date precise, nomi completi
+- Esempio: "Qual è il nome completo del teorema di Gödel sull'incompletezza?"
 
 2. OPZIONI DI RISPOSTA:
    - 4 opzioni plausibili e ben bilanciate
@@ -62,13 +87,18 @@ FORMATO OUTPUT (SOLO JSON, niente altro testo):
     "question": "Testo della domanda",
     "options": ["Opzione A", "Opzione B", "Opzione C", "Opzione D"],
     "correctAnswer": 0,
-    "difficulty": "facile",
+    "difficultyLevel": 1,
+    "difficultyName": "Principiante",
     "category": "Storia",
     "explanation": "Spiegazione breve e chiara"
   }
 ]
 
-IMPORTANTE: Rispondi ESCLUSIVAMENTE con il JSON array, senza markdown, senza testo aggiuntivo.`
+IMPORTANTE: 
+- Rispondi ESCLUSIVAMENTE con il JSON array
+- NO markdown, NO testo aggiuntivo
+- difficultyLevel deve essere un numero da 1 a 10
+- difficultyName deve corrispondere al livello`
 
     try {
       const response = await fetch(this.apiUrl, {
@@ -126,15 +156,16 @@ IMPORTANTE: Rispondi ESCLUSIVAMENTE con il JSON array, senza markdown, senza tes
   }
 
   /**
-   * Calculate difficulty progression for questions
+   * Calculate difficulty progression for questions (1-10 scale)
    * @param {number} numQuestions 
-   * @returns {Array<string>}
+   * @returns {Array<Object>}
    */
   calculateDifficultyProgression(numQuestions) {
     const difficulties = QUIZ_CONFIG.DIFFICULTY_LEVELS
     const progression = []
 
     for (let i = 0; i < numQuestions; i++) {
+      // Linear progression from level 1 to 10
       const ratio = i / (numQuestions - 1)
       const index = Math.floor(ratio * (difficulties.length - 1))
       progression.push(difficulties[index])
