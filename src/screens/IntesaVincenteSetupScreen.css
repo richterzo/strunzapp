@@ -11,41 +11,19 @@
     ),
     radial-gradient(
       circle at 80% 70%,
-      rgba(255, 0, 110, 0.06) 0%,
+      rgba(255, 140, 0, 0.06) 0%,
       transparent 50%
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
-  padding: 80px 20px 60px;
+  padding: 80px 20px 100px;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-}
-
-/* Scanlines */
-.intesa-setup-screen::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(255, 107, 0, 0.03) 2px,
-    rgba(255, 107, 0, 0.03) 4px
-  );
-  pointer-events: none;
-  z-index: 0;
 }
 
 .intesa-setup-content {
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
+  text-align: center;
   position: relative;
   z-index: 1;
 }
