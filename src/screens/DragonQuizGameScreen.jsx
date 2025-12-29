@@ -12,8 +12,15 @@ import './DragonQuizGameScreen.css'
 export default function DragonQuizGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { gameMode, numPlayers, playerNames, teams, categories, timerEnabled, comboEnabled } =
-    location.state || {}
+  const {
+    gameMode,
+    numPlayers,
+    playerNames,
+    teams,
+    categories,
+    timerEnabled,
+    comboEnabled,
+  } = location.state || {}
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1) // 1 to 10
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
@@ -21,7 +28,9 @@ export default function DragonQuizGameScreen() {
   const [combos, setCombos] = useState(Array(numPlayers).fill(0)) // Combo counter for each player
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(timerEnabled ? QUIZ_CONFIG.TIME_PER_QUESTION : 999)
+  const [timeLeft, setTimeLeft] = useState(
+    timerEnabled ? QUIZ_CONFIG.TIME_PER_QUESTION : 999
+  )
   const [gamePhase, setGamePhase] = useState(
     gameMode === 'teams' ? 'selectPlayer' : 'loading'
   ) // selectPlayer, loading, question, result, final
@@ -139,7 +148,10 @@ export default function DragonQuizGameScreen() {
         const question = await openaiService.generateSingleQuestion(
           difficultyLevel,
           [nextCategory],
-          [...allUsedQuestions, ...questions.map((q) => q.options[q.correctAnswer])]
+          [
+            ...allUsedQuestions,
+            ...questions.map((q) => q.options[q.correctAnswer]),
+          ]
         )
 
         // Save to localStorage (only correct answer to optimize storage)
@@ -224,7 +236,7 @@ export default function DragonQuizGameScreen() {
   const handleTimeUp = () => {
     setShowResult(true)
     setGamePhase('result')
-    
+
     // Reset combo on timeout
     if (comboEnabled) {
       const newCombos = [...combos]
@@ -256,19 +268,21 @@ export default function DragonQuizGameScreen() {
         : 1
 
       // Time bonus (max 50 points) - only if timer enabled
-      const timeBonus = timerEnabled ? Math.floor(
-        (timeLeft / QUIZ_CONFIG.TIME_PER_QUESTION) * QUIZ_CONFIG.TIME_BONUS_MAX
-      ) : 0
+      const timeBonus = timerEnabled
+        ? Math.floor(
+            (timeLeft / QUIZ_CONFIG.TIME_PER_QUESTION) *
+              QUIZ_CONFIG.TIME_BONUS_MAX
+          )
+        : 0
 
       // Combo multiplier (x2, x3, x4, x5+)
       const currentCombo = combos[currentPlayerIndex]
-      const comboMultiplier = comboEnabled && currentCombo > 0 
-        ? Math.min(currentCombo + 1, 5) 
-        : 1
+      const comboMultiplier =
+        comboEnabled && currentCombo > 0 ? Math.min(currentCombo + 1, 5) : 1
 
       // Calculate total points
       let points = Math.floor(basePoints * difficultyMultiplier) + timeBonus
-      
+
       // Apply combo multiplier
       if (comboEnabled && comboMultiplier > 1) {
         points = Math.floor(points * comboMultiplier)
@@ -575,7 +589,9 @@ export default function DragonQuizGameScreen() {
           {comboEnabled && combos[currentPlayerIndex] > 0 && (
             <div className="combo-display">
               <span className="combo-icon">🔥</span>
-              <span className="combo-text">COMBO x{Math.min(combos[currentPlayerIndex] + 1, 5)}</span>
+              <span className="combo-text">
+                COMBO x{Math.min(combos[currentPlayerIndex] + 1, 5)}
+              </span>
             </div>
           )}
         </div>

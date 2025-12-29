@@ -35,34 +35,41 @@ export default function IntesaVincenteGameScreen() {
       return
     }
 
-    // Generate initial pool of words (100 words) - try AI first
+    // Generate initial pool of words based on timer (timer/2)
     const loadInitialWords = async () => {
+      const initialWordsCount = Math.ceil(timePerRound / 2)
       const historicalWords = getUsedWords('intesa')
       console.log(
         `📚 Intesa: Caricate ${historicalWords.length} parole dalla cronologia`
+      )
+      console.log(
+        `🎲 Generazione ${initialWordsCount} parole per ${timePerRound}s di gioco`
       )
 
       const generatedWords = await getRandomWordsWithAI(
         categories,
         difficulty,
-        100,
+        initialWordsCount,
         openaiService,
         historicalWords.map((w) => w) // Pass historical words to avoid
       )
       setWords(generatedWords)
     }
     loadInitialWords()
-  }, [currentPairIndex])
+  }, [currentPairIndex, timePerRound])
 
-  // Auto-generate more words when running low
+  // Auto-generate more words when running low (proportional to timer)
   useEffect(() => {
     if (words.length > 0 && currentWordIndex >= words.length - 10) {
       const loadMoreWords = async () => {
+        // Generate half of initial batch (timer/4)
+        // Es: 60s → 15 parole extra, 90s → 22 parole extra
+        const moreWordsCount = Math.ceil(timePerRound / 4)
         const historicalWords = getUsedWords('intesa')
         const moreWords = await getRandomWordsWithAI(
           categories,
           difficulty,
-          50,
+          moreWordsCount,
           openaiService,
           historicalWords.map((w) => w)
         )
@@ -70,7 +77,7 @@ export default function IntesaVincenteGameScreen() {
       }
       loadMoreWords()
     }
-  }, [currentWordIndex, words.length, categories, difficulty])
+  }, [currentWordIndex, words.length, categories, difficulty, timePerRound])
 
   useEffect(() => {
     if (gamePhase === 'playing' && timeLeft > 0) {
@@ -94,12 +101,14 @@ export default function IntesaVincenteGameScreen() {
     setTimeLeft(timePerRound)
     setPassesUsed(0) // Reset passes
 
-    // Generate initial pool of words (100 words) - try AI first
+    // Generate initial pool of words based on timer (timer/2)
+    // Es: 60s → 30 parole, 90s → 45 parole, 120s → 60 parole
+    const initialWordsCount = Math.ceil(timePerRound / 2)
     const historicalWords = getUsedWords('intesa')
     const generatedWords = await getRandomWordsWithAI(
       categories,
       difficulty,
-      100,
+      initialWordsCount,
       openaiService,
       historicalWords.map((w) => w)
     )
