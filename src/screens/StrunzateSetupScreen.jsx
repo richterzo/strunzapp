@@ -74,6 +74,11 @@ export default function StrunzateSetupScreen() {
         </button>
 
         <div className="game-header">
+          <img 
+            src="/images/games/strunzate.png" 
+            alt="Strunzate" 
+            className="game-logo"
+          />
           <h1 className="setup-title">STRUNZATE</h1>
           <p className="setup-subtitle">Domande per conversazioni autentiche</p>
         </div>
