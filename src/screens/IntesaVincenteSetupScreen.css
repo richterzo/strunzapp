@@ -1,9 +1,26 @@
 /* Fonts loaded in index.css */
 
 /* Merda Vincente Setup */
+.intesa-setup-screen {
+  width: 100%;
+  min-height: 100vh;
+  background: radial-gradient(
+      circle at 20% 30%,
+      rgba(0, 255, 240, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(255, 0, 110, 0.06) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
+  padding: 80px 20px 60px;
   position: relative;
-  /* NO display: flex - NO align-items: center - NO justify-content: center */
-  /* These BLOCK vertical scroll! */
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 /* Scanlines */
@@ -28,6 +45,7 @@
 .intesa-setup-content {
   width: 100%;
   max-width: 700px;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
 }
@@ -37,30 +55,43 @@
   top: 20px;
   left: 20px;
   background: rgba(10, 10, 10, 0.95);
-  border: 2px solid #00fff0;
+  border: 3px solid #00fff0;
+  border-radius: 8px;
   padding: 12px 24px;
   color: #00fff0;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 3px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   text-transform: uppercase;
   font-family: 'Rajdhani', sans-serif;
-  z-index: 9999; /* Always on top */
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  z-index: 9999;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.3),
+    inset 0 0 10px rgba(0, 255, 240, 0.1),
+    0 4px 0 rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .back-button:hover {
   border-color: #00fff0;
   color: #ffffff;
-  transform: translateX(-3px);
-  box-shadow: 0 0 30px rgba(0, 255, 240, 0.6);
+  transform: translateX(-3px) translateY(-2px);
+  box-shadow: 
+    0 0 40px rgba(0, 255, 240, 0.8),
+    inset 0 0 20px rgba(0, 255, 240, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.5);
 }
 
 .back-button:active {
-  transform: translateX(-3px) scale(0.95);
+  transform: translateX(-3px) translateY(2px);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.5),
+    inset 0 0 15px rgba(0, 255, 240, 0.15),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* Game Header with Logo */
@@ -70,44 +101,45 @@
   align-items: center;
   gap: 15px;
   margin-bottom: 30px;
-  margin-top: 20px;
 }
 
 .game-logo {
-  width: 120px;
-  height: 120px;
+  width: clamp(140px, 35vw, 200px);
+  height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.4));
-  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
+  animation: arcadePulse 2s ease-in-out infinite;
+  transition: all 0.3s ease;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+.game-logo:hover {
+  filter: drop-shadow(0 0 50px rgba(0, 255, 240, 1)) 
+    drop-shadow(0 0 20px rgba(255, 0, 110, 0.8));
+  transform: scale(1.05);
+}
+
+@keyframes arcadePulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.6));
   }
   50% {
-    transform: translateY(-10px);
+    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 1)) 
+      drop-shadow(0 0 15px rgba(255, 0, 110, 0.6));
   }
 }
 
 /* Rules Box */
 .rules-box {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 255, 240, 0.1) 0%,
-    rgba(255, 0, 110, 0.05) 100%
-  );
-  border: 2px solid rgba(0, 255, 240, 0.3);
-  border-radius: 15px;
+  background: rgba(0, 255, 240, 0.05);
+  border: 2px solid rgba(0, 255, 240, 0.2);
+  border-radius: 8px;
   padding: 20px;
   margin-bottom: 30px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 255, 240, 0.1);
 }
 
 .rules-title {
-  font-size: 18px;
+  font-size: clamp(16px, 3.5vw, 18px);
   font-weight: 700;
   color: #00fff0;
   margin-bottom: 15px;
@@ -124,7 +156,7 @@
 }
 
 .rules-list li {
-  font-size: 15px;
+  font-size: clamp(13px, 3vw, 15px);
   color: #cccccc;
   margin-bottom: 12px;
   padding-left: 10px;
@@ -144,7 +176,7 @@
 }
 
 .intesa-setup-title {
-  font-size: clamp(36px, 8vw, 56px);
+  font-size: clamp(28px, 7vw, 48px);
   font-weight: 900;
   color: #00fff0;
   margin-bottom: 10px;
@@ -156,8 +188,7 @@
 }
 
 @keyframes titleGlow {
-  0%,
-  100% {
+  0%, 100% {
     text-shadow: 0 0 40px rgba(0, 255, 240, 0.8),
       0 0 80px rgba(0, 255, 240, 0.4);
   }
@@ -167,10 +198,10 @@
 }
 
 .intesa-subtitle {
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   color: #666666;
   margin-bottom: 20px;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-align: center;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
@@ -182,12 +213,12 @@
   border: 2px solid rgba(0, 255, 240, 0.2);
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   text-align: center;
 }
 
 .tv-show-info p {
-  font-size: 15px;
+  font-size: clamp(13px, 3vw, 15px);
   color: #cccccc;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
@@ -196,21 +227,22 @@
 }
 
 .setup-section {
-  margin-bottom: 35px;
+  margin-bottom: 30px;
 }
 
 .section-title {
-  font-size: 12px;
+  font-size: clamp(11px, 2.5vw, 12px);
   color: #00fff0;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 16px;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 240, 0.6);
 }
 
 .section-description {
-  font-size: 13px;
+  font-size: clamp(12px, 2.8vw, 13px);
   color: #999999;
   text-align: center;
   margin-bottom: 16px;
@@ -227,29 +259,47 @@
 }
 
 .counter-button {
-  width: 50px;
-  height: 50px;
+  width: clamp(44px, 12vw, 50px);
+  height: clamp(44px, 12vw, 50px);
+  min-width: 44px;
+  min-height: 44px;
   background: rgba(0, 255, 240, 0.05);
-  border: 2px solid #00fff0;
+  border: 3px solid #00fff0;
+  border-radius: 8px;
   color: #00fff0;
-  font-size: 28px;
+  font-size: clamp(24px, 6vw, 28px);
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Orbitron', sans-serif;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 240, 0.1),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+  touch-action: manipulation;
 }
 
 .counter-button:hover {
   background: rgba(0, 255, 240, 0.15);
-  box-shadow: 0 0 25px rgba(0, 255, 240, 0.5);
-  transform: scale(1.05);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(0, 255, 240, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+  transform: scale(1.05) translateY(-2px);
+}
+
+.counter-button:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.4),
+    inset 0 0 15px rgba(0, 255, 240, 0.15),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .counter-value {
-  font-size: 32px;
+  font-size: clamp(28px, 7vw, 32px);
   font-weight: 900;
   color: #ffffff;
   font-family: 'Orbitron', sans-serif;
@@ -272,7 +322,7 @@
 }
 
 .pair-label {
-  font-size: 11px;
+  font-size: clamp(10px, 2.5vw, 11px);
   color: #00fff0;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -291,12 +341,14 @@
   flex: 1;
   background: rgba(0, 0, 0, 0.5);
   border: 2px solid rgba(0, 255, 240, 0.3);
+  border-radius: 6px;
   color: #ffffff;
   padding: 12px 16px;
-  font-size: 15px;
+  font-size: clamp(14px, 3.5vw, 15px);
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   transition: all 0.3s ease;
+  min-height: 44px;
 }
 
 .pair-input:focus {
@@ -306,91 +358,183 @@
 }
 
 .pair-separator {
-  font-size: 20px;
+  font-size: clamp(18px, 5vw, 20px);
   color: #00fff0;
   font-weight: 700;
 }
 
 .difficulty-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  justify-content: center;
 }
 
 .difficulty-button {
-  flex: 1;
-  padding: 16px 20px;
+  padding: 16px 12px;
   background: rgba(0, 255, 240, 0.05);
-  border: 2px solid rgba(0, 255, 240, 0.3);
+  border: 3px solid rgba(0, 255, 240, 0.3);
+  border-radius: 8px;
   color: #666666;
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   font-weight: 700;
   font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  min-height: 50px;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 240, 0.05),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+  touch-action: manipulation;
+}
+
+.difficulty-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 240, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.difficulty-button:hover::before {
+  left: 100%;
 }
 
 .difficulty-button.active {
   background: rgba(0, 255, 240, 0.15);
   border-color: #00fff0;
   color: #00fff0;
-  box-shadow: 0 0 30px rgba(0, 255, 240, 0.4);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(0, 255, 240, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+  animation: arcadeSelected 0.3s ease;
+}
+
+@keyframes arcadeSelected {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .difficulty-button:hover:not(.active) {
   border-color: rgba(0, 255, 240, 0.5);
   color: #999999;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.3),
+    inset 0 0 15px rgba(0, 255, 240, 0.1),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+.difficulty-button:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 240, 0.4),
+    inset 0 0 15px rgba(0, 255, 240, 0.15),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 .category-button {
-  padding: 12px 16px;
+  padding: 14px 12px;
   background: rgba(0, 255, 240, 0.05);
-  border: 2px solid rgba(0, 255, 240, 0.2);
+  border: 3px solid rgba(0, 255, 240, 0.2);
+  border-radius: 8px;
   color: #666666;
-  font-size: 12px;
+  font-size: clamp(11px, 2.8vw, 12px);
   font-weight: 600;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   text-transform: uppercase;
+  min-height: 50px;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 240, 0.05),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.category-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 240, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.category-button:hover::before {
+  left: 100%;
 }
 
 .category-button.active {
   background: rgba(0, 255, 240, 0.15);
   border-color: #00fff0;
   color: #00fff0;
-  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  box-shadow: 
+    0 0 25px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(0, 255, 240, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+  animation: arcadeSelected 0.3s ease;
 }
 
 .category-button:hover:not(.active) {
-  border-color: rgba(0, 255, 240, 0.3);
+  border-color: rgba(0, 255, 240, 0.4);
   color: #999999;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.3),
+    inset 0 0 15px rgba(0, 255, 240, 0.1),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+.category-button:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 240, 0.4),
+    inset 0 0 15px rgba(0, 255, 240, 0.15),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .start-button {
   width: 100%;
   padding: 20px;
   background: linear-gradient(135deg, #00fff0 0%, #00ccc0 100%);
-  border: none;
+  border: 4px solid #00fff0;
+  border-radius: 8px;
   color: #000000;
-  font-size: 18px;
+  font-size: clamp(16px, 4vw, 20px);
   font-weight: 900;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Press Start 2P', 'Orbitron', sans-serif;
   letter-spacing: 3px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   margin-top: 40px;
-  box-shadow: 0 0 40px rgba(0, 255, 240, 0.5);
+  text-transform: uppercase;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 240, 0.8),
+    inset 0 0 20px rgba(255, 255, 255, 0.3),
+    0 8px 0 rgba(0, 0, 0, 0.5);
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  min-height: 60px;
 }
 
 .start-button::before {
@@ -403,33 +547,81 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.5),
     transparent
   );
   transition: left 0.5s;
 }
 
 .start-button:hover::before {
-  left: 200%;
+  left: 100%;
 }
 
 .start-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 60px rgba(0, 255, 240, 0.8);
+  transform: translateY(-4px);
+  box-shadow: 
+    0 0 60px rgba(0, 255, 240, 1),
+    0 0 30px rgba(255, 0, 110, 0.6),
+    inset 0 0 30px rgba(255, 255, 255, 0.4),
+    0 12px 0 rgba(0, 0, 0, 0.5);
+  animation: arcadeBlink 0.3s ease infinite;
+}
+
+@keyframes arcadeBlink {
+  0%, 100% { 
+    filter: brightness(1); 
+  }
+  50% { 
+    filter: brightness(1.2);
+  }
+}
+
+.start-button:active {
+  transform: translateY(4px);
+  box-shadow: 
+    0 0 40px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.2),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .intesa-setup-screen {
+    padding: 70px 20px 50px;
+  }
+
+  .back-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .difficulty-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .setup-section {
+    margin-bottom: 25px;
+  }
+
+  .start-button {
+    padding: 18px;
+    letter-spacing: 2px;
+  }
 }
 
 /* Mobile */
 @media (max-width: 480px) {
+  .intesa-setup-screen {
+    padding: 70px 16px 40px;
+  }
+
   .intesa-setup-title {
-    font-size: clamp(28px, 7vw, 44px);
-  }
-
-  .difficulty-buttons {
-    flex-direction: column;
-  }
-
-  .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
+    font-size: clamp(24px, 6vw, 36px);
   }
 
   .pair-inputs {
@@ -439,5 +631,27 @@
 
   .pair-separator {
     transform: rotate(90deg);
+  }
+
+  .counter-control {
+    gap: 20px;
+  }
+
+  .game-logo {
+    width: clamp(120px, 30vw, 160px);
+  }
+
+  .rules-box {
+    padding: 16px;
+  }
+
+  .tv-show-info {
+    padding: 16px;
+  }
+
+  .start-button {
+    padding: 16px;
+    letter-spacing: 1.5px;
+    font-size: clamp(14px, 3.5vw, 18px);
   }
 }
