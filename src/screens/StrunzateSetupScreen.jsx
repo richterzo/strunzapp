@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import openaiService from '../services/openaiService'
 import './StrunzateSetupScreen.css'
+import './shared-setup.css'
 
 export default function StrunzateSetupScreen() {
   const navigate = useNavigate()
   const [selectedCategories, setSelectedCategories] = useState(['personali'])
   const [error, setError] = useState('')
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   const categories = [
     { 
@@ -79,20 +81,27 @@ export default function StrunzateSetupScreen() {
             alt="Strunzate" 
             className="game-logo"
           />
-          <h1 className="setup-title">STRUNZATE</h1>
-          <p className="setup-subtitle">Domande per conversazioni autentiche</p>
         </div>
 
-        <div className="rules-box">
-          <h3 className="rules-title">💬 COME SI GIOCA</h3>
-          <ul className="rules-list">
-            <li>🎯 Domande generate per stimolare <strong>conversazioni profonde</strong></li>
-            <li>🗣️ Leggi ad alta voce e <strong>rispondi con sincerità</strong></li>
-            <li>👥 Perfetto per <strong>serate tra amici, coppie, famiglia</strong></li>
-            <li>💡 Non esistono risposte giuste o sbagliate</li>
-            <li>🔥 Più sei autentico, più la conversazione sarà <strong>memorabile</strong></li>
-          </ul>
-        </div>
+        <button 
+          className="rules-toggle" 
+          onClick={() => setRulesOpen(!rulesOpen)}
+        >
+          <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">COME SI GIOCA</span>
+        </button>
+
+        {rulesOpen && (
+          <div className="rules-box">
+            <ul className="rules-list">
+              <li>🎯 Domande generate per stimolare <strong>conversazioni profonde</strong></li>
+              <li>🗣️ Leggi ad alta voce e <strong>rispondi con sincerità</strong></li>
+              <li>👥 Perfetto per <strong>serate tra amici, coppie, famiglia</strong></li>
+              <li>💡 Non esistono risposte giuste o sbagliate</li>
+              <li>🔥 Più sei autentico, più la conversazione sarà <strong>memorabile</strong></li>
+            </ul>
+          </div>
+        )}
 
         {/* Categories */}
         <div className="setup-section">

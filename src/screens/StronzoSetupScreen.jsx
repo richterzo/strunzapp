@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './StronzoSetupScreen.css'
+import './shared-setup.css'
 
 const CATEGORIES = {
   cibi: {
@@ -654,6 +655,7 @@ export default function StronzoSetupScreen() {
     paesi: true,
   })
   const [playerNames, setPlayerNames] = useState(['', '', '', ''])
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   const toggleCategory = (category) => {
     setSelectedCategories((prev) => ({
@@ -721,21 +723,29 @@ export default function StronzoSetupScreen() {
             alt="Stronzo Impostore"
             className="game-logo"
           />
-          <h2 className="setup-title">STRONZO</h2>
         </div>
 
-        <div className="rules-box">
-          <h3 className="rules-title">📋 COME SI GIOCA</h3>
-          <ul className="rules-list">
-            <li>🎯 Tutti i giocatori vedono una parola segreta</li>
-            <li>
-              🤫 Gli <strong>impostori</strong> NON vedono la parola
-            </li>
-            <li>💬 A turno, descrivete la parola senza dirla</li>
-            <li>🕵️ Scoprite chi è l'impostore!</li>
-            <li>🎭 Se sei l'impostore: FINGI di sapere la parola!</li>
-          </ul>
-        </div>
+        <button 
+          className="rules-toggle" 
+          onClick={() => setRulesOpen(!rulesOpen)}
+        >
+          <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">COME SI GIOCA</span>
+        </button>
+
+        {rulesOpen && (
+          <div className="rules-box">
+            <ul className="rules-list">
+              <li>🎯 Tutti i giocatori vedono una parola segreta</li>
+              <li>
+                🤫 Gli <strong>impostori</strong> NON vedono la parola
+              </li>
+              <li>💬 A turno, descrivete la parola senza dirla</li>
+              <li>🕵️ Scoprite chi è l'impostore!</li>
+              <li>🎭 Se sei l'impostore: FINGI di sapere la parola!</li>
+            </ul>
+          </div>
+        )}
 
         <div className="setup-section">
           <h3 className="section-title">NUMERO GIOCATORI</h3>

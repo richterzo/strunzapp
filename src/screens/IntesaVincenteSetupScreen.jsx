@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './IntesaVincenteSetupScreen.css'
+import './shared-setup.css'
 
 export default function IntesaVincenteSetupScreen() {
   const navigate = useNavigate()
@@ -12,6 +13,7 @@ export default function IntesaVincenteSetupScreen() {
   const [difficulty, setDifficulty] = useState('medio')
   const [categories, setCategories] = useState(['Generale'])
   const [passLimit, setPassLimit] = useState(3) // 3 or 'unlimited'
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   const CATEGORIES = [
     'Generale',
@@ -82,15 +84,19 @@ export default function IntesaVincenteSetupScreen() {
             alt="Merda Vincente"
             className="game-logo"
           />
-          <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
-          <p className="intesa-subtitle">
-            📺 Il gioco della trasmissione italiana!
-          </p>
         </div>
 
-        <div className="rules-box">
-          <h3 className="rules-title">📺 COME SI GIOCA</h3>
-          <ul className="rules-list">
+        <button 
+          className="rules-toggle" 
+          onClick={() => setRulesOpen(!rulesOpen)}
+        >
+          <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">COME SI GIOCA</span>
+        </button>
+
+        {rulesOpen && (
+          <div className="rules-box">
+            <ul className="rules-list">
             <li>
               👥 Un giocatore fa <strong>indovinare</strong>, l'altro{' '}
               <strong>indovina</strong>
@@ -108,7 +114,8 @@ export default function IntesaVincenteSetupScreen() {
               → Solo <strong>3 PASSA</strong> disponibili (modalità TV)
             </li>
           </ul>
-        </div>
+          </div>
+        )}
 
         {/* Number of Pairs */}
         <div className="setup-section">

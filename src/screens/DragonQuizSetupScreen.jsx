@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG, GAME_MODES } from '../config/api'
 import openaiService from '../services/openaiService'
 import './DragonQuizSetupScreen.css'
+import './shared-setup.css'
 
 export default function DragonQuizSetupScreen() {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ export default function DragonQuizSetupScreen() {
   const [timerEnabled, setTimerEnabled] = useState(true)
   const [comboEnabled, setComboEnabled] = useState(true)
   const [error, setError] = useState('')
+  const [rulesOpen, setRulesOpen] = useState(false)
 
   const handleNumPlayersChange = (delta) => {
     const newNum = Math.max(1, Math.min(10, numPlayers + delta))
@@ -151,29 +153,37 @@ export default function DragonQuizSetupScreen() {
             alt="Dragon Quiz"
             className="game-logo"
           />
-          <h1 className="setup-title">DRAGON QUIZ</h1>
         </div>
 
-        <div className="rules-box">
-          <h3 className="rules-title">🐉 COME SI GIOCA</h3>
-          <ul className="rules-list">
-            <li>
-              🎯 <strong>10 domande</strong> a difficoltà crescente (1-10)
-            </li>
-            <li>
-              ⏱️ <strong>30 secondi</strong> per rispondere
-            </li>
-            <li>
-              📈 Più difficile = <strong>più punti</strong>
-            </li>
-            <li>
-              ⚡ Rispondi veloce per <strong>bonus tempo</strong>
-            </li>
-            <li>
-              🏆 Arriva al livello <strong>DRAGONE</strong>!
-            </li>
-          </ul>
-        </div>
+        <button 
+          className="rules-toggle" 
+          onClick={() => setRulesOpen(!rulesOpen)}
+        >
+          <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">COME SI GIOCA</span>
+        </button>
+
+        {rulesOpen && (
+          <div className="rules-box">
+            <ul className="rules-list">
+              <li>
+                🎯 <strong>10 domande</strong> a difficoltà crescente (1-10)
+              </li>
+              <li>
+                ⏱️ <strong>30 secondi</strong> per rispondere
+              </li>
+              <li>
+                📈 Più difficile = <strong>più punti</strong>
+              </li>
+              <li>
+                ⚡ Rispondi veloce per <strong>bonus tempo</strong>
+              </li>
+              <li>
+                🏆 Arriva al livello <strong>DRAGONE</strong>!
+              </li>
+            </ul>
+          </div>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 
