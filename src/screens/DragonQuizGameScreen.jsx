@@ -30,6 +30,7 @@ export default function DragonQuizGameScreen() {
   const [globalUsedQuestions, setGlobalUsedQuestions] = useState([]) // From localStorage
   const [loadingError, setLoadingError] = useState(null)
   const [loadingProgress, setLoadingProgress] = useState(0) // Track loading progress
+  const [questionsGenerated, setQuestionsGenerated] = useState(0) // Count of generated questions
   const [selectedPlayerInTeam, setSelectedPlayerInTeam] = useState(null) // Index of player in current team
 
   // Calculate current difficulty level based on question number (1-10)
@@ -46,18 +47,24 @@ export default function DragonQuizGameScreen() {
     )
   }, [])
 
-  // Load all questions for the round when question number changes
+  // Load all questions for the round when question number changes OR at game start
   useEffect(() => {
     if (!location.state) {
       navigate('/')
       return
     }
+
+    // Load all questions for this round when:
+    // 1. We're at player 0 AND no questions loaded
+    // 2. OR at game start (round 1, no questions, not in final phase)
+    const shouldLoadRound = 
+      (currentPlayerIndex === 0 && roundQuestions.length === 0) ||
+      (currentQuestionNumber === 1 && roundQuestions.length === 0 && gamePhase !== 'final')
     
-    // Load all questions for this round
-    if (currentPlayerIndex === 0 && roundQuestions.length === 0) {
+    if (shouldLoadRound) {
       loadRoundQuestions()
     }
-  }, [currentQuestionNumber])
+  }, [currentQuestionNumber, gamePhase])
 
   // Load question for current player from pre-loaded questions
   useEffect(() => {
@@ -99,11 +106,12 @@ export default function DragonQuizGameScreen() {
       console.log(`📝 Generazione di ${numPlayers} domande...`)
 
       const questions = []
-      
+      setQuestionsGenerated(0) // Reset counter
+
       // Generate questions for all players in this round
       for (let i = 0; i < numPlayers; i++) {
         const nextCategory = getNextCategory(categories)
-        
+
         console.log(
           `  Domanda ${i + 1}/${numPlayers} - Categoria: ${nextCategory}`
         )
@@ -111,23 +119,29 @@ export default function DragonQuizGameScreen() {
         const question = await openaiService.generateSingleQuestion(
           difficultyLevel,
           [nextCategory],
-          [...allUsedQuestions, ...questions.map(q => q.question)]
+          [...allUsedQuestions, ...questions.map((q) => q.question)]
         )
 
         // Save to localStorage
         saveQuestion(question.question, question.category)
         questions.push(question)
-        
-        // Update progress
+
+        // Update progress and counter
+        setQuestionsGenerated(i + 1)
         setLoadingProgress(Math.round(((i + 1) / numPlayers) * 100))
       }
 
       // Save all questions for this round
       setRoundQuestions(questions)
-      setUsedQuestions((prev) => [...prev, ...questions.map(q => q.question)])
-      setGlobalUsedQuestions((prev) => [...prev, ...questions.map(q => q.question)])
+      setUsedQuestions((prev) => [...prev, ...questions.map((q) => q.question)])
+      setGlobalUsedQuestions((prev) => [
+        ...prev,
+        ...questions.map((q) => q.question),
+      ])
 
-      console.log(`✅ Round ${currentQuestionNumber} caricato: ${questions.length} domande`)
+      console.log(
+        `✅ Round ${currentQuestionNumber} caricato: ${questions.length} domande`
+      )
 
       // If not in team mode, start immediately
       if (gameMode !== 'teams') {
@@ -155,7 +169,7 @@ export default function DragonQuizGameScreen() {
 
     // Get pre-loaded question for current player
     const question = roundQuestions[currentPlayerIndex]
-    
+
     if (!question) {
       console.error(`No question found for player ${currentPlayerIndex}`)
       setLoadingError('Errore nel caricamento della domanda')
@@ -164,7 +178,9 @@ export default function DragonQuizGameScreen() {
     }
 
     console.log(
-      `📖 Caricamento domanda ${currentPlayerIndex + 1}/${numPlayers} - "${question.question.substring(0, 50)}..."`
+      `📖 Caricamento domanda ${
+        currentPlayerIndex + 1
+      }/${numPlayers} - "${question.question.substring(0, 50)}..."`
     )
 
     setCurrentQuestion(question)
@@ -319,7 +335,7 @@ export default function DragonQuizGameScreen() {
   if (gamePhase === 'loading') {
     const difficultyLevel = getCurrentDifficultyLevel()
     const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS[difficultyLevel - 1]
-    
+
     // Show loading progress when generating questions
     const isGeneratingRound = roundQuestions.length === 0
     const progress = isGeneratingRound ? loadingProgress : 100
@@ -343,8 +359,8 @@ export default function DragonQuizGameScreen() {
               <p className="loading-progress-text">{progress}%</p>
             </div>
             <p className="loading-text">
-              {isGeneratingRound 
-                ? `Generazione Round ${currentQuestionNumber}...` 
+              {isGeneratingRound
+                ? `Generazione Round ${currentQuestionNumber}...`
                 : 'Caricamento domanda...'}
             </p>
             <p className="loading-subtext">
@@ -353,7 +369,10 @@ export default function DragonQuizGameScreen() {
                 {difficultyData?.name}
               </span>
               {isGeneratingRound && (
-                <span> • {numPlayers} domande</span>
+                <span className="questions-counter">
+                  <br />
+                  {questionsGenerated}/{numPlayers} domande generate
+                </span>
               )}
             </p>
           </div>

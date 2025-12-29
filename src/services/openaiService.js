@@ -258,32 +258,27 @@ Livello 1-2 (PRINCIPIANTE/FACILE):
 - Conoscenze comuni e basilari
 - Fatti universalmente noti
 - Domande che tutti dovrebbero sapere
-- Esempio: "Qual è la capitale d'Italia?"
 
 Livello 3-4 (BASE/INTERMEDIO):
 - Cultura generale di base
 - Richiede un minimo di istruzione
 - Fatti abbastanza noti
-- Esempio: "In che anno è caduto il Muro di Berlino?"
 
 Livello 5-6 (MEDIO/AVANZATO):
 - Richiede cultura media-alta
 - Dettagli specifici ma non oscuri
 - Conoscenze settoriali
-- Esempio: "Chi ha dipinto 'La Persistenza della Memoria'?"
 
 Livello 7-8 (DIFFICILE/ESPERTO):
 - Richiede conoscenze approfondite
 - Dettagli specifici e date precise
 - Fatti meno conosciuti
-- Esempio: "In che anno è stata fondata l'UNESCO?"
 
 Livello 9-10 (MAESTRO/LEGGENDA):
 - Conoscenze molto specialistiche
 - Dettagli oscuri e rari
 - Richiede expertise nel campo
 - Date precise, nomi completi
-- Esempio: "Qual è il nome completo del teorema di Gödel sull'incompletezza?"
 
 2. OPZIONI DI RISPOSTA:
    - 4 opzioni plausibili e ben bilanciate
