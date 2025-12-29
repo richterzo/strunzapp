@@ -65,23 +65,11 @@
 .game-logo {
   width: clamp(180px, 50vw, 280px);
   height: auto;
-  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
-  animation: arcadePulse 2s ease-in-out infinite;
   transition: all 0.3s ease;
 }
 
 .game-logo:hover {
-  filter: drop-shadow(0 0 50px rgba(0, 255, 240, 1)) drop-shadow(0 0 20px rgba(255, 0, 110, 0.8));
   transform: scale(1.05);
-}
-
-@keyframes arcadePulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.6));
-  }
-  50% {
-    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 1)) drop-shadow(0 0 15px rgba(255, 0, 110, 0.6));
-  }
 }
 
 .setup-title {
@@ -235,17 +223,21 @@
 .category-card::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(0, 255, 240, 0.1), transparent);
-  transform: rotate(45deg);
-  transition: all 0.5s ease;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 240, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.category-card:hover::before {
-  left: 100%;
+.category-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .category-card:hover {
@@ -263,6 +255,12 @@
     0 0 15px rgba(0, 255, 240, 0.4),
     inset 0 0 15px rgba(0, 255, 240, 0.3),
     0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.category-card:active::before {
+  width: 400px;
+  height: 400px;
+  transition: width 0s, height 0s;
 }
 
 .category-card.active {
@@ -369,6 +367,12 @@
     0 0 30px rgba(0, 255, 240, 0.6),
     inset 0 0 20px rgba(255, 255, 255, 0.2),
     0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.start-button:active::before {
+  width: 600px;
+  height: 600px;
+  transition: width 0s, height 0s;
 }
 
 @keyframes arcadeBlink {

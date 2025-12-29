@@ -24,6 +24,22 @@
     0 4px 0 rgba(0, 0, 0, 0.5);
   touch-action: manipulation;
   min-height: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rules-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 240, 0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  pointer-events: none;
 }
 
 .rules-toggle:hover {
@@ -42,6 +58,12 @@
     0 0 20px rgba(0, 255, 240, 0.3),
     inset 0 0 15px rgba(0, 255, 240, 0.15),
     0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.rules-toggle:active::before {
+  width: 300px;
+  height: 300px;
+  transition: width 0s, height 0s;
 }
 
 .rules-toggle-icon {
@@ -137,6 +159,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 240, 0.5) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  pointer-events: none;
 }
 
 .back-button:hover {
@@ -155,6 +193,12 @@
     0 0 20px rgba(0, 255, 240, 0.5),
     inset 0 0 15px rgba(0, 255, 240, 0.15),
     0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.back-button:active::before {
+  width: 200px;
+  height: 200px;
+  transition: width 0s, height 0s;
 }
 
 /* Mobile adjustments */

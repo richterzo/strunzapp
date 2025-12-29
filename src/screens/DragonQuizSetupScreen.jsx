@@ -155,8 +155,8 @@ export default function DragonQuizSetupScreen() {
           />
         </div>
 
-        <button 
-          className="rules-toggle" 
+        <button
+          className="rules-toggle"
           onClick={() => setRulesOpen(!rulesOpen)}
         >
           <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>

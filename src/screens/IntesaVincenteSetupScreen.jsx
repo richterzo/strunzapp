@@ -86,8 +86,8 @@ export default function IntesaVincenteSetupScreen() {
           />
         </div>
 
-        <button 
-          className="rules-toggle" 
+        <button
+          className="rules-toggle"
           onClick={() => setRulesOpen(!rulesOpen)}
         >
           <span className="rules-toggle-icon">{rulesOpen ? '▼' : '▶'}</span>
@@ -97,23 +97,23 @@ export default function IntesaVincenteSetupScreen() {
         {rulesOpen && (
           <div className="rules-box">
             <ul className="rules-list">
-            <li>
-              👥 Un giocatore fa <strong>indovinare</strong>, l'altro{' '}
-              <strong>indovina</strong>
-            </li>
-            <li>
-              ✅ <strong>PUOI:</strong> Sinonimi, gesti, descrizioni
-            </li>
-            <li>
-              ❌ <strong>NON PUOI:</strong> Dire la parola o sue parti
-            </li>
-            <li>
-              ⏱️ Hai <strong>tempo limitato</strong> - vai a RECORD!
-            </li>
-            <li>
-              → Solo <strong>3 PASSA</strong> disponibili (modalità TV)
-            </li>
-          </ul>
+              <li>
+                👥 Un giocatore fa <strong>indovinare</strong>, l'altro{' '}
+                <strong>indovina</strong>
+              </li>
+              <li>
+                ✅ <strong>PUOI:</strong> Sinonimi, gesti, descrizioni
+              </li>
+              <li>
+                ❌ <strong>NON PUOI:</strong> Dire la parola o sue parti
+              </li>
+              <li>
+                ⏱️ Hai <strong>tempo limitato</strong> - vai a RECORD!
+              </li>
+              <li>
+                → Solo <strong>3 PASSA</strong> disponibili (modalità TV)
+              </li>
+            </ul>
           </div>
         )}
 

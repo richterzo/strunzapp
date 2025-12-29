@@ -177,37 +177,16 @@
   width: 100px;
   height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 0 15px rgba(0, 255, 240, 0.4));
   flex-shrink: 0;
   transition: all 0.3s ease;
-  animation: gameImageFloat 3s ease-in-out infinite;
-}
-
-@keyframes gameImageFloat {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
 }
 
 .game-card:hover .game-image {
-  filter: drop-shadow(0 0 35px rgba(0, 255, 240, 1))
-    drop-shadow(0 0 15px rgba(255, 0, 255, 0.6));
-  transform: scale(1.1) rotate(-3deg);
-  animation: gameImageBounce 0.5s ease infinite;
+  transform: scale(1.05);
 }
 
-@keyframes gameImageBounce {
-  0%,
-  100% {
-    transform: scale(1.1) rotate(-3deg);
-  }
-  50% {
-    transform: scale(1.15) rotate(3deg);
-  }
+.game-card:active .game-image {
+  transform: scale(0.95);
 }
 
 .game-icon {
