@@ -698,6 +698,9 @@ Topic: Verità imbarazzanti su di te, situazioni ipotetiche difficili
 - "Se potessi leggere i pensieri di qualcuno per un giorno, chi sceglieresti?"
 
 ═══════════════════════════════════════════════════
+DOMANDE GIÀ USATE (NON RIPETERE):
+${usedQuestions.length > 0 ? usedQuestions.slice(0, 20).map(q => `- "${q}"`).join('\n') : 'Nessuna domanda precedente'}
+
 VINCOLI ASSOLUTI PER OGNI CATEGORIA:
 ═══════════════════════════════════════════════════
 

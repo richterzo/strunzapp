@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import openaiService from '../services/openaiService'
+import strunzateMemory from '../utils/strunzateMemory'
 import './StrunzateGameScreen.css'
 
 export default function StrunzateGameScreen() {
@@ -12,6 +13,7 @@ export default function StrunzateGameScreen() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [questionCount, setQuestionCount] = useState(0)
+  const [usedQuestions, setUsedQuestions] = useState([])
 
   const categoryNames = {
     personali: 'Personali',
@@ -32,6 +34,12 @@ export default function StrunzateGameScreen() {
       navigate('/strunzate/setup')
       return
     }
+    
+    // Load historical questions
+    const history = strunzateMemory.getUsedQuestions()
+    setUsedQuestions(history)
+    console.log(`Strunzate: Loaded ${history.length} questions from history`)
+    
     loadQuestion()
   }, [])
 
@@ -43,11 +51,32 @@ export default function StrunzateGameScreen() {
       // Select random category from selected ones
       const category = categories[Math.floor(Math.random() * categories.length)]
       
-      const question = await openaiService.generateStrunzateQuestion(category)
+      // Try to generate a unique question (max 3 attempts)
+      let question
+      let attempts = 0
+      const maxAttempts = 3
+      
+      do {
+        question = await openaiService.generateStrunzateQuestion(category, usedQuestions)
+        attempts++
+        
+        // If question is unique or we've tried enough times, use it
+        if (!usedQuestions.includes(question.question) || attempts >= maxAttempts) {
+          break
+        }
+        
+        console.log(`Strunzate: Question duplicate, retrying (${attempts}/${maxAttempts})...`)
+      } while (attempts < maxAttempts)
+      
+      // Save question to memory
+      strunzateMemory.saveQuestion(question.question)
+      setUsedQuestions(prev => [question.question, ...prev].slice(0, 100))
       
       setCurrentQuestion({ ...question, category })
       setQuestionCount(prev => prev + 1)
       setIsLoading(false)
+      
+      console.log(`Strunzate: Generated question in ${attempts} attempts`)
     } catch (err) {
       console.error('Error loading question:', err)
       setError('Errore nel caricamento della domanda. Riprova.')
