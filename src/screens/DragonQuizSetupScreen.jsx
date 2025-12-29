@@ -12,7 +12,6 @@ export default function DragonQuizSetupScreen() {
   const [playerNames, setPlayerNames] = useState([''])
   const [teamNames, setTeamNames] = useState(['Squadra 1', 'Squadra 2'])
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleNumPlayersChange = (delta) => {
@@ -77,47 +76,19 @@ export default function DragonQuizSetupScreen() {
     }
 
     setError('')
-    setIsLoading(true)
 
-    try {
-      // Generate questions
-      const questions = await openaiService.generateQuizQuestions(
-        QUIZ_CONFIG.TOTAL_QUESTIONS,
-        selectedCategories
-      )
-
-      // Navigate to game with data
-      navigate('/dragon-quiz/game', {
-        state: {
-          gameMode,
-          numPlayers: gameMode === 'single' ? numPlayers : numTeams,
-          playerNames: gameMode === 'single' ? playerNames : teamNames,
-          questions,
-          categories:
-            selectedCategories.length > 0
-              ? selectedCategories
-              : QUIZ_CONFIG.CATEGORIES,
-        },
-      })
-    } catch (err) {
-      console.error('Error starting quiz:', err)
-      setError(`Errore: ${err.message}`)
-      setIsLoading(false)
-    }
-  }
-
-  if (isLoading) {
-    return (
-      <div className="setup-screen">
-        <div className="setup-content">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p className="loading-text">Generazione domande AI...</p>
-            <p className="loading-subtext">Difficoltà crescente</p>
-          </div>
-        </div>
-      </div>
-    )
+    // Navigate to game - questions will be generated on-demand
+    navigate('/dragon-quiz/game', {
+      state: {
+        gameMode,
+        numPlayers: gameMode === 'single' ? numPlayers : numTeams,
+        playerNames: gameMode === 'single' ? playerNames : teamNames,
+        categories:
+          selectedCategories.length > 0
+            ? selectedCategories
+            : QUIZ_CONFIG.CATEGORIES,
+      },
+    })
   }
 
   return (

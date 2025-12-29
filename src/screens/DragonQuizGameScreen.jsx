@@ -1,28 +1,63 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG } from '../config/api'
+import openaiService from '../services/openaiService'
 import './DragonQuizGameScreen.css'
 
 export default function DragonQuizGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { gameMode, numPlayers, playerNames, questions, categories } = location.state || {}
+  const { gameMode, numPlayers, playerNames, categories } = location.state || {}
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1) // 1 to 10
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
   const [scores, setScores] = useState(Array(numPlayers).fill(0))
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
   const [timeLeft, setTimeLeft] = useState(QUIZ_CONFIG.TIME_PER_QUESTION)
-  const [gamePhase, setGamePhase] = useState('question') // question, result, final
-  const [answeredQuestions, setAnsweredQuestions] = useState(0)
+  const [gamePhase, setGamePhase] = useState('loading') // loading, question, result, final
+  const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [usedQuestions, setUsedQuestions] = useState([])
+  const [loadingError, setLoadingError] = useState(null)
 
+  // Calculate current difficulty level based on question number (1-10)
+  const getCurrentDifficultyLevel = () => {
+    return currentQuestionNumber
+  }
+
+  // Load question for current player
   useEffect(() => {
     if (!location.state) {
       navigate('/')
       return
     }
-  }, [])
+    loadNextQuestion()
+  }, [currentQuestionNumber, currentPlayerIndex])
+
+  const loadNextQuestion = async () => {
+    if (gamePhase === 'final') return
+
+    setGamePhase('loading')
+    setLoadingError(null)
+    
+    try {
+      const difficultyLevel = getCurrentDifficultyLevel()
+      const question = await openaiService.generateSingleQuestion(
+        difficultyLevel,
+        categories,
+        usedQuestions
+      )
+      
+      setCurrentQuestion(question)
+      setUsedQuestions(prev => [...prev, question.question])
+      setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
+      setGamePhase('question')
+    } catch (error) {
+      console.error('Error loading question:', error)
+      setLoadingError(error.message || 'Errore nel caricamento della domanda')
+      setGamePhase('error')
+    }
+  }
 
   useEffect(() => {
     if (gamePhase === 'question' && timeLeft > 0) {
@@ -48,15 +83,14 @@ export default function DragonQuizGameScreen() {
     setShowResult(true)
     setGamePhase('result')
 
-    // Calculate score with new difficulty system
-    const question = questions[currentQuestionIndex]
-    const isCorrect = answerIndex === question.correctAnswer
+    // Calculate score with difficulty system
+    const isCorrect = answerIndex === currentQuestion.correctAnswer
     
     if (isCorrect) {
       const basePoints = QUIZ_CONFIG.POINTS_BASE
       
       // Get difficulty multiplier from level
-      const difficultyLevel = question.difficultyLevel || 1
+      const difficultyLevel = currentQuestion.difficultyLevel || 1
       const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS.find(d => d.level === difficultyLevel)
       const difficultyMultiplier = difficultyData ? difficultyData.multiplier : 1
       
@@ -70,30 +104,27 @@ export default function DragonQuizGameScreen() {
       newScores[currentPlayerIndex] += points
       setScores(newScores)
     }
-
-    setAnsweredQuestions(answeredQuestions + 1)
   }
 
   const handleNextQuestion = () => {
-    // Check if all questions are done
-    if (currentQuestionIndex >= questions.length - 1) {
-      setGamePhase('final')
-      return
-    }
-
     // Move to next player
     const nextPlayerIndex = (currentPlayerIndex + 1) % numPlayers
     
-    // If all players have answered this question, move to next question
+    // If all players have answered this question round
     if (nextPlayerIndex === 0) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
+      // Check if we've completed all 10 question rounds
+      if (currentQuestionNumber >= QUIZ_CONFIG.NUM_QUESTIONS) {
+        setGamePhase('final')
+        return
+      }
+      // Move to next question round (increase difficulty)
+      setCurrentQuestionNumber(prev => prev + 1)
     }
 
     setCurrentPlayerIndex(nextPlayerIndex)
     setSelectedAnswer(null)
     setShowResult(false)
-    setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
-    setGamePhase('question')
+    // loadNextQuestion will be triggered by useEffect
   }
 
   const handleNewGame = () => {
@@ -102,6 +133,41 @@ export default function DragonQuizGameScreen() {
 
   const handleBackToHome = () => {
     navigate('/')
+  }
+
+  if (gamePhase === 'loading') {
+    return (
+      <div className="game-screen">
+        <div className="game-content">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Generazione domanda AI...</p>
+            <p className="loading-subtext">
+              Livello {getCurrentDifficultyLevel()}/10 - {QUIZ_CONFIG.DIFFICULTY_LEVELS[getCurrentDifficultyLevel() - 1]?.name}
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (gamePhase === 'error') {
+    return (
+      <div className="game-screen">
+        <div className="game-content">
+          <div className="error-container">
+            <div className="error-icon">⚠️</div>
+            <p className="error-message">{loadingError}</p>
+            <button className="action-button primary" onClick={loadNextQuestion}>
+              RIPROVA
+            </button>
+            <button className="action-button secondary" onClick={handleBackToHome}>
+              TORNA AL MENU
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (gamePhase === 'final') {
@@ -142,25 +208,27 @@ export default function DragonQuizGameScreen() {
     )
   }
 
-  if (!questions || questions.length === 0) {
+  if (!currentQuestion) {
     return (
       <div className="game-screen">
         <div className="game-content">
-          <div className="error-message">Nessuna domanda disponibile</div>
-          <button className="action-button" onClick={handleBackToHome}>
-            TORNA AL MENU
-          </button>
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Caricamento...</p>
+          </div>
         </div>
       </div>
     )
   }
 
-  const question = questions[currentQuestionIndex]
-  const isCorrect = selectedAnswer === question.correctAnswer
+  const isCorrect = selectedAnswer === currentQuestion.correctAnswer
   
   // Get difficulty styling
-  const difficultyLevel = question.difficultyLevel || 1
+  const difficultyLevel = currentQuestion.difficultyLevel || 1
   const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS.find(d => d.level === difficultyLevel) || QUIZ_CONFIG.DIFFICULTY_LEVELS[0]
+  
+  const totalQuestionsForProgress = QUIZ_CONFIG.NUM_QUESTIONS * numPlayers
+  const answeredCount = ((currentQuestionNumber - 1) * numPlayers) + currentPlayerIndex
 
   return (
     <div className="game-screen">
@@ -169,12 +237,12 @@ export default function DragonQuizGameScreen() {
           <div className="progress-bar">
             <div 
               className="progress-fill" 
-              style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+              style={{ width: `${(answeredCount / totalQuestionsForProgress) * 100}%` }}
             ></div>
           </div>
           <div className="header-info">
             <span className="question-number">
-              DOMANDA {currentQuestionIndex + 1}/{questions.length}
+              ROUND {currentQuestionNumber}/{QUIZ_CONFIG.NUM_QUESTIONS}
             </span>
             <span className={`timer ${timeLeft <= 10 ? 'warning' : ''}`}>
               ⏱️ {timeLeft}s
@@ -195,13 +263,13 @@ export default function DragonQuizGameScreen() {
             <span className="difficulty-level">Lv.{difficultyLevel}</span>
             <span className="difficulty-name">{difficultyData.name}</span>
           </div>
-          <div className="category-badge">{question.category}</div>
-          <h2 className="question-text">{question.question}</h2>
+          <div className="category-badge">{currentQuestion.category}</div>
+          <h2 className="question-text">{currentQuestion.question}</h2>
         </div>
 
         {!showResult ? (
           <div className="answers-container">
-            {question.options.map((option, index) => (
+            {currentQuestion.options.map((option, index) => (
               <button
                 key={index}
                 className="answer-button"
@@ -219,13 +287,13 @@ export default function DragonQuizGameScreen() {
             </div>
 
             <div className="correct-answer">
-              <strong>Risposta corretta:</strong> {question.options[question.correctAnswer]}
+              <strong>Risposta corretta:</strong> {currentQuestion.options[currentQuestion.correctAnswer]}
             </div>
 
-            {question.explanation && (
+            {currentQuestion.explanation && (
               <div className="explanation">
                 <strong>Spiegazione:</strong>
-                <p>{question.explanation}</p>
+                <p>{currentQuestion.explanation}</p>
               </div>
             )}
 
@@ -234,7 +302,7 @@ export default function DragonQuizGameScreen() {
                 <div className="points-earned">
                   +{(() => {
                     const basePoints = QUIZ_CONFIG.POINTS_BASE
-                    const difficultyLevel = question.difficultyLevel || 1
+                    const difficultyLevel = currentQuestion.difficultyLevel || 1
                     const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS.find(d => d.level === difficultyLevel)
                     const difficultyMultiplier = difficultyData ? difficultyData.multiplier : 1
                     const timeBonus = Math.floor((timeLeft / QUIZ_CONFIG.TIME_PER_QUESTION) * QUIZ_CONFIG.TIME_BONUS_MAX)
@@ -248,7 +316,7 @@ export default function DragonQuizGameScreen() {
             )}
 
             <button className="next-button" onClick={handleNextQuestion}>
-              {currentQuestionIndex >= questions.length - 1 && currentPlayerIndex >= numPlayers - 1
+              {currentQuestionNumber >= QUIZ_CONFIG.NUM_QUESTIONS && currentPlayerIndex >= numPlayers - 1
                 ? 'VEDI CLASSIFICA'
                 : 'PROSSIMA DOMANDA →'}
             </button>

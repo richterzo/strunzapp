@@ -15,9 +15,9 @@ export const GAME_MODES = {
 
 // Quiz configuration
 export const QUIZ_CONFIG = {
-  TOTAL_QUESTIONS: 10,
+  NUM_QUESTIONS: 10, // Number of question rounds
   
-  // Difficulty scale 1-10
+  // Difficulty scale 1-10 (one level per question round)
   DIFFICULTY_LEVELS: [
     { level: 1, name: 'Principiante', multiplier: 1.0, color: '#00FF00' },
     { level: 2, name: 'Facile', multiplier: 1.2, color: '#33FF33' },
