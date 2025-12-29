@@ -617,37 +617,55 @@ IMPORTANTE:
       throw new Error('API not configured')
     }
 
-    const categoryPrompts = {
-      personali: 'domande personali e intime che aiutano a conoscersi meglio, parlare di esperienze, sogni, paure, valori',
-      filosofiche: 'domande filosofiche e riflessive sulla vita, il senso dell\'esistenza, la felicità, il tempo, la moralità',
-      scottanti: 'domande provocatorie e audaci su argomenti delicati, opinioni controverse, scelte difficili',
-      scomode: 'domande imbarazzanti e situazioni scomode che mettono alla prova l\'onestà e il coraggio'
+    const categoryMapping = {
+      personali: 'Personali',
+      filosofiche: 'Filosofiche',
+      scottanti: 'Scottanti',
+      scomode: 'Scomode'
     }
 
-    const systemPrompt = `Sei un esperto di conversazioni profonde e autentiche.
-Genera una domanda aperta e stimolante per la categoria "${category}".
+    const systemPrompt = `Agisci come un autore di giochi conversazionali provocatori e intelligenti.
+Il tuo compito è generare DOMANDE ORIGINALI, NON COMUNI e MEMORABILI
+per stimolare conversazioni tra amici.
 
-CATEGORIA: ${categoryPrompts[category]}
+REGOLE FONDAMENTALI (obbligatorie):
+- NON usare domande generiche, motivazionali o da coaching
+- EVITA parole come: sogni, felicità, obiettivi, crescita personale, comfort zone
+- NESSUNA domanda deve essere risolvibile con sì/no
+- Ogni domanda deve creare almeno UNA di queste tensioni:
+  • conflitto morale
+  • scelta irreversibile
+  • esposizione sociale controllata
+  • rivelazione inaspettata
+  • immaginazione concreta con conseguenze
 
-REGOLE PER LA DOMANDA:
-1. Domanda APERTA (non sì/no)
-2. Stimola riflessione profonda
-3. Non giudicante, rispettosa
-4. Incoraggia autenticità
-5. Adatta a conversazioni tra amici/coppia/famiglia
-6. In italiano naturale
-7. Lunghezza 10-30 parole
+STRUTTURA DELLE DOMANDE:
+- Frasi brevi, dirette
+- Linguaggio naturale da conversazione reale
+- Nessun tono terapeutico o filosofico accademico
+- Deve sembrare una domanda che "resta addosso" dopo aver risposto
+
+VINCOLI DI QUALITÀ:
+- Ogni domanda deve essere SPECIFICA (tempo, persona, conseguenza)
+- Vietate domande astratte o vaghe
+- Vietato l'uso di "perché pensi che", "secondo te", "come ti senti"
+
+CATEGORIA: ${categoryMapping[category]}
 
 OUTPUT: Solo JSON con questa struttura:
 {
   "question": "La domanda"
 }
 
-ESEMPI CATEGORIA "${category}":
-- Se "personali": "Quale momento della tua vita ti ha cambiato più profondamente e perché?"
-- Se "filosofiche": "Se potessi sapere la data esatta della tua morte, vorresti saperla?"
-- Se "scottanti": "Hai mai mentito per proteggere qualcuno e te ne sei pentito?"
-- Se "scomode": "Qual è il segreto più imbarazzante che non hai mai raccontato a nessuno?"`
+ESEMPI DI BUONE DOMANDE:
+- "Hai mai scoperto una bugia di qualcuno e fatto finta di niente per mesi?"
+- "Se potessi cancellare un ricordo dalla tua vita, quale sceglieresti?"
+- "Qual è la cosa peggiore che hai pensato di una persona che ami?"
+- "Ti sei mai sentito sollevato alla notizia della sofferenza di qualcuno?"
+- "C'è una persona a cui non hai mai chiesto scusa ma dovresti?"
+
+GENERA 1 DOMANDA per la categoria ${categoryMapping[category]}.
+In italiano. Senza spiegazioni. Solo la domanda nel JSON.`
 
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -660,10 +678,10 @@ ESEMPI CATEGORIA "${category}":
           model: 'gpt-4o-mini',
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Genera una domanda per la categoria "${category}".` }
+            { role: 'user', content: `Genera 1 domanda originale e memorabile per la categoria "${categoryMapping[category]}".` }
           ],
-          temperature: 0.9,
-          max_tokens: 300,
+          temperature: 1.0,
+          max_tokens: 200,
           response_format: { type: "json_object" }
         })
       })
