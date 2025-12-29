@@ -24,128 +24,147 @@ export class OpenAIService {
     const categoriesStr = categories.length > 0 ? categories.join(', ') : 'cultura generale'
     const selectedCategory = categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : 'cultura generale'
 
-    // Create examples based on difficulty level
-    const getExampleForLevel = (level) => {
-      const examples = {
-        5: '"Chi ha composto la \'Nona Sinfonia\' e in che anno è stata eseguita per la prima volta?"',
-        6: '"Quale teorema matematico afferma che in un triangolo rettangolo il quadrato dell\'ipotenusa è uguale alla somma dei quadrati dei cateti?"',
-        7: '"In che anno è stata ratificata la Costituzione degli Stati Uniti d\'America?"',
-        8: '"Qual è il nome completo della teoria della relatività generale di Einstein?"',
-        9: '"Quale elemento chimico ha numero atomico 79 e simbolo Au?"',
-        10: '"Chi ha vinto il Premio Nobel per la Letteratura nel 1957?"',
-        11: '"Qual è la costante di Planck espressa in joule-secondo con 4 cifre decimali?"',
-        12: '"In che anno fu pubblicato il \'Tractatus Logico-Philosophicus\' di Wittgenstein?"',
-        13: '"Qual è il nome del primo ministro giapponese che firmò la resa del Giappone nel 1945?"',
-        14: '"Quanti sono i cromosomi nella sindrome di Edwards e qual è la loro disposizione esatta?"'
-      }
-      return examples[level] || examples[10]
-    }
-
     const usedQuestionsContext = usedQuestions.length > 0 
       ? `\n\nEVITA ASSOLUTAMENTE queste domande già usate:\n${usedQuestions.slice(-20).join('\n')}\n`
       : ''
 
-    const prompt = `Genera UNA SINGOLA domanda di quiz in italiano MOLTO DIFFICILE e APPROFONDITA.
+    // Parametric difficulty description based on level
+    const getDifficultyDescription = (level) => {
+      const descriptions = {
+        1: {
+          knowledge: 'Conoscenze basilari universalmente note',
+          examples: 'Capitali principali, eventi storici recenti noti, celebrità famose',
+          complexity: 'Domande dirette e semplici'
+        },
+        2: {
+          knowledge: 'Cultura generale elementare',
+          examples: 'Geografia di base, opere famose, fatti storici importanti',
+          complexity: 'Domande chiare con risposta nota alla maggior parte'
+        },
+        3: {
+          knowledge: 'Cultura generale media',
+          examples: 'Date importanti, autori classici, scoperte scientifiche note',
+          complexity: 'Richiede memoria di eventi e nomi noti'
+        },
+        4: {
+          knowledge: 'Conoscenze specifiche ma accessibili',
+          examples: 'Dettagli su opere d\'arte, eventi storici con date, personaggi secondari',
+          complexity: 'Richiede buona cultura generale'
+        },
+        5: {
+          knowledge: 'Cultura approfondita',
+          examples: 'Date precise, nomi completi, dettagli tecnici di base',
+          complexity: 'Difficile ma risolvibile con buona preparazione'
+        },
+        6: {
+          knowledge: 'Expertise settoriale',
+          examples: 'Dettagli biografici, date esatte, termini tecnici specifici',
+          complexity: 'Molto difficile, richiede conoscenze specialistiche'
+        },
+        7: {
+          knowledge: 'Conoscenze da esperto',
+          examples: 'Dettagli oscuri ma verificabili, formule, valori numerici',
+          complexity: 'Estremamente difficile, dettagli raramente noti'
+        },
+        8: {
+          knowledge: 'Expertise assoluta',
+          examples: 'Fatti storici secondari cruciali, dettagli tecnici avanzati, citazioni',
+          complexity: 'Quasi impossibile senza studio specifico'
+        },
+        9: {
+          knowledge: 'Conoscenze enciclopediche',
+          examples: 'Dettagli ultra-specifici, nomi completi rari, date precise di pubblicazioni',
+          complexity: 'Impossibile per la maggior parte, richiede memoria eccezionale'
+        },
+        10: {
+          knowledge: 'Livello "Chi vuol essere milionario" - domanda finale',
+          examples: 'Combinazione di dettagli rarissimi, conoscenze multi-disciplinari oscure',
+          complexity: 'Domanda da milione: quasi impossibile, richiede fortuna o expertise assoluta'
+        }
+      }
+      return descriptions[level] || descriptions[5]
+    }
+
+    const diffDescription = getDifficultyDescription(difficultyLevel)
+
+    const prompt = `Genera UNA SINGOLA domanda di quiz in italiano, stile "CHI VUOL ESSERE MILIONARIO".
 
 CATEGORIA: ${selectedCategory}
-DIFFICOLTÀ: Livello ${difficultyLevel}/14 - ${difficultyData.name.toUpperCase()}
+LIVELLO DI DIFFICOLTÀ: ${difficultyLevel}/10 - ${difficultyData.name.toUpperCase()}
 
-SCALA DIFFICOLTÀ DETTAGLIATA (DA MEDIO AD ASSURDO):
+PARAMETRI DI DIFFICOLTÀ PER LIVELLO ${difficultyLevel}:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 TIPO DI CONOSCENZE: ${diffDescription.knowledge}
+📖 AMBITO: ${diffDescription.examples}
+🎯 COMPLESSITÀ: ${diffDescription.complexity}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Livello 5 (MEDIO): Richiede buona cultura generale e memoria
-- Domande su fatti storici importanti con date
-- Opere d'arte, letteratura, musica classica
-- Geografia avanzata, capitali, fiumi principali
-- Esempio: "Chi ha composto la 'Nona Sinfonia' e in che anno?"
+SCALA PROGRESSIVA (tipo "Chi vuol essere milionario"):
+${Array.from({length: 10}, (_, i) => {
+  const l = i + 1
+  const desc = getDifficultyDescription(l)
+  return `Livello ${l}/10: ${desc.knowledge} - ${desc.complexity}`
+}).join('\n')}
 
-Livello 6 (AVANZATO): Conoscenze specifiche e dettagliate
-- Teoremi matematici, leggi fisiche con dettagli
-- Eventi storici con protagonisti e contesti
-- Opere letterarie con autori e periodi
-- Esempio: "Quale teorema afferma che in un triangolo rettangolo..."
+LA TUA DOMANDA DEVE ESSERE ESATTAMENTE AL LIVELLO ${difficultyLevel}/10!
 
-Livello 7 (DIFFICILE): Richiede conoscenze approfondite
-- Date precise di eventi storici importanti
-- Dettagli su scoperte scientifiche
-- Artisti e opere con periodi storici
-- Esempio: "In che anno fu ratificata la Costituzione USA?"
+REGOLE CRITICHE PER LA DIFFICOLTÀ:
+${difficultyLevel <= 3 ? `
+✓ Fatti universalmente noti
+✓ Risposte che molti conoscono
+✓ Domande chiare e dirette
+` : difficultyLevel <= 6 ? `
+✓ Dettagli specifici ma non oscuri
+✓ Date precise o nomi completi
+✓ Richiede cultura medio-alta
+✓ Non troppo tecnico
+` : `
+✓ Dettagli rarissimi e oscuri
+✓ Conoscenze ultra-specialistiche
+✓ Combinazioni complesse
+✓ Quasi impossibile indovinare
+`}
 
-Livello 8 (ESPERTO): Expertise settoriale richiesta
-- Formule scientifiche complete
-- Date precise e nomi completi
-- Dettagli tecnici specifici
-- Esempio: "Nome completo della teoria della relatività generale"
-
-Livello 9 (MAESTRO): Conoscenze molto specialistiche
-- Tavola periodica con dettagli
-- Premi Nobel con anni e categorie
-- Eventi storici oscuri ma verificabili
-- Esempio: "Elemento con numero atomico 79?"
-
-Livello 10 (LEGGENDA): Cultura enciclopedica richiesta
-- Dettagli molto specifici e rari
-- Date precise di pubblicazioni
-- Nomi completi e titoli esatti
-- Esempio: "Premio Nobel Letteratura 1957?"
-
-Livello 11 (DIVINO): Conoscenze da esperto assoluto
-- Costanti fisiche con valori numerici
-- Dettagli biografici oscuri
-- Citazioni con fonti precise
-- Esempio: "Valore costante di Planck con 4 decimali?"
-
-Livello 12 (IMPOSSIBILE): Conoscenze ultra-specialistiche
-- Pubblicazioni accademiche con date
-- Dettagli tecnici rarissimi
-- Nomi e titoli completi in lingua originale
-- Esempio: "Anno pubblicazione Tractatus Logico-Philosophicus?"
-
-Livello 13 (DEMONIACO): Conoscenze da archivio storico
-- Personaggi storici secondari ma cruciali
-- Eventi specifici con protagonisti esatti
-- Dettagli che richiedono ricerca approfondita
-- Esempio: "Nome del primo ministro giapponese alla resa 1945?"
-
-Livello 14 (ASSURDO): Conoscenze da enciclopedia medica/scientifica
-- Dettagli genetici, cromosomici
-- Formule chimiche complesse
-- Dati numerici precisi rarissimi
-- Esempio: "Numero cromosomi sindrome di Edwards e disposizione?"
-
-LA TUA DOMANDA DEVE ESSERE ESATTAMENTE LIVELLO ${difficultyLevel}/14!
-NON FARE DOMANDE PIÙ FACILI! DEVE ESSERE MOLTO DIFFICILE!
 ${usedQuestionsContext}
 
-REQUISITI CRITICI:
-1. LA DIFFICOLTÀ DEVE ESSERE APPROPRIATA AL LIVELLO ${difficultyLevel}/14
-2. Genera ESATTAMENTE 5 OPZIONI di risposta molto plausibili
-3. TUTTE le opzioni devono sembrare corrette a prima vista
-4. Evita opzioni ovviamente sbagliate
-5. La risposta corretta deve essere indicata con un indice (0-4)
-6. Includi una spiegazione dettagliata e accurata
-7. La domanda deve essere specifica, tecnica e approfondita
-8. Usa termini tecnici appropriati alla categoria
-9. Richiedi conoscenze molto specifiche
-10. La domanda DEVE essere DIVERSA da quelle già fatte
+REQUISITI ASSOLUTI:
+1. Difficoltà ESATTA al livello ${difficultyLevel}/10
+2. ESATTAMENTE 5 opzioni di risposta
+3. Tutte le opzioni devono sembrare plausibili
+4. Opzioni ben bilanciate e credibili
+5. NO opzioni ovviamente sbagliate
+6. Risposta corretta indicata con indice (0-4)
+7. Spiegazione dettagliata e accurata
+8. Domanda chiara e ben formulata
+9. La domanda DEVE essere DIVERSA da quelle già usate
+10. Stile "Chi vuol essere milionario"
+
+${difficultyLevel >= 8 ? 'ATTENZIONE: Livello ultra-difficile! La domanda deve essere quasi impossibile da indovinare!' : ''}
+${difficultyLevel === 10 ? '🏆 DOMANDA DA MILIONE! Deve essere la domanda più difficile possibile, quasi impossibile!' : ''}
 
 FORMATO OUTPUT (SOLO JSON, niente altro testo):
 {
-  "question": "Testo della domanda molto specifica e dettagliata",
-  "options": ["Opzione A molto plausibile", "Opzione B molto plausibile", "Opzione C molto plausibile", "Opzione D molto plausibile", "Opzione E molto plausibile"],
+  "question": "Testo della domanda ben formulata e chiara",
+  "options": [
+    "Opzione A - molto plausibile",
+    "Opzione B - molto plausibile",
+    "Opzione C - molto plausibile",
+    "Opzione D - molto plausibile",
+    "Opzione E - molto plausibile"
+  ],
   "correctAnswer": 0,
   "difficultyLevel": ${difficultyLevel},
   "difficultyName": "${difficultyData.name}",
   "category": "${selectedCategory}",
-  "explanation": "Spiegazione dettagliata e tecnica del perché questa è la risposta corretta, con contesto storico/scientifico"
+  "explanation": "Spiegazione dettagliata con contesto e perché la risposta è corretta"
 }
 
 IMPORTANTE: 
 - Rispondi ESCLUSIVAMENTE con l'oggetto JSON
-- NO markdown, NO testo aggiuntivo, NO array
+- NO markdown, NO testo aggiuntivo
 - ESATTAMENTE 5 OPZIONI
-- DIFFICOLTÀ MASSIMA PER IL LIVELLO ${difficultyLevel}
-- DOMANDE MOLTO SPECIFICHE E APPROFONDITE
-- SOLO l'oggetto JSON della domanda`
+- Difficoltà calibrata PRECISAMENTE al livello ${difficultyLevel}/10
+- Stile "Chi vuol essere milionario"`
 
     try {
       const response = await fetch(this.apiUrl, {
