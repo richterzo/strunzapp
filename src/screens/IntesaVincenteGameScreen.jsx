@@ -7,7 +7,7 @@ import './IntesaVincenteGameScreen.css'
 export default function IntesaVincenteGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { pairs, timePerRound, difficulty, categories } = location.state || {}
+  const { pairs, timePerRound, difficulty, categories, passLimit } = location.state || {}
 
   const [currentPairIndex, setCurrentPairIndex] = useState(0)
   const [currentPlayer, setCurrentPlayer] = useState(1) // 1 or 2
@@ -20,6 +20,7 @@ export default function IntesaVincenteGameScreen() {
   const [isWordVisible, setIsWordVisible] = useState(false)
   const [countdown, setCountdown] = useState(3)
   const [showCountdown, setShowCountdown] = useState(false)
+  const [passesUsed, setPassesUsed] = useState(0)
   const timerRef = useRef(null)
   const countdownRef = useRef(null)
 
@@ -81,6 +82,7 @@ export default function IntesaVincenteGameScreen() {
     setCurrentRoundScore(0)
     setCurrentWordIndex(0)
     setTimeLeft(timePerRound)
+    setPassesUsed(0) // Reset passes
 
     // Generate initial pool of words (100 words) - try AI first
     const generatedWords = await getRandomWordsWithAI(
@@ -123,6 +125,15 @@ export default function IntesaVincenteGameScreen() {
   }
 
   const handleSkip = () => {
+    if (passLimit !== 'unlimited' && passesUsed >= passLimit) {
+      return // No more passes available
+    }
+    
+    if (navigator.vibrate) {
+      navigator.vibrate([30, 20, 30])
+    }
+    
+    setPassesUsed((prev) => prev + 1)
     setCurrentWordIndex((prev) => prev + 1)
   }
 
@@ -186,6 +197,11 @@ export default function IntesaVincenteGameScreen() {
                 ⏱️ Avete <strong>{timePerRound} secondi</strong> per fare
                 RECORD!
               </li>
+              {passLimit !== 'unlimited' && (
+                <li>
+                  ⚠️ Avete solo <strong>{passLimit} PASSA</strong> disponibili!
+                </li>
+              )}
             </ul>
 
             <div className="rules-allowed">
@@ -268,6 +284,9 @@ export default function IntesaVincenteGameScreen() {
   }
 
   if (gamePhase === 'playing') {
+    const passesRemaining = passLimit === 'unlimited' ? null : passLimit - passesUsed
+    const canPass = passLimit === 'unlimited' || passesUsed < passLimit
+    
     return (
       <div className="intesa-game-screen playing">
         <div className="game-header-bar">
@@ -283,15 +302,37 @@ export default function IntesaVincenteGameScreen() {
           </div>
         </div>
 
+        {passLimit !== 'unlimited' && (
+          <div className="passes-display">
+            <span className="passes-label">PASSA RIMASTI:</span>
+            <div className="passes-icons">
+              {[...Array(passLimit)].map((_, i) => (
+                <span 
+                  key={i} 
+                  className={`pass-icon ${i < passesUsed ? 'used' : ''}`}
+                >
+                  {i < passesUsed ? '✗' : '→'}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="word-display-container">
           <div className="category-tag">{currentWord.category}</div>
           <h1 className="main-word">{currentWord.word}</h1>
         </div>
 
         <div className="action-buttons-row">
-          <button className="skip-button" onClick={handleSkip}>
+          <button 
+            className={`skip-button ${!canPass ? 'disabled' : ''}`}
+            onClick={handleSkip}
+            disabled={!canPass}
+          >
             <span className="button-icon">→</span>
-            <span className="button-label">PASSA</span>
+            <span className="button-label">
+              {canPass ? 'PASSA' : 'NO PASSA'}
+            </span>
           </button>
           <button className="correct-button" onClick={handleCorrect}>
             <span className="button-icon">✓</span>

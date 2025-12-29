@@ -11,6 +11,7 @@ export default function IntesaVincenteSetupScreen() {
   const [timePerRound, setTimePerRound] = useState(60)
   const [difficulty, setDifficulty] = useState('medio')
   const [categories, setCategories] = useState(['Generale'])
+  const [passLimit, setPassLimit] = useState(3) // 3 or 'unlimited'
 
   const CATEGORIES = [
     'Generale',
@@ -63,6 +64,7 @@ export default function IntesaVincenteSetupScreen() {
         timePerRound,
         difficulty,
         categories: categories.length > 0 ? categories : CATEGORIES,
+        passLimit,
       },
     })
   }
@@ -74,10 +76,10 @@ export default function IntesaVincenteSetupScreen() {
           ← INDIETRO
         </button>
 
-          <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
-          <p className="intesa-subtitle">
-            📺 Il gioco della trasmissione italiana!
-          </p>
+        <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
+        <p className="intesa-subtitle">
+          📺 Il gioco della trasmissione italiana!
+        </p>
         <div className="tv-show-info">
           <p>🎯 Fai indovinare più parole possibili al tuo compagno!</p>
           <p>⏱️ Hai tempo limitato - vai a RECORD!</p>
@@ -186,6 +188,32 @@ export default function IntesaVincenteSetupScreen() {
               onClick={() => setDifficulty('difficile')}
             >
               DIFFICILE
+            </button>
+          </div>
+        </div>
+
+        {/* Pass Limit */}
+        <div className="setup-section">
+          <h3 className="section-title">PASSA DISPONIBILI</h3>
+          <p className="section-description">
+            📺 Nella trasmissione TV: solo 3 passa!
+          </p>
+          <div className="difficulty-buttons">
+            <button
+              className={`difficulty-button ${
+                passLimit === 3 ? 'active' : ''
+              }`}
+              onClick={() => setPassLimit(3)}
+            >
+              3 PASSA (TV)
+            </button>
+            <button
+              className={`difficulty-button ${
+                passLimit === 'unlimited' ? 'active' : ''
+              }`}
+              onClick={() => setPassLimit('unlimited')}
+            >
+              INFINITI
             </button>
           </div>
         </div>
