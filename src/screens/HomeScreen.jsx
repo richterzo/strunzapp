@@ -14,11 +14,11 @@ export default function HomeScreen() {
       image: '/images/games/impostore.png',
     },
     {
-      id: 'dragon-quiz',
-      name: 'DRAGON QUIZ',
-      description: '10 domande a difficoltà crescente',
-      route: '/dragon-quiz/setup',
-      image: '/images/games/dragonquiz.png',
+      id: 'strunzate',
+      name: 'STRUNZATE',
+      description: 'Domande per conversazioni profonde',
+      route: '/strunzate/setup',
+      image: '/images/games/strunzate.png',
     },
     {
       id: 'intesa-vincente',
@@ -28,11 +28,11 @@ export default function HomeScreen() {
       image: '/images/games/merda-vincente.png',
     },
     {
-      id: 'strunzate',
-      name: 'STRUNZATE',
-      description: 'Domande per conversazioni profonde',
-      route: '/strunzate/setup',
-      image: '/images/games/strunzate.png',
+      id: 'dragon-quiz',
+      name: 'DRAGON QUIZ',
+      description: '10 domande a difficoltà crescente',
+      route: '/dragon-quiz/setup',
+      image: '/images/games/dragonquiz.png',
     },
   ]
 
