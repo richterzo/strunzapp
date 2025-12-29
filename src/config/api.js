@@ -28,7 +28,7 @@ export const QUIZ_CONFIG = {
     { level: 7, name: 'Esperto', multiplier: 4.3, color: '#FF9900' },
     { level: 8, name: 'Maestro', multiplier: 5.2, color: '#FF6600' },
     { level: 9, name: 'Impossibile', multiplier: 6.5, color: '#FF3300' },
-    { level: 10, name: 'Milionario', multiplier: 8.0, color: '#FF00FF' },
+    { level: 10, name: 'Dragone', multiplier: 8.0, color: '#FF00FF' },
   ],
   
   CATEGORIES: [

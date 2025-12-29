@@ -27,17 +27,17 @@ export default function IntesaVincenteGameScreen() {
       navigate('/')
       return
     }
-    
+
     // Generate initial pool of words (100 words)
     const generatedWords = getRandomWords(categories, difficulty, 100)
     setWords(generatedWords)
   }, [currentPairIndex])
-  
+
   // Auto-generate more words when running low
   useEffect(() => {
     if (words.length > 0 && currentWordIndex >= words.length - 10) {
       const moreWords = getRandomWords(categories, difficulty, 50)
-      setWords(prev => [...prev, ...moreWords])
+      setWords((prev) => [...prev, ...moreWords])
     }
   }, [currentWordIndex, words.length, categories, difficulty])
 
@@ -58,7 +58,7 @@ export default function IntesaVincenteGameScreen() {
     setCurrentRoundScore(0)
     setCurrentWordIndex(0)
     setTimeLeft(timePerRound)
-    
+
     // Generate initial pool of words (100 words)
     const generatedWords = getRandomWords(categories, difficulty, 100)
     setWords(generatedWords)
@@ -73,19 +73,19 @@ export default function IntesaVincenteGameScreen() {
     if (navigator.vibrate) {
       navigator.vibrate(50)
     }
-    
-    setCurrentRoundScore(prev => prev + 1)
-    setCurrentWordIndex(prev => prev + 1)
+
+    setCurrentRoundScore((prev) => prev + 1)
+    setCurrentWordIndex((prev) => prev + 1)
   }
 
   const handleSkip = () => {
-    setCurrentWordIndex(prev => prev + 1)
+    setCurrentWordIndex((prev) => prev + 1)
   }
 
   const handleTimeUp = () => {
     clearTimeout(timerRef.current)
     setGamePhase('roundEnd')
-    
+
     // Update score
     const newScores = [...scores]
     newScores[currentPairIndex] += currentRoundScore
@@ -96,7 +96,7 @@ export default function IntesaVincenteGameScreen() {
     if (currentPairIndex >= pairs.length - 1) {
       setGamePhase('final')
     } else {
-      setCurrentPairIndex(prev => prev + 1)
+      setCurrentPairIndex((prev) => prev + 1)
       setGamePhase('instructions')
       setIsWordVisible(false)
     }
@@ -130,12 +130,24 @@ export default function IntesaVincenteGameScreen() {
           <div className="instructions-box">
             <h3 className="instructions-title">COME FUNZIONA</h3>
             <ul className="instructions-list">
-              <li><strong>{currentPair.player1}</strong> tiene il telefono</li>
-              <li><strong>{currentPair.player2}</strong> deve indovinare</li>
-              <li>⏱️ Hai <strong>{timePerRound} secondi</strong> per indovinare più parole possibili</li>
-              <li>🎯 Non c'è limite! Vai a <strong>RECORD</strong>!</li>
+              <li>
+                <strong>{currentPair.player1}</strong> tiene il telefono
+              </li>
+              <li>
+                <strong>{currentPair.player2}</strong> deve indovinare
+              </li>
+              <li>
+                ⏱️ Hai <strong>{timePerRound} secondi</strong> per indovinare
+                più parole possibili
+              </li>
+              <li>
+                🎯 Non c'è limite! Vai a <strong>RECORD</strong>!
+              </li>
               <li>Usa sinonimi, descrizioni, gesti - NO parole contenute!</li>
-              <li>Premi <strong>✓</strong> se indovina, <strong>→</strong> per passare</li>
+              <li>
+                Premi <strong>✓</strong> se indovina, <strong>→</strong> per
+                passare
+              </li>
             </ul>
           </div>
 
@@ -152,7 +164,10 @@ export default function IntesaVincenteGameScreen() {
       <div className="intesa-game-screen">
         <div className="intesa-game-content ready-screen">
           <h1 className="ready-title">PRONTI?</h1>
-          <p className="ready-subtitle">{currentPair.player1}, tieni il telefono in modo che {currentPair.player2} non veda</p>
+          <p className="ready-subtitle">
+            {currentPair.player1}, tieni il telefono in modo che{' '}
+            {currentPair.player2} non veda
+          </p>
           <div className="countdown-circle">
             <span className="countdown-number">3</span>
           </div>
@@ -169,7 +184,9 @@ export default function IntesaVincenteGameScreen() {
       <div className="intesa-game-screen playing">
         <div className="game-header-bar">
           <div className="timer-display">
-            <span className={`timer-value ${timeLeft <= 10 ? 'warning' : ''}`}>{timeLeft}</span>
+            <span className={`timer-value ${timeLeft <= 10 ? 'warning' : ''}`}>
+              {timeLeft}
+            </span>
           </div>
           <div className="score-display">
             <span className="score-label">RECORD:</span>
@@ -207,15 +224,21 @@ export default function IntesaVincenteGameScreen() {
               <span className="result-score">{currentRoundScore}</span>
               <span className="result-label">parole indovinate</span>
             </div>
-            
+
             <div className="pair-result">
-              <span className="pair-names">{currentPair.player1} + {currentPair.player2}</span>
-              <span className="pair-total">Totale: {scores[currentPairIndex]} punti</span>
+              <span className="pair-names">
+                {currentPair.player1} + {currentPair.player2}
+              </span>
+              <span className="pair-total">
+                Totale: {scores[currentPairIndex]} punti
+              </span>
             </div>
           </div>
 
           <button className="big-action-button" onClick={handleNextPair}>
-            {currentPairIndex >= pairs.length - 1 ? 'CLASSIFICA FINALE' : 'PROSSIMA COPPIA'}
+            {currentPairIndex >= pairs.length - 1
+              ? 'CLASSIFICA FINALE'
+              : 'PROSSIMA COPPIA'}
           </button>
         </div>
       </div>
@@ -227,7 +250,7 @@ export default function IntesaVincenteGameScreen() {
       .map((pair, index) => ({
         pair: `${pair.player1} + ${pair.player2}`,
         score: scores[index],
-        index
+        index,
       }))
       .sort((a, b) => b.score - a.score)
 
@@ -235,12 +258,21 @@ export default function IntesaVincenteGameScreen() {
       <div className="intesa-game-screen">
         <div className="intesa-game-content">
           <h1 className="final-title">CLASSIFICA FINALE</h1>
-          
+
           <div className="rankings-list">
             {rankings.map((rank, index) => (
-              <div key={rank.index} className={`ranking-item rank-${index + 1}`}>
+              <div
+                key={rank.index}
+                className={`ranking-item rank-${index + 1}`}
+              >
                 <div className="rank-position">
-                  {index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                  {index === 0
+                    ? '🏆'
+                    : index === 1
+                    ? '🥈'
+                    : index === 2
+                    ? '🥉'
+                    : `#${index + 1}`}
                 </div>
                 <div className="rank-details">
                   <span className="rank-pair-name">{rank.pair}</span>
@@ -265,4 +297,3 @@ export default function IntesaVincenteGameScreen() {
 
   return null
 }
-

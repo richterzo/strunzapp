@@ -77,9 +77,9 @@ export class OpenAIService {
           complexity: 'Impossibile per la maggior parte, richiede memoria eccezionale'
         },
         10: {
-          knowledge: 'Livello "Chi vuol essere milionario" - domanda finale',
+          knowledge: 'Livello DRAGONE - domanda finale',
           examples: 'Combinazione di dettagli rarissimi, conoscenze multi-disciplinari oscure',
-          complexity: 'Domanda da milione: quasi impossibile, richiede fortuna o expertise assoluta'
+          complexity: 'Domanda da Dragone: quasi impossibile, richiede fortuna o expertise assoluta'
         }
       }
       return descriptions[level] || descriptions[5]
@@ -87,7 +87,7 @@ export class OpenAIService {
 
     const diffDescription = getDifficultyDescription(difficultyLevel)
 
-    const prompt = `Genera UNA SINGOLA domanda di quiz in italiano, stile "CHI VUOL ESSERE MILIONARIO".
+    const prompt = `Genera UNA SINGOLA domanda di quiz in italiano, stile "DRAGON QUIZ".
 
 CATEGORIA: ${selectedCategory}
 LIVELLO DI DIFFICOLTÀ: ${difficultyLevel}/10 - ${difficultyData.name.toUpperCase()}
@@ -137,10 +137,10 @@ REQUISITI ASSOLUTI:
 7. Spiegazione dettagliata e accurata
 8. Domanda chiara e ben formulata
 9. La domanda DEVE essere DIVERSA da quelle già usate
-10. Stile "Chi vuol essere milionario"
+10. Stile Dragon Quiz - difficoltà progressiva da Base a Dragone
 
 ${difficultyLevel >= 8 ? 'ATTENZIONE: Livello ultra-difficile! La domanda deve essere quasi impossibile da indovinare!' : ''}
-${difficultyLevel === 10 ? '🏆 DOMANDA DA MILIONE! Deve essere la domanda più difficile possibile, quasi impossibile!' : ''}
+${difficultyLevel === 10 ? '🐉 DOMANDA DA DRAGONE! Deve essere la domanda più difficile possibile, quasi impossibile!' : ''}
 
 FORMATO OUTPUT (SOLO JSON, niente altro testo):
 {
@@ -164,7 +164,7 @@ IMPORTANTE:
 - NO markdown, NO testo aggiuntivo
 - ESATTAMENTE 5 OPZIONI
 - Difficoltà calibrata PRECISAMENTE al livello ${difficultyLevel}/10
-- Stile "Chi vuol essere milionario"`
+- Stile Dragon Quiz - progressione da Base a Dragone`
 
     try {
       const response = await fetch(this.apiUrl, {
