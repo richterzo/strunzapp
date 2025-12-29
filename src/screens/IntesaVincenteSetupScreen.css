@@ -2,7 +2,6 @@
 
 /* Merda Vincente Setup */
 .intesa-setup-screen {
-  
   background: radial-gradient(
       circle at 20% 30%,
       rgba(0, 255, 240, 0.08) 0%,
@@ -14,18 +13,18 @@
       transparent 50%
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+  padding: 40px 20px 100px;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
+  /* NO display: flex - NO align-items: center - NO justify-content: center */
+  /* These BLOCK vertical scroll! */
 }
 
 /* Scanlines */
 .intesa-setup-screen::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;

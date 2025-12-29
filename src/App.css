@@ -1,7 +1,4 @@
-.app {
-  min-height: 100vh;
-  background: #000000;
-}
+/* Removed .app styles - not used and blocking scroll */
 
 /* Animazioni */
 @keyframes pulse {
