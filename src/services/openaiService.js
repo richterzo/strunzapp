@@ -25,8 +25,12 @@ export class OpenAIService {
     const selectedCategory = categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : 'cultura generale'
 
     const usedQuestionsContext = usedQuestions.length > 0 
-      ? `\n\nEVITA ASSOLUTAMENTE queste domande già usate:\n${usedQuestions.slice(-20).join('\n')}\n`
-      : ''
+      ? `\n\n⚠️ DOMANDE GIÀ USATE - NON RIPETERE MAI:
+${usedQuestions.slice(-30).join('\n')}
+
+IMPORTANTE: Ogni giocatore deve avere una domanda COMPLETAMENTE DIVERSA. 
+Non fare domande simili o variazioni delle domande già usate!\n`
+      : '\n\n✓ Prima domanda del gioco - sii creativo!\n'
 
     // Parametric difficulty description based on level
     const getDifficultyDescription = (level) => {
@@ -406,6 +410,107 @@ IMPORTANTE:
 
     // Shuffle to avoid predictable pattern
     return distribution.sort(() => Math.random() - 0.5)
+  }
+
+  /**
+   * Generate random words for party games (Stronzo, Intesa Vincente)
+   * @param {string} category - Category of words
+   * @param {string} difficulty - Difficulty level (facile, medio, difficile)
+   * @param {number} count - Number of words to generate
+   * @param {string} gameType - Type of game (stronzo, intesa)
+   * @returns {Promise<Array>} Array of words
+   */
+  async generatePartyWords(category, difficulty, count, gameType = 'intesa') {
+    if (!this.apiKey) {
+      console.warn('OpenAI API key not configured, using fallback words')
+      return null // Return null to use fallback
+    }
+
+    const difficultyDescriptions = {
+      facile: 'parole comuni e facili da indovinare/spiegare',
+      medio: 'parole di media difficoltà, richiedono un po\' di creatività',
+      difficile: 'parole difficili, tecniche o astratte'
+    }
+
+    const gameDescriptions = {
+      stronzo: 'Gioco dove i giocatori devono indovinare la parola segreta. Le parole devono essere concrete, comuni e facili da collegare.',
+      intesa: 'Gioco dove un giocatore deve far indovinare la parola al compagno. Le parole devono essere indovinabili con sinonimi, descrizioni, gesti.'
+    }
+
+    const prompt = `Genera ESATTAMENTE ${count} parole in italiano per il gioco "${gameType}".
+
+CATEGORIA: ${category}
+DIFFICOLTÀ: ${difficulty} (${difficultyDescriptions[difficulty]})
+TIPO DI GIOCO: ${gameDescriptions[gameType]}
+
+REGOLE FONDAMENTALI:
+1. Parole appropriate per il livello di difficoltà
+2. Nessuna parola troppo oscura o impossibile
+3. Parole concrete e tangibili (evita concetti troppo astratti)
+4. Varietà: non ripetere parole simili o dello stesso campo semantico
+5. Lunghezza: 1-3 parole massimo
+6. NO nomi propri di persone specifiche
+7. Adatte per essere indovinate/spiegate
+
+FORMATO OUTPUT (SOLO JSON array di stringhe):
+["Parola1", "Parola2", "Parola3", ...]
+
+IMPORTANTE:
+- Rispondi SOLO con l'array JSON
+- NO testo aggiuntivo, NO markdown
+- ESATTAMENTE ${count} parole`
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: [
+            {
+              role: 'system',
+              content: 'Sei un esperto creatore di giochi da tavolo. Generi parole perfette per party games. Rispondi SOLO con JSON array.',
+            },
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+          temperature: 1.0, // High creativity
+          max_tokens: 500,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('OpenAI API error:', response.statusText)
+        return null // Use fallback
+      }
+
+      const data = await response.json()
+      const content = data.choices[0].message.content.trim()
+
+      let words
+      try {
+        const jsonStr = content.replace(/```json\n?|\n?```/g, '').trim()
+        words = JSON.parse(jsonStr)
+      } catch (parseError) {
+        console.error('Failed to parse words JSON:', content)
+        return null // Use fallback
+      }
+
+      if (!Array.isArray(words) || words.length === 0) {
+        console.error('Invalid words array received')
+        return null // Use fallback
+      }
+
+      return words
+    } catch (error) {
+      console.error('Error generating party words:', error)
+      return null // Use fallback
+    }
   }
 
   /**

@@ -242,3 +242,50 @@ export function getRandomWords(categories, difficulty, count) {
   return words.sort(() => Math.random() - 0.5)
 }
 
+/**
+ * Get random words with AI support
+ * @param {Array} categories - Selected categories
+ * @param {string} difficulty - Difficulty level
+ * @param {number} count - Number of words
+ * @param {Object} openaiService - OpenAI service instance (optional)
+ * @returns {Promise<Array>} Array of word objects
+ */
+export async function getRandomWordsWithAI(categories, difficulty, count, openaiService = null) {
+  // Try AI first if service is available and configured
+  if (openaiService && openaiService.isConfigured()) {
+    try {
+      const availableCategories = categories.filter(cat => INTESA_WORDS[cat])
+      if (availableCategories.length === 0) {
+        availableCategories.push('Generale')
+      }
+      
+      const wordsPerCategory = Math.ceil(count / availableCategories.length)
+      const allAIWords = []
+      
+      for (const category of availableCategories) {
+        const aiWords = await openaiService.generatePartyWords(category, difficulty, wordsPerCategory, 'intesa')
+        
+        if (aiWords && Array.isArray(aiWords)) {
+          aiWords.forEach(word => {
+            allAIWords.push({
+              word,
+              category,
+              difficulty
+            })
+          })
+        }
+      }
+      
+      if (allAIWords.length >= count * 0.7) { // If we got at least 70% of words from AI
+        // Shuffle and return
+        return allAIWords.slice(0, count).sort(() => Math.random() - 0.5)
+      }
+    } catch (error) {
+      console.warn('AI word generation failed, using fallback:', error)
+    }
+  }
+  
+  // Fallback to static words
+  return getRandomWords(categories, difficulty, count)
+}
+

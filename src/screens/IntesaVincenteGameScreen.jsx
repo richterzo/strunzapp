@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getRandomWords } from '../data/intesaWords'
+import { getRandomWords, getRandomWordsWithAI } from '../data/intesaWords'
+import openaiService from '../services/openaiService'
 import './IntesaVincenteGameScreen.css'
 
 export default function IntesaVincenteGameScreen() {
@@ -28,16 +29,22 @@ export default function IntesaVincenteGameScreen() {
       return
     }
 
-    // Generate initial pool of words (100 words)
-    const generatedWords = getRandomWords(categories, difficulty, 100)
-    setWords(generatedWords)
+    // Generate initial pool of words (100 words) - try AI first
+    const loadInitialWords = async () => {
+      const generatedWords = await getRandomWordsWithAI(categories, difficulty, 100, openaiService)
+      setWords(generatedWords)
+    }
+    loadInitialWords()
   }, [currentPairIndex])
 
   // Auto-generate more words when running low
   useEffect(() => {
     if (words.length > 0 && currentWordIndex >= words.length - 10) {
-      const moreWords = getRandomWords(categories, difficulty, 50)
-      setWords((prev) => [...prev, ...moreWords])
+      const loadMoreWords = async () => {
+        const moreWords = await getRandomWordsWithAI(categories, difficulty, 50, openaiService)
+        setWords((prev) => [...prev, ...moreWords])
+      }
+      loadMoreWords()
     }
   }, [currentWordIndex, words.length, categories, difficulty])
 
@@ -53,14 +60,14 @@ export default function IntesaVincenteGameScreen() {
     return () => clearTimeout(timerRef.current)
   }, [timeLeft, gamePhase])
 
-  const handleStartRound = () => {
+  const handleStartRound = async () => {
     setGamePhase('ready')
     setCurrentRoundScore(0)
     setCurrentWordIndex(0)
     setTimeLeft(timePerRound)
 
-    // Generate initial pool of words (100 words)
-    const generatedWords = getRandomWords(categories, difficulty, 100)
+    // Generate initial pool of words (100 words) - try AI first
+    const generatedWords = await getRandomWordsWithAI(categories, difficulty, 100, openaiService)
     setWords(generatedWords)
   }
 
