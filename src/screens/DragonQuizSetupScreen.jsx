@@ -11,6 +11,10 @@ export default function DragonQuizSetupScreen() {
   const [numTeams, setNumTeams] = useState(2)
   const [playerNames, setPlayerNames] = useState([''])
   const [teamNames, setTeamNames] = useState(['Squadra 1', 'Squadra 2'])
+  const [teams, setTeams] = useState([
+    { name: 'Squadra 1', players: ['Giocatore 1'] },
+    { name: 'Squadra 2', players: ['Giocatore 2'] }
+  ])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [error, setError] = useState('')
 
@@ -28,12 +32,39 @@ export default function DragonQuizSetupScreen() {
   const handleNumTeamsChange = (delta) => {
     const newNum = Math.max(2, Math.min(4, numTeams + delta))
     setNumTeams(newNum)
-    setTeamNames(
+    setTeams(
       Array.from(
         { length: newNum },
-        (_, i) => teamNames[i] || `Squadra ${i + 1}`
+        (_, i) => teams[i] || { name: `Squadra ${i + 1}`, players: [`Giocatore ${i + 1}`] }
       )
     )
+  }
+
+  const handleTeamNameChangeNew = (teamIndex, value) => {
+    const newTeams = [...teams]
+    newTeams[teamIndex].name = value
+    setTeams(newTeams)
+  }
+
+  const handleTeamPlayerNameChange = (teamIndex, playerIndex, value) => {
+    const newTeams = [...teams]
+    newTeams[teamIndex].players[playerIndex] = value
+    setTeams(newTeams)
+  }
+
+  const addPlayerToTeam = (teamIndex) => {
+    const newTeams = [...teams]
+    const playerNum = newTeams[teamIndex].players.length + 1
+    newTeams[teamIndex].players.push(`Giocatore ${playerNum}`)
+    setTeams(newTeams)
+  }
+
+  const removePlayerFromTeam = (teamIndex, playerIndex) => {
+    const newTeams = [...teams]
+    if (newTeams[teamIndex].players.length > 1) {
+      newTeams[teamIndex].players.splice(playerIndex, 1)
+      setTeams(newTeams)
+    }
   }
 
   const handlePlayerNameChange = (index, value) => {
@@ -63,9 +94,17 @@ export default function DragonQuizSetupScreen() {
       return
     }
 
-    if (gameMode === 'teams' && numTeams < 2) {
-      setError('Servono almeno 2 squadre')
-      return
+    if (gameMode === 'teams') {
+      if (teams.length < 2) {
+        setError('Servono almeno 2 squadre')
+        return
+      }
+      // Check that each team has at least 1 player
+      const emptyTeams = teams.filter(team => team.players.length === 0)
+      if (emptyTeams.length > 0) {
+        setError('Ogni squadra deve avere almeno 1 giocatore')
+        return
+      }
     }
 
     if (!openaiService.isConfigured()) {
@@ -81,8 +120,9 @@ export default function DragonQuizSetupScreen() {
     navigate('/dragon-quiz/game', {
       state: {
         gameMode,
-        numPlayers: gameMode === 'single' ? numPlayers : numTeams,
-        playerNames: gameMode === 'single' ? playerNames : teamNames,
+        numPlayers: gameMode === 'single' ? numPlayers : teams.length,
+        playerNames: gameMode === 'single' ? playerNames : teams.map(t => t.name),
+        teams: gameMode === 'teams' ? teams : null,
         categories:
           selectedCategories.length > 0
             ? selectedCategories
@@ -217,17 +257,47 @@ export default function DragonQuizSetupScreen() {
           </div>
         ) : (
           <div className="setup-section">
-            <h3 className="section-title">NOMI SQUADRE</h3>
-            <div className="names-container">
-              {teamNames.map((name, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  className="name-input"
-                  placeholder={`Squadra ${index + 1}`}
-                  value={name}
-                  onChange={(e) => handleTeamNameChange(index, e.target.value)}
-                />
+            <h3 className="section-title">SQUADRE E GIOCATORI</h3>
+            <div className="teams-container">
+              {teams.map((team, teamIndex) => (
+                <div key={teamIndex} className="team-config">
+                  <input
+                    type="text"
+                    className="team-name-input"
+                    placeholder={`Squadra ${teamIndex + 1}`}
+                    value={team.name}
+                    onChange={(e) => handleTeamNameChangeNew(teamIndex, e.target.value)}
+                  />
+                  <div className="team-players">
+                    {team.players.map((player, playerIndex) => (
+                      <div key={playerIndex} className="team-player-row">
+                        <input
+                          type="text"
+                          className="team-player-input"
+                          placeholder={`Giocatore ${playerIndex + 1}`}
+                          value={player}
+                          onChange={(e) =>
+                            handleTeamPlayerNameChange(teamIndex, playerIndex, e.target.value)
+                          }
+                        />
+                        {team.players.length > 1 && (
+                          <button
+                            className="remove-player-button"
+                            onClick={() => removePlayerFromTeam(teamIndex, playerIndex)}
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      className="add-player-button"
+                      onClick={() => addPlayerToTeam(teamIndex)}
+                    >
+                      + Aggiungi Giocatore
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

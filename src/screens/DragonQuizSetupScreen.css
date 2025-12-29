@@ -97,6 +97,120 @@
   text-transform: uppercase;
 }
 
+/* Teams configuration */
+.teams-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.team-config {
+  background: rgba(0, 255, 240, 0.03);
+  border: 2px solid rgba(0, 255, 240, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.team-config:hover {
+  border-color: rgba(0, 255, 240, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 240, 0.1);
+}
+
+.team-name-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(0, 255, 240, 0.3);
+  color: #00FFF0;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Rajdhani', sans-serif;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.team-name-input:focus {
+  outline: none;
+  border-color: #00FFF0;
+  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+}
+
+.team-players {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.team-player-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.team-player-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 240, 0.2);
+  color: #FFFFFF;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.team-player-input:focus {
+  outline: none;
+  border-color: rgba(0, 255, 240, 0.5);
+  box-shadow: 0 0 15px rgba(0, 255, 240, 0.2);
+}
+
+.remove-player-button {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 0, 110, 0.1);
+  border: 2px solid rgba(255, 0, 110, 0.3);
+  color: #FF006E;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.remove-player-button:hover {
+  background: rgba(255, 0, 110, 0.2);
+  border-color: #FF006E;
+  transform: scale(1.1);
+}
+
+.add-player-button {
+  width: 100%;
+  background: rgba(0, 255, 240, 0.05);
+  border: 2px dashed rgba(0, 255, 240, 0.3);
+  color: #00FFF0;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.add-player-button:hover {
+  background: rgba(0, 255, 240, 0.1);
+  border-color: rgba(0, 255, 240, 0.5);
+  border-style: solid;
+}
+
 /* Tablet optimization */
 @media (max-width: 768px) {
   .mode-buttons {

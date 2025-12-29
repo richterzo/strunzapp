@@ -7,7 +7,7 @@ import './DragonQuizGameScreen.css'
 export default function DragonQuizGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { gameMode, numPlayers, playerNames, categories } = location.state || {}
+  const { gameMode, numPlayers, playerNames, teams, categories } = location.state || {}
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1) // 1 to 10
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
@@ -15,10 +15,11 @@ export default function DragonQuizGameScreen() {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
   const [timeLeft, setTimeLeft] = useState(QUIZ_CONFIG.TIME_PER_QUESTION)
-  const [gamePhase, setGamePhase] = useState('loading') // loading, question, result, final
+  const [gamePhase, setGamePhase] = useState(gameMode === 'teams' ? 'selectPlayer' : 'loading') // selectPlayer, loading, question, result, final
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [usedQuestions, setUsedQuestions] = useState([])
   const [loadingError, setLoadingError] = useState(null)
+  const [selectedPlayerInTeam, setSelectedPlayerInTeam] = useState(null) // Index of player in current team
 
   // Calculate current difficulty level based on question number (1-10)
   const getCurrentDifficultyLevel = () => {
@@ -31,8 +32,20 @@ export default function DragonQuizGameScreen() {
       navigate('/')
       return
     }
-    loadNextQuestion()
-  }, [currentQuestionNumber, currentPlayerIndex])
+    // In team mode, show player selection first
+    if (gameMode === 'teams' && gamePhase === 'selectPlayer') {
+      return
+    }
+    // Otherwise load question
+    if (gamePhase === 'loading') {
+      loadNextQuestion()
+    }
+  }, [currentQuestionNumber, currentPlayerIndex, gamePhase])
+
+  const handlePlayerSelection = (playerIndex) => {
+    setSelectedPlayerInTeam(playerIndex)
+    setGamePhase('loading')
+  }
 
   const loadNextQuestion = async () => {
     if (gamePhase === 'final') return
@@ -113,6 +126,10 @@ export default function DragonQuizGameScreen() {
   }
 
   const handleNextQuestion = () => {
+    setSelectedAnswer(null)
+    setShowResult(false)
+    setSelectedPlayerInTeam(null)
+
     // Move to next player
     const nextPlayerIndex = (currentPlayerIndex + 1) % numPlayers
 
@@ -128,9 +145,13 @@ export default function DragonQuizGameScreen() {
     }
 
     setCurrentPlayerIndex(nextPlayerIndex)
-    setSelectedAnswer(null)
-    setShowResult(false)
-    // loadNextQuestion will be triggered by useEffect
+    
+    // In team mode, go to player selection
+    if (gameMode === 'teams') {
+      setGamePhase('selectPlayer')
+    } else {
+      // loadNextQuestion will be triggered by useEffect
+    }
   }
 
   const handleNewGame = () => {
@@ -139,6 +160,47 @@ export default function DragonQuizGameScreen() {
 
   const handleBackToHome = () => {
     navigate('/')
+  }
+
+  // Player selection screen for team mode
+  if (gamePhase === 'selectPlayer' && gameMode === 'teams') {
+    const currentTeam = teams[currentPlayerIndex]
+    return (
+      <div className="game-screen">
+        <div className="game-content">
+          <div className="player-selection-container">
+            <h2 className="selection-title">TURNO DI</h2>
+            <h1 className="team-name">{currentTeam.name}</h1>
+            <p className="selection-subtitle">Chi risponde a questa domanda?</p>
+            
+            <div className="difficulty-info">
+              <span className="difficulty-label">Livello</span>
+              <span className="difficulty-value">{getCurrentDifficultyLevel()}/10</span>
+              <span className="difficulty-name">
+                {QUIZ_CONFIG.DIFFICULTY_LEVELS[getCurrentDifficultyLevel() - 1]?.name}
+              </span>
+            </div>
+
+            <div className="team-players-selection">
+              {currentTeam.players.map((player, index) => (
+                <button
+                  key={index}
+                  className="player-selection-button"
+                  onClick={() => handlePlayerSelection(index)}
+                >
+                  <span className="player-icon">👤</span>
+                  <span className="player-name">{player}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="question-progress">
+              Domanda {currentQuestionNumber} di {QUIZ_CONFIG.NUM_QUESTIONS}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (gamePhase === 'loading') {
@@ -283,6 +345,11 @@ export default function DragonQuizGameScreen() {
         <div className="current-player-section">
           <h3 className="player-label">TURNO DI</h3>
           <h2 className="player-name">{playerNames[currentPlayerIndex]}</h2>
+          {gameMode === 'teams' && selectedPlayerInTeam !== null && (
+            <p className="team-player-name">
+              👤 {teams[currentPlayerIndex].players[selectedPlayerInTeam]}
+            </p>
+          )}
         </div>
 
         <div className="question-section">
