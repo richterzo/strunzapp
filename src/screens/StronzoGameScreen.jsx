@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import openaiService from '../services/openaiService'
 import './StronzoGameScreen.css'
 
 export default function StronzoGameScreen() {
@@ -23,19 +24,39 @@ export default function StronzoGameScreen() {
       return
     }
 
-    // Seleziona casualmente gli stronzi
-    const players = Array.from({ length: numPlayers }, (_, i) => i)
-    const shuffled = [...players].sort(() => Math.random() - 0.5)
-    const selectedStronzi = shuffled.slice(0, numStronzi)
-    setStronzi(selectedStronzi)
-    
-    // Seleziona parola casuale
-    const randomWord = allWords[Math.floor(Math.random() * allWords.length)]
-    setCurrentWord(randomWord)
-    setUsedWords([randomWord])
-    setIsWordHidden(true) // Inizia con la parola nascosta
-    
-    setGamePhase('playing')
+    const initGame = async () => {
+      // Seleziona casualmente gli stronzi
+      const players = Array.from({ length: numPlayers }, (_, i) => i)
+      const shuffled = [...players].sort(() => Math.random() - 0.5)
+      const selectedStronzi = shuffled.slice(0, numStronzi)
+      setStronzi(selectedStronzi)
+      
+      // Try to get word from AI first
+      let word = null
+      if (openaiService.isConfigured()) {
+        try {
+          const categoryName = categories && categories.length > 0 ? categories[0] : 'Generale'
+          const aiWords = await openaiService.generatePartyWords(categoryName, 'medio', 1, 'stronzo')
+          if (aiWords && aiWords.length > 0) {
+            word = aiWords[0]
+          }
+        } catch (error) {
+          console.warn('AI word generation failed, using fallback')
+        }
+      }
+      
+      // Fallback to static words if AI failed
+      if (!word) {
+        word = allWords[Math.floor(Math.random() * allWords.length)]
+      }
+      
+      setCurrentWord(word)
+      setUsedWords([word])
+      setIsWordHidden(true)
+      setGamePhase('playing')
+    }
+
+    initGame()
   }, [])
 
   const handlePlayerSeen = (playerIndex) => {
@@ -69,14 +90,31 @@ export default function StronzoGameScreen() {
     }
   }
 
-  const nextRound = () => {
-    // Seleziona nuova parola (evita di ripetere le ultime 3 parole se possibile)
-    let availableWords = allWords.filter(w => !usedWords.slice(-3).includes(w))
-    if (availableWords.length === 0) {
-      availableWords = allWords // Se abbiamo esaurito, riusa tutte
+  const nextRound = async () => {
+    let newWord = null
+    
+    // Try AI first
+    if (openaiService.isConfigured()) {
+      try {
+        const categoryName = categories && categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : 'Generale'
+        const aiWords = await openaiService.generatePartyWords(categoryName, 'medio', 1, 'stronzo')
+        if (aiWords && aiWords.length > 0 && !usedWords.includes(aiWords[0])) {
+          newWord = aiWords[0]
+        }
+      } catch (error) {
+        console.warn('AI word generation failed, using fallback')
+      }
     }
     
-    const newWord = availableWords[Math.floor(Math.random() * availableWords.length)]
+    // Fallback to static words if AI failed
+    if (!newWord) {
+      let availableWords = allWords.filter(w => !usedWords.slice(-3).includes(w))
+      if (availableWords.length === 0) {
+        availableWords = allWords
+      }
+      newWord = availableWords[Math.floor(Math.random() * availableWords.length)]
+    }
+    
     setCurrentWord(newWord)
     setUsedWords(prev => [...prev, newWord].slice(-10)) // Mantieni solo ultime 10
     setCurrentPlayerIndex(0)
