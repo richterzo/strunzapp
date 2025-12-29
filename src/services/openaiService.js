@@ -202,19 +202,19 @@ Se anche UNA SOLA risposta è NO → RICREA la domanda!
 
 FORMATO OUTPUT (SOLO JSON, niente altro testo):
 {
-  "question": "Testo della domanda ben formulata e chiara",
+  "question": "In che anno Cristoforo Colombo scoprì l'America?",
   "options": [
-    "Opzione A - molto plausibile",
-    "Opzione B - molto plausibile",
-    "Opzione C - molto plausibile",
-    "Opzione D - molto plausibile",
-    "Opzione E - molto plausibile"
+    "1492",
+    "1498",
+    "1485",
+    "1490",
+    "1502"
   ],
   "correctAnswer": 0,
   "difficultyLevel": ${difficultyLevel},
   "difficultyName": "${difficultyData.name}",
   "category": "${selectedCategory}",
-  "explanation": "Spiegazione dettagliata con contesto e perché la risposta è corretta"
+  "explanation": "Cristoforo Colombo sbarcò nelle Americhe il 12 ottobre 1492, credendo di aver raggiunto le Indie."
 }
 
 IMPORTANTE: 

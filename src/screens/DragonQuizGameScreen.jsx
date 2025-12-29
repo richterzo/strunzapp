@@ -86,6 +86,7 @@ export default function DragonQuizGameScreen() {
 
   const handlePlayerSelection = (playerIndex) => {
     setSelectedPlayerInTeam(playerIndex)
+    setCurrentQuestion(null) // Clear to prevent flash
     setGamePhase('loading')
   }
 
@@ -93,6 +94,7 @@ export default function DragonQuizGameScreen() {
     if (gamePhase === 'final') return
 
     setGamePhase('loading')
+    setCurrentQuestion(null) // Clear current question to prevent flash
     setLoadingError(null)
     setLoadingProgress(0)
 
@@ -262,8 +264,9 @@ export default function DragonQuizGameScreen() {
       }
       // Move to next question round (increase difficulty)
       setCurrentQuestionNumber((prev) => prev + 1)
-      // Clear round questions to trigger reload
+      // Clear round questions and current question to trigger reload
       setRoundQuestions([])
+      setCurrentQuestion(null) // Prevent flash of old question
       setCurrentPlayerIndex(0)
       // Will trigger loadRoundQuestions in useEffect
       return
@@ -275,6 +278,8 @@ export default function DragonQuizGameScreen() {
     if (gameMode === 'teams') {
       setGamePhase('selectPlayer')
     } else {
+      // Clear current question before loading next to prevent flash
+      setCurrentQuestion(null)
       // Load next pre-loaded question
       setGamePhase('loading')
     }
