@@ -62,7 +62,7 @@ select,
 textarea {
   font-family: inherit;
   min-height: 44px; /* iOS recommended minimum */
-  touch-action: manipulation; /* Prevent double-tap zoom */
+  /* touch-action: auto allows scrolling */
 }
 
 /* Remove default button styles */
