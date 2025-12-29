@@ -76,13 +76,27 @@ export default function IntesaVincenteSetupScreen() {
           ← INDIETRO
         </button>
 
-        <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
-        <p className="intesa-subtitle">
-          📺 Il gioco della trasmissione italiana!
-        </p>
-        <div className="tv-show-info">
-          <p>🎯 Fai indovinare più parole possibili al tuo compagno!</p>
-          <p>⏱️ Hai tempo limitato - vai a RECORD!</p>
+        <div className="game-header">
+          <img 
+            src="/images/games/merda-vincente.png" 
+            alt="Merda Vincente" 
+            className="game-logo"
+          />
+          <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
+          <p className="intesa-subtitle">
+            📺 Il gioco della trasmissione italiana!
+          </p>
+        </div>
+
+        <div className="rules-box">
+          <h3 className="rules-title">📺 COME SI GIOCA</h3>
+          <ul className="rules-list">
+            <li>👥 Un giocatore fa <strong>indovinare</strong>, l'altro <strong>indovina</strong></li>
+            <li>✅ <strong>PUOI:</strong> Sinonimi, gesti, descrizioni</li>
+            <li>❌ <strong>NON PUOI:</strong> Dire la parola o sue parti</li>
+            <li>⏱️ Hai <strong>tempo limitato</strong> - vai a RECORD!</li>
+            <li>→ Solo <strong>3 PASSA</strong> disponibili (modalità TV)</li>
+          </ul>
         </div>
 
         {/* Number of Pairs */}

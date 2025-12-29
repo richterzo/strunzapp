@@ -143,7 +143,25 @@ export default function DragonQuizSetupScreen() {
           ← INDIETRO
         </button>
 
-        <h1 className="setup-title">DRAGON QUIZ</h1>
+        <div className="game-header">
+          <img 
+            src="/images/games/dragonquiz.png" 
+            alt="Dragon Quiz" 
+            className="game-logo"
+          />
+          <h1 className="setup-title">DRAGON QUIZ</h1>
+        </div>
+
+        <div className="rules-box">
+          <h3 className="rules-title">🐉 COME SI GIOCA</h3>
+          <ul className="rules-list">
+            <li>🎯 <strong>10 domande</strong> a difficoltà crescente (1-10)</li>
+            <li>⏱️ <strong>30 secondi</strong> per rispondere</li>
+            <li>📈 Più difficile = <strong>più punti</strong></li>
+            <li>⚡ Rispondi veloce per <strong>bonus tempo</strong></li>
+            <li>🏆 Arriva al livello <strong>DRAGONE</strong>!</li>
+          </ul>
+        </div>
 
         {error && <div className="error-message">{error}</div>}
 

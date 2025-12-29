@@ -1,5 +1,108 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 
+/* Back Button - Always Clickable */
+.back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(10, 10, 10, 0.95);
+  border: 2px solid #00FFF0;
+  padding: 12px 24px;
+  color: #00FFF0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Rajdhani', sans-serif;
+  z-index: 9999; /* Always on top */
+  box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+  border-color: #00FFF0;
+  color: #FFFFFF;
+  transform: translateX(-3px);
+  box-shadow: 0 0 30px rgba(0, 255, 240, 0.6);
+}
+
+.back-button:active {
+  transform: translateX(-3px) scale(0.95);
+}
+
+/* Game Header with Logo */
+.game-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  margin-top: 50px; /* Space for back button */
+}
+
+.game-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.4));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Rules Box */
+.rules-box {
+  background: linear-gradient(135deg, rgba(0, 255, 240, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
+  border: 2px solid rgba(0, 255, 240, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 255, 240, 0.1);
+}
+
+.rules-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00FFF0;
+  margin-bottom: 15px;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 255, 240, 0.5);
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rules-list li {
+  font-size: 15px;
+  color: #CCCCCC;
+  margin-bottom: 12px;
+  padding-left: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.rules-list li:hover {
+  color: #FFFFFF;
+  padding-left: 15px;
+}
+
+.rules-list li strong {
+  color: #FF006E;
+  font-weight: 700;
+}
+
 /* Reuse setup screen styles from StronzoSetupScreen but keep specific overrides */
 .error-message {
   background: rgba(255, 0, 110, 0.1);
