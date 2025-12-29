@@ -25,9 +25,11 @@ export default function DragonQuizGameScreen() {
     gameMode === 'teams' ? 'selectPlayer' : 'loading'
   ) // selectPlayer, loading, question, result, final
   const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [roundQuestions, setRoundQuestions] = useState([]) // Pre-loaded questions for current round
   const [usedQuestions, setUsedQuestions] = useState([])
   const [globalUsedQuestions, setGlobalUsedQuestions] = useState([]) // From localStorage
   const [loadingError, setLoadingError] = useState(null)
+  const [loadingProgress, setLoadingProgress] = useState(0) // Track loading progress
   const [selectedPlayerInTeam, setSelectedPlayerInTeam] = useState(null) // Index of player in current team
 
   // Calculate current difficulty level based on question number (1-10)
@@ -44,8 +46,20 @@ export default function DragonQuizGameScreen() {
     )
   }, [])
 
-  // Load question for current player
-  // This triggers whenever currentPlayerIndex changes, ensuring each player gets a different question
+  // Load all questions for the round when question number changes
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/')
+      return
+    }
+    
+    // Load all questions for this round
+    if (currentPlayerIndex === 0 && roundQuestions.length === 0) {
+      loadRoundQuestions()
+    }
+  }, [currentQuestionNumber])
+
+  // Load question for current player from pre-loaded questions
   useEffect(() => {
     if (!location.state) {
       navigate('/')
@@ -55,66 +69,107 @@ export default function DragonQuizGameScreen() {
     if (gameMode === 'teams' && gamePhase === 'selectPlayer') {
       return
     }
-    // Load new question when gamePhase is 'loading'
-    // This ensures each player in the same round gets a DIFFERENT question
-    if (gamePhase === 'loading') {
+    // Load question from pre-loaded round questions
+    if (gamePhase === 'loading' && roundQuestions.length > 0) {
       loadNextQuestion()
     }
-  }, [currentQuestionNumber, currentPlayerIndex, gamePhase])
+  }, [currentPlayerIndex, gamePhase, roundQuestions])
 
   const handlePlayerSelection = (playerIndex) => {
     setSelectedPlayerInTeam(playerIndex)
     setGamePhase('loading')
   }
 
-  const loadNextQuestion = async () => {
+  const loadRoundQuestions = async () => {
     if (gamePhase === 'final') return
 
     setGamePhase('loading')
     setLoadingError(null)
-    // Reset answer states to ensure clean slate for each player
-    setSelectedAnswer(null)
-    setShowResult(false)
+    setLoadingProgress(0)
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
-
-      // Combine session questions + global history to avoid ALL repeats
       const allUsedQuestions = [
         ...new Set([...usedQuestions, ...globalUsedQuestions]),
       ]
 
-      // Get next category using smart rotation (ensures variety)
-      const nextCategory = getNextCategory(categories)
-
       console.log(
-        `🎯 Generando domanda - Livello: ${difficultyLevel}, Categoria: ${nextCategory}`
+        `🎯 Pre-caricamento Round ${currentQuestionNumber} - Livello ${difficultyLevel}`
       )
-      console.log(`📝 Domande da evitare: ${allUsedQuestions.length}`)
+      console.log(`📝 Generazione di ${numPlayers} domande...`)
 
-      const question = await openaiService.generateSingleQuestion(
-        difficultyLevel,
-        [nextCategory], // Use single rotated category for maximum variety
-        allUsedQuestions
-      )
+      const questions = []
+      
+      // Generate questions for all players in this round
+      for (let i = 0; i < numPlayers; i++) {
+        const nextCategory = getNextCategory(categories)
+        
+        console.log(
+          `  Domanda ${i + 1}/${numPlayers} - Categoria: ${nextCategory}`
+        )
 
-      // Save to localStorage for future sessions
-      saveQuestion(question.question, question.category)
+        const question = await openaiService.generateSingleQuestion(
+          difficultyLevel,
+          [nextCategory],
+          [...allUsedQuestions, ...questions.map(q => q.question)]
+        )
 
-      setCurrentQuestion(question)
-      setUsedQuestions((prev) => [...prev, question.question])
-      setGlobalUsedQuestions((prev) => [...prev, question.question]) // Update global list too
-      setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
-      setGamePhase('question')
+        // Save to localStorage
+        saveQuestion(question.question, question.category)
+        questions.push(question)
+        
+        // Update progress
+        setLoadingProgress(Math.round(((i + 1) / numPlayers) * 100))
+      }
 
-      console.log(
-        `✅ Domanda generata: "${question.question.substring(0, 50)}..."`
-      )
+      // Save all questions for this round
+      setRoundQuestions(questions)
+      setUsedQuestions((prev) => [...prev, ...questions.map(q => q.question)])
+      setGlobalUsedQuestions((prev) => [...prev, ...questions.map(q => q.question)])
+
+      console.log(`✅ Round ${currentQuestionNumber} caricato: ${questions.length} domande`)
+
+      // If not in team mode, start immediately
+      if (gameMode !== 'teams') {
+        setGamePhase('loading') // Will trigger loadNextQuestion
+      } else {
+        setGamePhase('selectPlayer')
+      }
     } catch (error) {
-      console.error('Error loading question:', error)
-      setLoadingError(error.message || 'Errore nel caricamento della domanda')
+      console.error('Error loading round questions:', error)
+      setLoadingError(error.message || 'Errore nel caricamento delle domande')
       setGamePhase('error')
     }
+  }
+
+  const loadNextQuestion = () => {
+    if (gamePhase === 'final') return
+    if (roundQuestions.length === 0) {
+      console.error('No questions loaded for this round!')
+      return
+    }
+
+    // Reset answer states to ensure clean slate for each player
+    setSelectedAnswer(null)
+    setShowResult(false)
+
+    // Get pre-loaded question for current player
+    const question = roundQuestions[currentPlayerIndex]
+    
+    if (!question) {
+      console.error(`No question found for player ${currentPlayerIndex}`)
+      setLoadingError('Errore nel caricamento della domanda')
+      setGamePhase('error')
+      return
+    }
+
+    console.log(
+      `📖 Caricamento domanda ${currentPlayerIndex + 1}/${numPlayers} - "${question.question.substring(0, 50)}..."`
+    )
+
+    setCurrentQuestion(question)
+    setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
+    setGamePhase('question')
   }
 
   useEffect(() => {
@@ -189,6 +244,11 @@ export default function DragonQuizGameScreen() {
       }
       // Move to next question round (increase difficulty)
       setCurrentQuestionNumber((prev) => prev + 1)
+      // Clear round questions to trigger reload
+      setRoundQuestions([])
+      setCurrentPlayerIndex(0)
+      // Will trigger loadRoundQuestions in useEffect
+      return
     }
 
     setCurrentPlayerIndex(nextPlayerIndex)
@@ -197,7 +257,7 @@ export default function DragonQuizGameScreen() {
     if (gameMode === 'teams') {
       setGamePhase('selectPlayer')
     } else {
-      // Explicitly set to loading to trigger new question load
+      // Load next pre-loaded question
       setGamePhase('loading')
     }
   }
@@ -259,8 +319,10 @@ export default function DragonQuizGameScreen() {
   if (gamePhase === 'loading') {
     const difficultyLevel = getCurrentDifficultyLevel()
     const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS[difficultyLevel - 1]
-    const progress =
-      ((currentQuestionNumber - 1) / QUIZ_CONFIG.NUM_QUESTIONS) * 100
+    
+    // Show loading progress when generating questions
+    const isGeneratingRound = roundQuestions.length === 0
+    const progress = isGeneratingRound ? loadingProgress : 100
 
     return (
       <div className="game-screen">
@@ -278,13 +340,21 @@ export default function DragonQuizGameScreen() {
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>
+              <p className="loading-progress-text">{progress}%</p>
             </div>
-            <p className="loading-text">Caricamento domanda...</p>
+            <p className="loading-text">
+              {isGeneratingRound 
+                ? `Generazione Round ${currentQuestionNumber}...` 
+                : 'Caricamento domanda...'}
+            </p>
             <p className="loading-subtext">
               Livello {difficultyLevel}/10 -{' '}
               <span style={{ color: difficultyData?.color }}>
                 {difficultyData?.name}
               </span>
+              {isGeneratingRound && (
+                <span> • {numPlayers} domande</span>
+              )}
             </p>
           </div>
         </div>
