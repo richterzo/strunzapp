@@ -612,7 +612,7 @@ IMPORTANTE:
   /**
    * Generate a conversation question for Strunzate game
    */
-  async generateStrunzateQuestion(category) {
+  async generateStrunzateQuestion(category, usedQuestions = []) {
     if (!this.isConfigured()) {
       throw new Error('API not configured')
     }
