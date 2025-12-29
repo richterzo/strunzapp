@@ -12,15 +12,16 @@ import './DragonQuizGameScreen.css'
 export default function DragonQuizGameScreen() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { gameMode, numPlayers, playerNames, teams, categories } =
+  const { gameMode, numPlayers, playerNames, teams, categories, timerEnabled, comboEnabled } =
     location.state || {}
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1) // 1 to 10
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
   const [scores, setScores] = useState(Array(numPlayers).fill(0))
+  const [combos, setCombos] = useState(Array(numPlayers).fill(0)) // Combo counter for each player
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [showResult, setShowResult] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(QUIZ_CONFIG.TIME_PER_QUESTION)
+  const [timeLeft, setTimeLeft] = useState(timerEnabled ? QUIZ_CONFIG.TIME_PER_QUESTION : 999)
   const [gamePhase, setGamePhase] = useState(
     gameMode === 'teams' ? 'selectPlayer' : 'loading'
   ) // selectPlayer, loading, question, result, final
@@ -80,7 +81,11 @@ export default function DragonQuizGameScreen() {
     }
     // Load question from pre-loaded round questions
     // IMPORTANTE: Verifica che roundQuestions abbia domande E che currentQuestion sia null
-    if (gamePhase === 'loading' && roundQuestions.length > 0 && !currentQuestion) {
+    if (
+      gamePhase === 'loading' &&
+      roundQuestions.length > 0 &&
+      !currentQuestion
+    ) {
       loadNextQuestion()
     }
   }, [currentPlayerIndex, gamePhase, roundQuestions, currentQuestion])
@@ -102,12 +107,12 @@ export default function DragonQuizGameScreen() {
     setLoadingError(null)
     setLoadingProgress(0)
     setQuestionsGenerated(0)
-    
+
     // Solo DOPO il flush, imposta loading
     setGamePhase('loading')
-    
+
     // Piccolo delay per assicurare che React faccia il flush del render
-    await new Promise(resolve => setTimeout(resolve, 50))
+    await new Promise((resolve) => setTimeout(resolve, 50))
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
@@ -134,11 +139,12 @@ export default function DragonQuizGameScreen() {
         const question = await openaiService.generateSingleQuestion(
           difficultyLevel,
           [nextCategory],
-          [...allUsedQuestions, ...questions.map((q) => q.question)]
+          [...allUsedQuestions, ...questions.map((q) => q.options[q.correctAnswer])]
         )
 
-        // Save to localStorage
-        saveQuestion(question.question, question.category)
+        // Save to localStorage (only correct answer to optimize storage)
+        const correctAnswer = question.options[question.correctAnswer]
+        saveQuestion(correctAnswer, question.category)
         questions.push(question)
 
         // Update progress and counter
@@ -199,25 +205,32 @@ export default function DragonQuizGameScreen() {
     )
 
     setCurrentQuestion(question)
-    setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
+    setTimeLeft(timerEnabled ? QUIZ_CONFIG.TIME_PER_QUESTION : 999)
     setGamePhase('question')
   }
 
   useEffect(() => {
-    if (gamePhase === 'question' && timeLeft > 0) {
+    if (timerEnabled && gamePhase === 'question' && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(timeLeft - 1)
       }, 1000)
       return () => clearTimeout(timer)
-    } else if (timeLeft === 0 && gamePhase === 'question') {
+    } else if (timerEnabled && timeLeft === 0 && gamePhase === 'question') {
       // Time's up - treat as wrong answer
       handleTimeUp()
     }
-  }, [timeLeft, gamePhase])
+  }, [timeLeft, gamePhase, timerEnabled])
 
   const handleTimeUp = () => {
     setShowResult(true)
     setGamePhase('result')
+    
+    // Reset combo on timeout
+    if (comboEnabled) {
+      const newCombos = [...combos]
+      newCombos[currentPlayerIndex] = 0
+      setCombos(newCombos)
+    }
   }
 
   const handleAnswerSelect = (answerIndex) => {
@@ -242,17 +255,42 @@ export default function DragonQuizGameScreen() {
         ? difficultyData.multiplier
         : 1
 
-      // Time bonus (max 50 points)
-      const timeBonus = Math.floor(
+      // Time bonus (max 50 points) - only if timer enabled
+      const timeBonus = timerEnabled ? Math.floor(
         (timeLeft / QUIZ_CONFIG.TIME_PER_QUESTION) * QUIZ_CONFIG.TIME_BONUS_MAX
-      )
+      ) : 0
+
+      // Combo multiplier (x2, x3, x4, x5+)
+      const currentCombo = combos[currentPlayerIndex]
+      const comboMultiplier = comboEnabled && currentCombo > 0 
+        ? Math.min(currentCombo + 1, 5) 
+        : 1
 
       // Calculate total points
-      const points = Math.floor(basePoints * difficultyMultiplier) + timeBonus
+      let points = Math.floor(basePoints * difficultyMultiplier) + timeBonus
+      
+      // Apply combo multiplier
+      if (comboEnabled && comboMultiplier > 1) {
+        points = Math.floor(points * comboMultiplier)
+      }
 
       const newScores = [...scores]
       newScores[currentPlayerIndex] += points
       setScores(newScores)
+
+      // Increase combo
+      if (comboEnabled) {
+        const newCombos = [...combos]
+        newCombos[currentPlayerIndex] = currentCombo + 1
+        setCombos(newCombos)
+      }
+    } else {
+      // Reset combo on wrong answer
+      if (comboEnabled) {
+        const newCombos = [...combos]
+        newCombos[currentPlayerIndex] = 0
+        setCombos(newCombos)
+      }
     }
   }
 
@@ -273,7 +311,7 @@ export default function DragonQuizGameScreen() {
         setGamePhase('final')
         return
       }
-      
+
       // FLUSH COMPLETO prima del nuovo round
       setCurrentQuestion(null)
       setRoundQuestions([])
@@ -281,7 +319,7 @@ export default function DragonQuizGameScreen() {
       setShowResult(false)
       setLoadingProgress(0)
       setQuestionsGenerated(0)
-      
+
       // Move to next question round (increase difficulty)
       setCurrentQuestionNumber((prev) => prev + 1)
       setCurrentPlayerIndex(0)
@@ -518,9 +556,11 @@ export default function DragonQuizGameScreen() {
             <span className="question-number">
               ROUND {currentQuestionNumber}/{QUIZ_CONFIG.NUM_QUESTIONS}
             </span>
-            <span className={`timer ${timeLeft <= 10 ? 'warning' : ''}`}>
-              ⏱️ {timeLeft}s
-            </span>
+            {timerEnabled && (
+              <span className={`timer ${timeLeft <= 10 ? 'warning' : ''}`}>
+                ⏱️ {timeLeft}s
+              </span>
+            )}
           </div>
         </div>
 
@@ -531,6 +571,12 @@ export default function DragonQuizGameScreen() {
             <p className="team-player-name">
               👤 {teams[currentPlayerIndex].players[selectedPlayerInTeam]}
             </p>
+          )}
+          {comboEnabled && combos[currentPlayerIndex] > 0 && (
+            <div className="combo-display">
+              <span className="combo-icon">🔥</span>
+              <span className="combo-text">COMBO x{Math.min(combos[currentPlayerIndex] + 1, 5)}</span>
+            </div>
           )}
         </div>
 

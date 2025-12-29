@@ -16,6 +16,8 @@ export default function DragonQuizSetupScreen() {
     { name: 'Squadra 2', players: ['Giocatore 2'] },
   ])
   const [selectedCategories, setSelectedCategories] = useState([])
+  const [timerEnabled, setTimerEnabled] = useState(true)
+  const [comboEnabled, setComboEnabled] = useState(true)
   const [error, setError] = useState('')
 
   const handleNumPlayersChange = (delta) => {
@@ -130,6 +132,8 @@ export default function DragonQuizSetupScreen() {
           selectedCategories.length > 0
             ? selectedCategories
             : QUIZ_CONFIG.CATEGORIES,
+        timerEnabled,
+        comboEnabled,
       },
     })
   }
@@ -360,6 +364,48 @@ export default function DragonQuizSetupScreen() {
                 {category}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Game Options */}
+        <div className="setup-section">
+          <h3 className="section-title">⚙️ OPZIONI DI GIOCO</h3>
+          <div className="game-options-grid">
+            <div className="option-card">
+              <div className="option-header">
+                <span className="option-icon">⏱️</span>
+                <div className="option-info">
+                  <h4 className="option-name">TIMER</h4>
+                  <p className="option-description">
+                    30 secondi per rispondere
+                  </p>
+                </div>
+              </div>
+              <button
+                className={`toggle-button ${timerEnabled ? 'active' : ''}`}
+                onClick={() => setTimerEnabled(!timerEnabled)}
+              >
+                {timerEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
+
+            <div className="option-card">
+              <div className="option-header">
+                <span className="option-icon">🔥</span>
+                <div className="option-info">
+                  <h4 className="option-name">COMBO</h4>
+                  <p className="option-description">
+                    Moltiplicatore per risposte consecutive
+                  </p>
+                </div>
+              </div>
+              <button
+                className={`toggle-button ${comboEnabled ? 'active' : ''}`}
+                onClick={() => setComboEnabled(!comboEnabled)}
+              >
+                {comboEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
           </div>
         </div>
 

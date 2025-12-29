@@ -11,10 +11,10 @@ export class OpenAIService {
    * Generate a single quiz question with specific difficulty
    * @param {number} difficultyLevel - Difficulty level (1-10)
    * @param {Array<string>} categories - Selected categories
-   * @param {Array<string>} usedQuestions - Already used questions to avoid duplicates
+   * @param {Array<string>} usedAnswers - Already used correct answers to avoid duplicates
    * @returns {Promise<Object>} Single question object
    */
-  async generateSingleQuestion(difficultyLevel, categories = [], usedQuestions = []) {
+  async generateSingleQuestion(difficultyLevel, categories = [], usedAnswers = []) {
     if (!this.apiKey) {
       throw new Error('OpenAI API key not configured. Please add VITE_OPENAI_API_KEY to your .env file')
     }
@@ -24,12 +24,12 @@ export class OpenAIService {
     const categoriesStr = categories.length > 0 ? categories.join(', ') : 'cultura generale'
     const selectedCategory = categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : 'cultura generale'
 
-    const usedQuestionsContext = usedQuestions.length > 0 
-      ? `\n\n⚠️ DOMANDE GIÀ USATE - NON RIPETERE MAI:
-${usedQuestions.slice(-30).join('\n')}
+    const usedQuestionsContext = usedAnswers.length > 0 
+      ? `\n\n⚠️ RISPOSTE GIÀ USATE - Evita domande con queste risposte:
+${usedAnswers.slice(-30).join(', ')}
 
 IMPORTANTE: Ogni giocatore deve avere una domanda COMPLETAMENTE DIVERSA. 
-Non fare domande simili o variazioni delle domande già usate!\n`
+Non usare le risposte sopra come risposta corretta!\n`
       : '\n\n✓ Prima domanda del gioco - sii creativo!\n'
 
     // Parametric difficulty description based on level

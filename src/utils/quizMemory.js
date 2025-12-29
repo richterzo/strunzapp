@@ -6,8 +6,8 @@ const MAX_QUESTIONS_STORED = 500 // Limit to prevent localStorage overflow
 const MAX_CATEGORY_HISTORY = 30 // Track last 30 categories used
 
 /**
- * Get all used questions from localStorage
- * @returns {Array} Array of question texts
+ * Get all used answers from localStorage
+ * @returns {Array} Array of correct answers
  */
 export function getUsedQuestions() {
   try {
@@ -15,7 +15,7 @@ export function getUsedQuestions() {
     if (!data) return []
     
     const parsed = JSON.parse(data)
-    return parsed.questions || []
+    return parsed.answers || []
   } catch (error) {
     console.error('Error reading quiz history:', error)
     return []
@@ -40,26 +40,32 @@ export function getRecentCategories() {
 }
 
 /**
- * Save a new question to history
- * @param {string} questionText - The question text
+ * Save a new answer to history (optimized: only answer, not full question)
+ * @param {string} answer - The correct answer
  * @param {string} category - The category of the question
  */
-export function saveQuestion(questionText, category) {
+export function saveQuestion(answer, category) {
   try {
     const data = localStorage.getItem(STORAGE_KEY)
-    let history = data ? JSON.parse(data) : { questions: [], recentCategories: [] }
+    let history = data ? JSON.parse(data) : { answers: [], recentCategories: [] }
     
-    // Add question (prevent duplicates)
-    if (!history.questions.includes(questionText)) {
-      history.questions.push(questionText)
+    // Ensure backwards compatibility
+    if (history.questions && !history.answers) {
+      history.answers = []
+      delete history.questions
+    }
+    
+    // Add answer (prevent duplicates)
+    if (!history.answers.includes(answer)) {
+      history.answers.push(answer)
     }
     
     // Add category to recent list
     history.recentCategories.push(category)
     
     // Trim to max size (keep most recent)
-    if (history.questions.length > MAX_QUESTIONS_STORED) {
-      history.questions = history.questions.slice(-MAX_QUESTIONS_STORED)
+    if (history.answers.length > MAX_QUESTIONS_STORED) {
+      history.answers = history.answers.slice(-MAX_QUESTIONS_STORED)
     }
     
     if (history.recentCategories.length > MAX_CATEGORY_HISTORY) {
@@ -75,7 +81,7 @@ export function saveQuestion(questionText, category) {
       // Try again
       try {
         const minimalHistory = {
-          questions: [questionText],
+          answers: [answer],
           recentCategories: [category]
         }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(minimalHistory))
@@ -133,9 +139,9 @@ function clearOldHistory() {
     
     const parsed = JSON.parse(data)
     
-    // Keep only last 100 questions and 10 categories
+    // Keep only last 100 answers and 10 categories
     const trimmed = {
-      questions: (parsed.questions || []).slice(-100),
+      answers: (parsed.answers || parsed.questions || []).slice(-100),
       recentCategories: (parsed.recentCategories || []).slice(-10)
     }
     
@@ -172,7 +178,7 @@ export function getHistoryStats() {
     if (!data) return { totalQuestions: 0, categories: {} }
     
     const parsed = JSON.parse(data)
-    const questions = parsed.questions || []
+    const answers = parsed.answers || parsed.questions || []
     const recentCategories = parsed.recentCategories || []
     
     // Count categories
@@ -182,7 +188,7 @@ export function getHistoryStats() {
     })
     
     return {
-      totalQuestions: questions.length,
+      totalQuestions: answers.length,
       categories: categoryCount,
       recentCategories: recentCategories.slice(-10)
     }
