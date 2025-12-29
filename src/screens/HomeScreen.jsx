@@ -32,7 +32,7 @@ export default function HomeScreen() {
       name: 'STRUNZATE',
       description: 'Domande per conversazioni profonde',
       route: '/strunzate/setup',
-      icon: '💬',
+      image: '/images/games/strunzate.png',
     },
   ]
 
