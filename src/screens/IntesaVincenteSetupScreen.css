@@ -14,7 +14,7 @@
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
   padding: 40px 20px 100px;
-  min-height: 100vh;
+  height: 100%; /* CRITICAL: Fill parent for mobile scroll */
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

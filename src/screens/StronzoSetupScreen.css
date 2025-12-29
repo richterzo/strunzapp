@@ -7,7 +7,7 @@
     radial-gradient(circle at 80% 70%, rgba(255, 0, 110, 0.06) 0%, transparent 50%),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
   padding: 20px 20px 100px;
-  min-height: 100vh;
+  height: 100%; /* CRITICAL: Fill parent for mobile scroll */
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -388,7 +388,7 @@
 @media (max-width: 480px) {
   .setup-screen {
     padding: 16px;
-  min-height: 100vh;
+  height: 100%; /* CRITICAL: Fill parent for mobile scroll */
   }
 
   .setup-content {
@@ -471,7 +471,7 @@
 @media (max-width: 375px) {
   .setup-screen {
     padding: 12px;
-  min-height: 100vh;
+  height: 100%; /* CRITICAL: Fill parent for mobile scroll */
   }
 
   .setup-title {
