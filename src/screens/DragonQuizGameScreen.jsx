@@ -30,6 +30,7 @@ export default function DragonQuizGameScreen() {
   }
 
   // Load question for current player
+  // This triggers whenever currentPlayerIndex changes, ensuring each player gets a different question
   useEffect(() => {
     if (!location.state) {
       navigate('/')
@@ -39,7 +40,8 @@ export default function DragonQuizGameScreen() {
     if (gameMode === 'teams' && gamePhase === 'selectPlayer') {
       return
     }
-    // Otherwise load question
+    // Load new question when gamePhase is 'loading'
+    // This ensures each player in the same round gets a DIFFERENT question
     if (gamePhase === 'loading') {
       loadNextQuestion()
     }
@@ -55,6 +57,9 @@ export default function DragonQuizGameScreen() {
 
     setGamePhase('loading')
     setLoadingError(null)
+    // Reset answer states to ensure clean slate for each player
+    setSelectedAnswer(null)
+    setShowResult(false)
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
@@ -129,9 +134,11 @@ export default function DragonQuizGameScreen() {
   }
 
   const handleNextQuestion = () => {
+    // Reset all answer states
     setSelectedAnswer(null)
     setShowResult(false)
     setSelectedPlayerInTeam(null)
+    setLoadingError(null)
 
     // Move to next player
     const nextPlayerIndex = (currentPlayerIndex + 1) % numPlayers
@@ -153,7 +160,8 @@ export default function DragonQuizGameScreen() {
     if (gameMode === 'teams') {
       setGamePhase('selectPlayer')
     } else {
-      // loadNextQuestion will be triggered by useEffect
+      // Explicitly set to loading to trigger new question load
+      setGamePhase('loading')
     }
   }
 

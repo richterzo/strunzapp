@@ -200,9 +200,7 @@ export default function IntesaVincenteSetupScreen() {
           </p>
           <div className="difficulty-buttons">
             <button
-              className={`difficulty-button ${
-                passLimit === 3 ? 'active' : ''
-              }`}
+              className={`difficulty-button ${passLimit === 3 ? 'active' : ''}`}
               onClick={() => setPassLimit(3)}
             >
               3 PASSA (TV)
