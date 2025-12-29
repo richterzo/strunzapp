@@ -714,11 +714,11 @@ export default function StronzoSetupScreen() {
         <button className="back-button" onClick={() => navigate('/')}>
           ← INDIETRO
         </button>
-        
+
         <div className="game-header">
-          <img 
-            src="/images/games/impostore.png" 
-            alt="Stronzo Impostore" 
+          <img
+            src="/images/games/impostore.png"
+            alt="Stronzo Impostore"
             className="game-logo"
           />
           <h2 className="setup-title">STRONZO</h2>
@@ -728,7 +728,9 @@ export default function StronzoSetupScreen() {
           <h3 className="rules-title">📋 COME SI GIOCA</h3>
           <ul className="rules-list">
             <li>🎯 Tutti i giocatori vedono una parola segreta</li>
-            <li>🤫 Gli <strong>impostori</strong> NON vedono la parola</li>
+            <li>
+              🤫 Gli <strong>impostori</strong> NON vedono la parola
+            </li>
             <li>💬 A turno, descrivete la parola senza dirla</li>
             <li>🕵️ Scoprite chi è l'impostore!</li>
             <li>🎭 Se sei l'impostore: FINGI di sapere la parola!</li>

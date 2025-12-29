@@ -77,9 +77,9 @@ export default function IntesaVincenteSetupScreen() {
         </button>
 
         <div className="game-header">
-          <img 
-            src="/images/games/merda-vincente.png" 
-            alt="Merda Vincente" 
+          <img
+            src="/images/games/merda-vincente.png"
+            alt="Merda Vincente"
             className="game-logo"
           />
           <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
@@ -91,11 +91,22 @@ export default function IntesaVincenteSetupScreen() {
         <div className="rules-box">
           <h3 className="rules-title">📺 COME SI GIOCA</h3>
           <ul className="rules-list">
-            <li>👥 Un giocatore fa <strong>indovinare</strong>, l'altro <strong>indovina</strong></li>
-            <li>✅ <strong>PUOI:</strong> Sinonimi, gesti, descrizioni</li>
-            <li>❌ <strong>NON PUOI:</strong> Dire la parola o sue parti</li>
-            <li>⏱️ Hai <strong>tempo limitato</strong> - vai a RECORD!</li>
-            <li>→ Solo <strong>3 PASSA</strong> disponibili (modalità TV)</li>
+            <li>
+              👥 Un giocatore fa <strong>indovinare</strong>, l'altro{' '}
+              <strong>indovina</strong>
+            </li>
+            <li>
+              ✅ <strong>PUOI:</strong> Sinonimi, gesti, descrizioni
+            </li>
+            <li>
+              ❌ <strong>NON PUOI:</strong> Dire la parola o sue parti
+            </li>
+            <li>
+              ⏱️ Hai <strong>tempo limitato</strong> - vai a RECORD!
+            </li>
+            <li>
+              → Solo <strong>3 PASSA</strong> disponibili (modalità TV)
+            </li>
           </ul>
         </div>
 

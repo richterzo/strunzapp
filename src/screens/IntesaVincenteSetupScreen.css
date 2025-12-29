@@ -53,9 +53,9 @@
   top: 20px;
   left: 20px;
   background: rgba(10, 10, 10, 0.95);
-  border: 2px solid #00FFF0;
+  border: 2px solid #00fff0;
   padding: 12px 24px;
-  color: #00FFF0;
+  color: #00fff0;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -69,8 +69,8 @@
 }
 
 .back-button:hover {
-  border-color: #00FFF0;
-  color: #FFFFFF;
+  border-color: #00fff0;
+  color: #ffffff;
   transform: translateX(-3px);
   box-shadow: 0 0 30px rgba(0, 255, 240, 0.6);
 }
@@ -98,13 +98,22 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Rules Box */
 .rules-box {
-  background: linear-gradient(135deg, rgba(0, 255, 240, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 240, 0.1) 0%,
+    rgba(255, 0, 110, 0.05) 100%
+  );
   border: 2px solid rgba(0, 255, 240, 0.3);
   border-radius: 15px;
   padding: 20px;
@@ -116,7 +125,7 @@
 .rules-title {
   font-size: 18px;
   font-weight: 700;
-  color: #00FFF0;
+  color: #00fff0;
   margin-bottom: 15px;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 2px;
@@ -132,7 +141,7 @@
 
 .rules-list li {
   font-size: 15px;
-  color: #CCCCCC;
+  color: #cccccc;
   margin-bottom: 12px;
   padding-left: 10px;
   font-family: 'Rajdhani', sans-serif;
@@ -141,12 +150,12 @@
 }
 
 .rules-list li:hover {
-  color: #FFFFFF;
+  color: #ffffff;
   padding-left: 15px;
 }
 
 .rules-list li strong {
-  color: #FF006E;
+  color: #ff006e;
   font-weight: 700;
 }
 

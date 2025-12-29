@@ -113,7 +113,7 @@ export default function DragonQuizSetupScreen() {
 
     if (!openaiService.isConfigured()) {
       setError(
-        '⚠️ API Key OpenAI non configurata. Aggiungi VITE_OPENAI_API_KEY al file .env'
+        '⚠️ Servizio non disponibile. Contatta l\'amministratore.'
       )
       return
     }
@@ -144,9 +144,9 @@ export default function DragonQuizSetupScreen() {
         </button>
 
         <div className="game-header">
-          <img 
-            src="/images/games/dragonquiz.png" 
-            alt="Dragon Quiz" 
+          <img
+            src="/images/games/dragonquiz.png"
+            alt="Dragon Quiz"
             className="game-logo"
           />
           <h1 className="setup-title">DRAGON QUIZ</h1>
@@ -155,11 +155,21 @@ export default function DragonQuizSetupScreen() {
         <div className="rules-box">
           <h3 className="rules-title">🐉 COME SI GIOCA</h3>
           <ul className="rules-list">
-            <li>🎯 <strong>10 domande</strong> a difficoltà crescente (1-10)</li>
-            <li>⏱️ <strong>30 secondi</strong> per rispondere</li>
-            <li>📈 Più difficile = <strong>più punti</strong></li>
-            <li>⚡ Rispondi veloce per <strong>bonus tempo</strong></li>
-            <li>🏆 Arriva al livello <strong>DRAGONE</strong>!</li>
+            <li>
+              🎯 <strong>10 domande</strong> a difficoltà crescente (1-10)
+            </li>
+            <li>
+              ⏱️ <strong>30 secondi</strong> per rispondere
+            </li>
+            <li>
+              📈 Più difficile = <strong>più punti</strong>
+            </li>
+            <li>
+              ⚡ Rispondi veloce per <strong>bonus tempo</strong>
+            </li>
+            <li>
+              🏆 Arriva al livello <strong>DRAGONE</strong>!
+            </li>
           </ul>
         </div>
 
@@ -361,7 +371,7 @@ export default function DragonQuizSetupScreen() {
         </button>
 
         <div className="quiz-info">
-          <p>🎯 10 domande • 📈 Difficoltà crescente • 🤖 AI-powered</p>
+          <p>🎯 10 domande • 📈 Difficoltà crescente • 🐉 Sfida il Dragone</p>
         </div>
       </div>
     </div>

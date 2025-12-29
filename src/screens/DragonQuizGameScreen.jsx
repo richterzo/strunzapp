@@ -220,18 +220,33 @@ export default function DragonQuizGameScreen() {
   }
 
   if (gamePhase === 'loading') {
+    const difficultyLevel = getCurrentDifficultyLevel()
+    const difficultyData = QUIZ_CONFIG.DIFFICULTY_LEVELS[difficultyLevel - 1]
+    const progress = ((currentQuestionNumber - 1) / QUIZ_CONFIG.NUM_QUESTIONS) * 100
+    
     return (
       <div className="game-screen">
         <div className="game-content">
           <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p className="loading-text">Generazione domanda AI...</p>
+            <img 
+              src="/images/games/dragonquiz.png" 
+              alt="Dragon Quiz" 
+              className="loading-dragon"
+            />
+            <div className="loading-progress-container">
+              <div className="loading-progress-bar">
+                <div 
+                  className="loading-progress-fill"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+            <p className="loading-text">Caricamento domanda...</p>
             <p className="loading-subtext">
-              Livello {getCurrentDifficultyLevel()}/10 -{' '}
-              {
-                QUIZ_CONFIG.DIFFICULTY_LEVELS[getCurrentDifficultyLevel() - 1]
-                  ?.name
-              }
+              Livello {difficultyLevel}/10 -{' '}
+              <span style={{ color: difficultyData?.color }}>
+                {difficultyData?.name}
+              </span>
             </p>
           </div>
         </div>

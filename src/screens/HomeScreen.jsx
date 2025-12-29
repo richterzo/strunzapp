@@ -16,7 +16,7 @@ export default function HomeScreen() {
     {
       id: 'dragon-quiz',
       name: 'DRAGON QUIZ',
-      description: 'Quiz AI con difficoltà crescente',
+      description: '10 domande a difficoltà crescente',
       route: '/dragon-quiz/setup',
       image: '/images/games/dragonquiz.png',
     },
