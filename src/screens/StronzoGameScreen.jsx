@@ -35,7 +35,9 @@ export default function StronzoGameScreen() {
 
       // Get historical words to avoid
       const historicalWords = getUsedWords('stronzo')
-      console.log(`📚 Stronzo: Caricate ${historicalWords.length} parole dalla cronologia`)
+      console.log(
+        `📚 Stronzo: Caricate ${historicalWords.length} parole dalla cronologia`
+      )
 
       // Try to get word from AI first
       let word = null
@@ -49,7 +51,11 @@ export default function StronzoGameScreen() {
             1,
             'stronzo'
           )
-          if (aiWords && aiWords.length > 0 && !historicalWords.includes(aiWords[0])) {
+          if (
+            aiWords &&
+            aiWords.length > 0 &&
+            !historicalWords.includes(aiWords[0])
+          ) {
             word = aiWords[0]
           }
         } catch (error) {
@@ -59,19 +65,21 @@ export default function StronzoGameScreen() {
 
       // Fallback to static words if AI failed
       if (!word) {
-        const availableWords = allWords.filter(w => !historicalWords.includes(w))
+        const availableWords = allWords.filter(
+          (w) => !historicalWords.includes(w)
+        )
         const wordsToUse = availableWords.length > 0 ? availableWords : allWords
         word = wordsToUse[Math.floor(Math.random() * wordsToUse.length)]
       }
 
       // Save to history
       saveWord('stronzo', word)
-      
+
       setCurrentWord(word)
       setUsedWords([word])
       setIsWordHidden(true)
       setGamePhase('playing')
-      
+
       console.log(`✅ Stronzo: Parola selezionata "${word}"`)
     }
 
@@ -132,7 +140,11 @@ export default function StronzoGameScreen() {
           1,
           'stronzo'
         )
-        if (aiWords && aiWords.length > 0 && !allUsedWords.includes(aiWords[0])) {
+        if (
+          aiWords &&
+          aiWords.length > 0 &&
+          !allUsedWords.includes(aiWords[0])
+        ) {
           newWord = aiWords[0]
         }
       } catch (error) {
@@ -142,9 +154,7 @@ export default function StronzoGameScreen() {
 
     // Fallback to static words if AI failed
     if (!newWord) {
-      let availableWords = allWords.filter(
-        (w) => !allUsedWords.includes(w)
-      )
+      let availableWords = allWords.filter((w) => !allUsedWords.includes(w))
       if (availableWords.length === 0) {
         // If all words used, reset and use all
         availableWords = allWords
@@ -168,8 +178,10 @@ export default function StronzoGameScreen() {
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100])
     }
-    
-    console.log(`✅ Stronzo Round ${roundNumber + 1}: Nuova parola "${newWord}"`)
+
+    console.log(
+      `✅ Stronzo Round ${roundNumber + 1}: Nuova parola "${newWord}"`
+    )
   }
 
   const isStronzo = (playerIndex) => {

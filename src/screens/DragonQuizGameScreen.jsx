@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG } from '../config/api'
 import openaiService from '../services/openaiService'
-import { getUsedQuestions, saveQuestion, getNextCategory } from '../utils/quizMemory'
+import {
+  getUsedQuestions,
+  saveQuestion,
+  getNextCategory,
+} from '../utils/quizMemory'
 import './DragonQuizGameScreen.css'
 
 export default function DragonQuizGameScreen() {
@@ -35,7 +39,9 @@ export default function DragonQuizGameScreen() {
   useEffect(() => {
     const historicalQuestions = getUsedQuestions()
     setGlobalUsedQuestions(historicalQuestions)
-    console.log(`📚 Caricate ${historicalQuestions.length} domande dalla cronologia`)
+    console.log(
+      `📚 Caricate ${historicalQuestions.length} domande dalla cronologia`
+    )
   }, [])
 
   // Load question for current player
@@ -72,16 +78,20 @@ export default function DragonQuizGameScreen() {
 
     try {
       const difficultyLevel = getCurrentDifficultyLevel()
-      
+
       // Combine session questions + global history to avoid ALL repeats
-      const allUsedQuestions = [...new Set([...usedQuestions, ...globalUsedQuestions])]
-      
+      const allUsedQuestions = [
+        ...new Set([...usedQuestions, ...globalUsedQuestions]),
+      ]
+
       // Get next category using smart rotation (ensures variety)
       const nextCategory = getNextCategory(categories)
-      
-      console.log(`🎯 Generando domanda - Livello: ${difficultyLevel}, Categoria: ${nextCategory}`)
+
+      console.log(
+        `🎯 Generando domanda - Livello: ${difficultyLevel}, Categoria: ${nextCategory}`
+      )
       console.log(`📝 Domande da evitare: ${allUsedQuestions.length}`)
-      
+
       const question = await openaiService.generateSingleQuestion(
         difficultyLevel,
         [nextCategory], // Use single rotated category for maximum variety
@@ -90,14 +100,16 @@ export default function DragonQuizGameScreen() {
 
       // Save to localStorage for future sessions
       saveQuestion(question.question, question.category)
-      
+
       setCurrentQuestion(question)
       setUsedQuestions((prev) => [...prev, question.question])
       setGlobalUsedQuestions((prev) => [...prev, question.question]) // Update global list too
       setTimeLeft(QUIZ_CONFIG.TIME_PER_QUESTION)
       setGamePhase('question')
-      
-      console.log(`✅ Domanda generata: "${question.question.substring(0, 50)}..."`)
+
+      console.log(
+        `✅ Domanda generata: "${question.question.substring(0, 50)}..."`
+      )
     } catch (error) {
       console.error('Error loading question:', error)
       setLoadingError(error.message || 'Errore nel caricamento della domanda')
@@ -409,17 +421,18 @@ export default function DragonQuizGameScreen() {
           )}
         </div>
 
+        <div
+          className="difficulty-badge-new"
+          style={{
+            borderColor: difficultyData.color,
+            color: difficultyData.color,
+          }}
+        >
+          <span className="difficulty-level">Lv.{difficultyLevel}</span>
+          <span className="difficulty-name">{difficultyData.name}</span>
+        </div>
+
         <div className="question-section">
-          <div
-            className="difficulty-badge-new"
-            style={{
-              borderColor: difficultyData.color,
-              color: difficultyData.color,
-            }}
-          >
-            <span className="difficulty-level">Lv.{difficultyLevel}</span>
-            <span className="difficulty-name">{difficultyData.name}</span>
-          </div>
           <div className="category-badge">{currentQuestion.category}</div>
           <h2 className="question-text">{currentQuestion.question}</h2>
         </div>

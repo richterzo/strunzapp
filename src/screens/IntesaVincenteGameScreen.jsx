@@ -38,14 +38,16 @@ export default function IntesaVincenteGameScreen() {
     // Generate initial pool of words (100 words) - try AI first
     const loadInitialWords = async () => {
       const historicalWords = getUsedWords('intesa')
-      console.log(`📚 Intesa: Caricate ${historicalWords.length} parole dalla cronologia`)
-      
+      console.log(
+        `📚 Intesa: Caricate ${historicalWords.length} parole dalla cronologia`
+      )
+
       const generatedWords = await getRandomWordsWithAI(
         categories,
         difficulty,
         100,
         openaiService,
-        historicalWords.map(w => w) // Pass historical words to avoid
+        historicalWords.map((w) => w) // Pass historical words to avoid
       )
       setWords(generatedWords)
     }
@@ -62,7 +64,7 @@ export default function IntesaVincenteGameScreen() {
           difficulty,
           50,
           openaiService,
-          historicalWords.map(w => w)
+          historicalWords.map((w) => w)
         )
         setWords((prev) => [...prev, ...moreWords])
       }
@@ -99,7 +101,7 @@ export default function IntesaVincenteGameScreen() {
       difficulty,
       100,
       openaiService,
-      historicalWords.map(w => w)
+      historicalWords.map((w) => w)
     )
     setWords(generatedWords)
   }
