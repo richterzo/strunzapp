@@ -28,11 +28,8 @@
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
   background: #000000;
-  overflow-x: hidden;
-  overflow-y: scroll; /* Force scrollbar space */
-  position: relative;
+  /* No height restrictions - allow natural scroll */
   
   /* Prevent pull-to-refresh on mobile */
   overscroll-behavior-y: contain;
@@ -41,8 +38,7 @@ body {
 
 #root {
   width: 100%;
-  min-height: 100vh;
-  position: relative;
+  /* No height restrictions - allow natural scroll */
 }
 
 /* Mobile-optimized scrolling */
@@ -93,9 +89,7 @@ button,
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
+  /* No height/overflow restrictions - let browser handle scroll naturally */
 }
 
 /* Improved mobile viewport */

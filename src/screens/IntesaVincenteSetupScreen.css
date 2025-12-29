@@ -406,7 +406,7 @@
   margin-top: 40px;
   box-shadow: 0 0 40px rgba(0, 255, 240, 0.5);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; overflow-y: auto;
 }
 
 .start-button::before {

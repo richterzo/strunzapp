@@ -337,7 +337,7 @@
   margin-top: 50px;
   font-family: 'Rajdhani', sans-serif;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; overflow-y: auto;
   box-shadow: 
     0 0 40px rgba(0, 255, 240, 0.3),
     inset 0 0 40px rgba(0, 255, 240, 0.05);
