@@ -52,44 +52,32 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.home-title {
-  font-size: clamp(42px, 10vw, 72px);
-  font-weight: 900;
-  color: #00FFF0;
-  margin-bottom: 20px;
-  letter-spacing: clamp(3px, 1.5vw, 8px);
-  font-family: 'Orbitron', sans-serif;
-  text-transform: uppercase;
-  text-shadow: 
-    0 0 40px rgba(0, 255, 240, 0.8),
-    0 0 80px rgba(0, 255, 240, 0.4),
-    2px 2px 4px rgba(0, 0, 0, 0.9);
-  animation: titleGlow 4s ease-in-out infinite;
+.logo-container {
+  margin-bottom: 50px;
+  animation: logoFloat 3s ease-in-out infinite;
 }
 
-@keyframes titleGlow {
-  0%, 100% { 
-    text-shadow: 
-      0 0 40px rgba(0, 255, 240, 0.8),
-      0 0 80px rgba(0, 255, 240, 0.4),
-      2px 2px 4px rgba(0, 0, 0, 0.9);
-  }
-  50% { 
-    text-shadow: 
-      0 0 60px rgba(0, 255, 240, 1),
-      0 0 100px rgba(0, 255, 240, 0.6),
-      2px 2px 4px rgba(0, 0, 0, 0.9);
-  }
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
-.home-subtitle {
-  font-size: 12px;
-  color: #666666;
-  margin-bottom: 70px;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
+.app-logo {
+  width: clamp(280px, 70vw, 450px);
+  height: auto;
+  filter: 
+    drop-shadow(0 0 50px rgba(0, 255, 240, 0.4))
+    drop-shadow(0 0 100px rgba(255, 0, 110, 0.2))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
+.app-logo:hover {
+  filter: 
+    drop-shadow(0 0 70px rgba(0, 255, 240, 0.6))
+    drop-shadow(0 0 120px rgba(255, 0, 110, 0.3))
+    drop-shadow(0 10px 40px rgba(0, 0, 0, 0.6));
+  transform: scale(1.02);
 }
 
 .games-container {
@@ -111,13 +99,13 @@
   backdrop-filter: blur(20px);
   border: 2px solid;
   border-image: linear-gradient(135deg, #00FFF0 0%, #FF006E 100%) 1;
-  padding: 40px;
+  padding: 30px 40px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 30px;
   position: relative;
   overflow: hidden;
   box-shadow: 
@@ -153,17 +141,40 @@
   transform: translateY(-2px);
 }
 
+.game-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.4));
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.game-card:hover .game-image {
+  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
+  transform: scale(1.1) rotate(5deg);
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
 .game-name {
-  font-size: clamp(32px, 7vw, 52px);
+  font-size: clamp(28px, 6vw, 48px);
   font-weight: 900;
   background: linear-gradient(135deg, #00FFF0 0%, #FFFFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   font-family: 'Orbitron', sans-serif;
   filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
   transition: filter 0.3s ease;
+  text-align: left;
 }
 
 .game-card:hover .game-name {
@@ -173,7 +184,7 @@
 .game-description {
   font-size: 13px;
   color: #999999;
-  text-align: center;
+  text-align: left;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   letter-spacing: 2px;
@@ -186,13 +197,27 @@
 
 /* Tablet optimization */
 @media (max-width: 768px) {
-  .home-title {
-    font-size: clamp(38px, 9vw, 64px);
-    letter-spacing: clamp(2px, 1vw, 6px);
+  .logo-container {
+    margin-bottom: 40px;
+  }
+  
+  .app-logo {
+    width: clamp(240px, 65vw, 380px);
   }
   
   .game-card {
-    padding: 32px 28px;
+    padding: 25px 30px;
+    gap: 20px;
+  }
+
+  .game-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .game-name {
+    font-size: clamp(24px, 5.5vw, 40px);
+    letter-spacing: 2px;
   }
 }
 
@@ -202,30 +227,40 @@
     padding: 20px 16px;
   }
   
-  .home-title {
-    font-size: clamp(32px, 8vw, 54px);
-    letter-spacing: clamp(2px, 0.8vw, 4px);
-    margin-bottom: 16px;
+  .logo-container {
+    margin-bottom: 35px;
   }
-
-  .home-subtitle {
-    font-size: 11px;
-    margin-bottom: 50px;
-    letter-spacing: 4px;
+  
+  .app-logo {
+    width: clamp(200px, 60vw, 320px);
   }
   
   .game-card {
-    padding: 28px 20px;
-    min-height: 120px;
+    padding: 20px 24px;
+    min-height: auto;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .game-image {
+    width: 90px;
+    height: 90px;
+  }
+
+  .game-info {
+    align-items: center;
+    text-align: center;
   }
 
   .game-name {
-    font-size: clamp(24px, 6vw, 40px);
+    font-size: clamp(22px, 5vw, 36px);
     letter-spacing: 2px;
+    text-align: center;
   }
 
   .game-description {
     font-size: 12px;
+    text-align: center;
   }
 }
 
@@ -235,8 +270,12 @@
     padding: 16px 12px;
   }
 
-  .home-title {
-    font-size: clamp(28px, 7vw, 48px);
+  .logo-container {
+    margin-bottom: 30px;
+  }
+  
+  .app-logo {
+    width: clamp(180px, 55vw, 280px);
   }
 
   .games-container {
@@ -244,6 +283,15 @@
   }
 
   .game-card {
-    padding: 24px 16px;
+    padding: 18px 20px;
+  }
+
+  .game-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .game-name {
+    font-size: clamp(20px, 4.5vw, 32px);
   }
 }

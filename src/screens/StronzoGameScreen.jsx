@@ -142,8 +142,11 @@ export default function StronzoGameScreen() {
                 </div>
               ) : (
                 <div className="stronzo-revealed">
-                  <div className="stronzo-icon">💀</div>
-                  <p className="stronzo-text">SEI LO STRONZO!</p>
+                  <img 
+                    src="/images/games/impostore.png" 
+                    alt="Stronzo Impostore" 
+                    className="stronzo-logo"
+                  />
                   <p className="stronzo-hint">Non sai la parola. Fingi di saperla!</p>
                   <p className="stronzo-warning">⚠️ Non farti scoprire!</p>
                   <button 

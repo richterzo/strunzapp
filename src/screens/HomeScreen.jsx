@@ -11,20 +11,27 @@ export default function HomeScreen() {
       name: 'STRONZO',
       description: 'Trova l\'impostore',
       route: '/stronzo/setup',
+      image: '/images/games/impostore.png',
     },
     {
       id: 'dragon-quiz',
       name: 'DRAGON QUIZ',
       description: 'Quiz AI con difficoltà crescente',
       route: '/dragon-quiz/setup',
+      image: '/images/games/dragonquiz.png',
     },
   ]
 
   return (
     <div className="home-screen">
       <div className="home-content">
-        <h1 className="home-title">STRUNZAPP</h1>
-        <p className="home-subtitle">Minigiochi</p>
+        <div className="logo-container">
+          <img 
+            src="/images/logo.png" 
+            alt="StrunzApp Logo" 
+            className="app-logo"
+          />
+        </div>
         
         <div className="games-container">
           {games.map((game) => (
@@ -33,10 +40,17 @@ export default function HomeScreen() {
               className="game-card"
               onClick={() => navigate(game.route)}
             >
-              <span className="game-name">
-                {game.name}
-              </span>
-              <span className="game-description">{game.description}</span>
+              <img 
+                src={game.image} 
+                alt={game.name} 
+                className="game-image"
+              />
+              <div className="game-info">
+                <span className="game-name">
+                  {game.name}
+                </span>
+                <span className="game-description">{game.description}</span>
+              </div>
             </button>
           ))}
         </div>
