@@ -14,9 +14,11 @@
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
   padding: 40px 20px 100px;
-  position: relative;
+  min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
   /* NO display: flex - NO align-items: center - NO justify-content: center */
   /* These BLOCK vertical scroll! */
 }
@@ -405,7 +407,8 @@
   margin-top: 40px;
   box-shadow: 0 0 40px rgba(0, 255, 240, 0.5);
   position: relative;
-  overflow-x: hidden; overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .start-button::before {

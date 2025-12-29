@@ -1,6 +1,7 @@
 /* Cyberpunk Street Underground - Fonts loaded in index.css */
 .home-screen {
   width: 100%;
+  min-height: 100vh; /* Force viewport height to enable scroll */
   background: radial-gradient(
       circle at 20% 30%,
       rgba(0, 255, 240, 0.08) 0%,
@@ -12,9 +13,11 @@
       transparent 50%
     ),
     linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
-  padding: 40px 20px 100px; /* Extra padding bottom for mobile scroll */
+  padding: 40px 20px 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* NO min-height - let content grow naturally */
+  position: relative;
 }
 
 /* Scanlines effect - Removed for mobile scroll compatibility */
