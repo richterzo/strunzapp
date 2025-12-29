@@ -657,14 +657,33 @@ OUTPUT: Solo JSON con questa struttura:
   "question": "La domanda"
 }
 
-ESEMPI DI BUONE DOMANDE:
-- "Hai mai scoperto una bugia di qualcuno e fatto finta di niente per mesi?"
-- "Se potessi cancellare un ricordo dalla tua vita, quale sceglieresti?"
-- "Qual è la cosa peggiore che hai pensato di una persona che ami?"
-- "Ti sei mai sentito sollevato alla notizia della sofferenza di qualcuno?"
-- "C'è una persona a cui non hai mai chiesto scusa ma dovresti?"
+ESEMPI DI BUONE DOMANDE (MAI BANALI):
 
-GENERA 1 DOMANDA per la categoria ${categoryMapping[category]}.
+SITUAZIONALI/ETICHE:
+- "Hai mai approfittato del lavoro di qualcuno senza dargli credito?"
+- "Quando è stata l'ultima volta che hai preferito non sapere la verità?"
+- "Hai mai difeso qualcuno pubblicamente e criticato privatamente?"
+- "Ti è mai capitato di non fermare qualcuno che stava facendo un errore?"
+
+MORALI/SCELTE:
+- "Quale regola hai infranto e non ti sei mai pentito?"
+- "Hai mai lasciato che qualcun altro si prendesse la colpa al posto tuo?"
+- "Quando hai mentito per evitare una conseguenza scomoda?"
+- "C'è qualcosa che hai fatto e che non faresti mai sapere ai tuoi genitori?"
+
+RELAZIONALI/CONCRETE:
+- "Hai mai tagliato i ponti con qualcuno senza spiegazioni?"
+- "Qual è stata la volta in cui hai tradito la fiducia di qualcuno?"
+- "Hai mai finto di non vedere qualcuno per strada per evitarlo?"
+- "Ti sei mai vendicato in modo che l'altra persona non se ne accorgesse?"
+
+VINCOLI CRITICI:
+- VIETATO usare parola "segreto" (troppo ripetitiva)
+- VIETATO domande su "cosa pensi di", "qual è il tuo più grande"
+- OGNI domanda deve riferirsi a SITUAZIONE CONCRETA passata
+- OGNI domanda deve implicare AZIONE o SCELTA reale
+
+GENERA 1 DOMANDA UNICA E NON BANALE per la categoria ${categoryMapping[category]}.
 In italiano. Senza spiegazioni. Solo la domanda nel JSON.`
 
     try {
