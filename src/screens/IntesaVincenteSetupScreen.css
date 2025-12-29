@@ -2,7 +2,6 @@
 
 /* Merda Vincente Setup */
 overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   position: relative;
   /* NO display: flex - NO align-items: center - NO justify-content: center */
   /* These BLOCK vertical scroll! */

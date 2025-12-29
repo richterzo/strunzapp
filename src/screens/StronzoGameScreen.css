@@ -2,7 +2,6 @@
 
 /* Cyberpunk Street Underground */
 overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   position: relative;
   /* NO display: flex - let content flow naturally */
 }

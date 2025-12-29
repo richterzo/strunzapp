@@ -1,7 +1,6 @@
 /* Fonts loaded in index.css */
 
 overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   position: relative;
   /* NO display: flex - let content flow naturally */
 }

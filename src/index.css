@@ -9,14 +9,10 @@
   font-weight: 400;
   color-scheme: dark;
   
-  /* Mobile optimizations */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   
-  /* Touch-friendly */
   -webkit-tap-highlight-color: rgba(0, 255, 240, 0.2);
-  -webkit-touch-callout: none;
 }
 
 * {
@@ -25,36 +21,23 @@
   box-sizing: border-box;
 }
 
-/* BEST PRACTICE: Simple natural scroll */
-html, body {
+/* SIMPLE: Let browser handle scroll naturally */
+html {
   width: 100%;
-  background: #000000;
-  /* NO height, NO overflow - let it flow naturally */
+  height: 100%;
 }
 
 body {
-  min-height: 100vh;
-  /* Enable smooth scrolling on iOS */
-  -webkit-overflow-scrolling: touch;
-  /* Allow scroll but prevent pull-to-refresh */
-  overscroll-behavior-y: contain;
-  
-  /* iOS safe areas */
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  width: 100%;
+  min-height: 100%;
+  background: #000000;
+  overflow-x: hidden; /* Only prevent horizontal scroll */
+  /* Let vertical scroll work naturally */
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
-  /* Let content grow naturally */
-}
-
-/* Mobile momentum scrolling */
-* {
-  -webkit-overflow-scrolling: touch;
+  min-height: 100%;
 }
 
 /* Improve button touch targets on mobile */
@@ -63,11 +46,9 @@ input,
 select,
 textarea {
   font-family: inherit;
-  min-height: 44px; /* iOS recommended minimum */
-  /* touch-action: auto allows scrolling */
+  min-height: 44px;
 }
 
-/* Remove default button styles */
 button {
   background: none;
   border: none;
@@ -77,12 +58,11 @@ button {
   appearance: none;
 }
 
-/* Improve input focus on mobile */
+/* Prevent zoom on iOS input focus */
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  /* Prevent zoom on iOS */
   font-size: 16px;
 }
 
