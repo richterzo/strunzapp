@@ -1,6 +1,5 @@
 /* Fonts loaded in index.css */
 
-overflow-y: auto;
   position: relative;
   /* NO display: flex - let content flow naturally */
 }
@@ -229,8 +228,7 @@ overflow-y: auto;
   transition: all 0.3s ease;
   box-shadow: 0 0 40px rgba(0, 255, 240, 0.5);
   position: relative;
-  overflow-x: hidden; overflow-y: auto;
-}
+  overflow-x: hidden;}
 
 .big-action-button::before {
   content: '';
