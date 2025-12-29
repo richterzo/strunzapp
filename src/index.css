@@ -27,25 +27,22 @@
 
 body {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-width: 320px;
   min-height: 100vh;
   background: #000000;
   overflow-x: hidden;
-  overflow-y: auto; /* Ensure vertical scroll is allowed */
+  overflow-y: scroll; /* Force scrollbar space */
+  position: relative;
   
   /* Prevent pull-to-refresh on mobile */
-  overscroll-behavior-y: contain; /* Allow scroll but prevent pull-to-refresh */
+  overscroll-behavior-y: contain;
   overscroll-behavior-x: none;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  position: relative;
 }
 
 /* Mobile-optimized scrolling */
@@ -96,6 +93,9 @@ button,
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 /* Improved mobile viewport */
