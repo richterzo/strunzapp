@@ -57,10 +57,12 @@ export default function DragonQuizGameScreen() {
     // Load all questions for this round when:
     // 1. We're at player 0 AND no questions loaded
     // 2. OR at game start (round 1, no questions, not in final phase)
-    const shouldLoadRound = 
+    const shouldLoadRound =
       (currentPlayerIndex === 0 && roundQuestions.length === 0) ||
-      (currentQuestionNumber === 1 && roundQuestions.length === 0 && gamePhase !== 'final')
-    
+      (currentQuestionNumber === 1 &&
+        roundQuestions.length === 0 &&
+        gamePhase !== 'final')
+
     if (shouldLoadRound) {
       loadRoundQuestions()
     }

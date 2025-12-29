@@ -301,6 +301,16 @@ export default function IntesaVincenteGameScreen() {
   }
 
   if (gamePhase === 'playing') {
+    // Safety check: if no current word, show loading
+    if (!currentWord || !currentWord.word) {
+      return (
+        <div className="intesa-game-screen loading-screen">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Caricamento parole...</p>
+        </div>
+      )
+    }
+
     const passesRemaining =
       passLimit === 'unlimited' ? null : passLimit - passesUsed
     const canPass = passLimit === 'unlimited' || passesUsed < passLimit
