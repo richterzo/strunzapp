@@ -20,6 +20,13 @@ export default function HomeScreen() {
       route: '/dragon-quiz/setup',
       image: '/images/games/dragonquiz.png',
     },
+    {
+      id: 'intesa-vincente',
+      name: 'INTESA VINCENTE',
+      description: 'Fai indovinare le parole al tuo compagno',
+      route: '/intesa-vincente/setup',
+      image: '/images/games/intesa.png',
+    },
   ]
 
   return (
