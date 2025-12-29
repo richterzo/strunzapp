@@ -10,9 +10,14 @@ export default function HomeScreen() {
       id: 'stronzo',
       name: 'STRONZO',
       description: 'Trova l\'impostore',
-      color: '#FF4444',
+      route: '/stronzo/setup',
     },
-    // Altri minigiochi verranno aggiunti qui
+    {
+      id: 'dragon-quiz',
+      name: 'DRAGON QUIZ',
+      description: 'Quiz AI con difficoltà crescente',
+      route: '/dragon-quiz/setup',
+    },
   ]
 
   return (
@@ -26,7 +31,7 @@ export default function HomeScreen() {
             <button
               key={game.id}
               className="game-card"
-              onClick={() => navigate('/stronzo/setup')}
+              onClick={() => navigate(game.route)}
             >
               <span className="game-name">
                 {game.name}

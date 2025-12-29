@@ -53,26 +53,32 @@
 }
 
 .home-title {
-  font-size: clamp(52px, 12vw, 88px);
+  font-size: clamp(42px, 10vw, 72px);
   font-weight: 900;
-  background: linear-gradient(135deg, #00FFF0 0%, #FFFFFF 50%, #FF006E 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #00FFF0;
   margin-bottom: 20px;
-  letter-spacing: 8px;
+  letter-spacing: clamp(3px, 1.5vw, 8px);
   font-family: 'Orbitron', sans-serif;
   text-transform: uppercase;
-  filter: drop-shadow(0 0 40px rgba(0, 255, 240, 0.8));
+  text-shadow: 
+    0 0 40px rgba(0, 255, 240, 0.8),
+    0 0 80px rgba(0, 255, 240, 0.4),
+    2px 2px 4px rgba(0, 0, 0, 0.9);
   animation: titleGlow 4s ease-in-out infinite;
 }
 
 @keyframes titleGlow {
   0%, 100% { 
-    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 0.8));
+    text-shadow: 
+      0 0 40px rgba(0, 255, 240, 0.8),
+      0 0 80px rgba(0, 255, 240, 0.4),
+      2px 2px 4px rgba(0, 0, 0, 0.9);
   }
   50% { 
-    filter: drop-shadow(0 0 60px rgba(0, 255, 240, 1));
+    text-shadow: 
+      0 0 60px rgba(0, 255, 240, 1),
+      0 0 100px rgba(0, 255, 240, 0.6),
+      2px 2px 4px rgba(0, 0, 0, 0.9);
   }
 }
 

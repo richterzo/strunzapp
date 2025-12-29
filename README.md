@@ -1,70 +1,142 @@
-# StrunzApp 🎮
+# 🎮 STRUNZAPP
 
-App web con minigiochi per telefono. Il primo minigioco è **STRONZO**, un gioco stile "impostore" dove i giocatori devono trovare chi non conosce la parola segreta.
+Cyberpunk party game collection - Local multiplayer games for your next party!
 
-## ✨ Caratteristiche
+## 🕹️ Games
 
-- 🎮 Minigioco STRONZO completamente funzionante
-- 🎨 Design moderno stile underground/graffiti
-- 📱 Ottimizzato per dispositivi mobili (responsive)
-- ⚡ Interfaccia snappy e veloce
-- 🔄 Facilmente espandibile con nuovi minigiochi
-- 🎯 Animazioni fluide e feedback visivo
-- 📳 Supporto vibrazione (se disponibile)
-- 🎲 Sistema intelligente per evitare parole ripetute
+### 1. STRONZO
+Find the impostor! A social deduction game where players try to identify who doesn't know the secret word.
 
-## 🚀 Installazione
+**Features:**
+- 3-10 players (local)
+- 3 categories with 100 words each
+- Hide/show mechanism for privacy
+- Cyberpunk aesthetic
+
+### 2. DRAGON QUIZ 🐉
+AI-powered quiz game with increasing difficulty powered by ChatGPT.
+
+**Features:**
+- Single player or team mode
+- 10 questions per game
+- Progressive difficulty (easy → expert)
+- Multiple categories
+- Real-time scoring
+- AI-generated questions
+
+## 🚀 Setup
+
+### Prerequisites
+- Node.js 16+ and npm
+- OpenAI API key (for Dragon Quiz)
+
+### Installation
 
 ```bash
+# Clone repository
+git clone https://github.com/richterzo/strunzapp.git
+cd strunzapp
+
+# Install dependencies
 npm install
+
+# Create .env file
+cp .env.example .env
+
+# Add your OpenAI API key to .env
+# VITE_OPENAI_API_KEY=your_key_here
 ```
 
-## ▶️ Avvio
+### Get OpenAI API Key
+
+1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Create an account or sign in
+3. Generate a new API key
+4. Add it to your `.env` file
+
+### Run Development Server
 
 ```bash
 npm run dev
 ```
 
-L'app sarà disponibile su `http://localhost:3000`
+Open [http://localhost:3000](http://localhost:3000)
 
-## 📦 Build per produzione
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-Il build sarà disponibile nella cartella `dist/`
-
-## 🎯 Come giocare a STRONZO
-
-1. **Setup**: Seleziona il numero di giocatori (3-12)
-2. **Nomi**: Inserisci i nomi dei giocatori
-3. **Categorie**: Scegli le categorie di parole (Cibi, Oggetti, Paesi del Mondo)
-4. **Gioco**: A turno, ogni giocatore vede la parola segreta
-   - Gli "stronzi" (impostori) NON vedono la parola
-   - Devono fingere di conoscerla!
-5. **Discussione**: I giocatori discutono e cercano di capire chi è lo stronzo
-6. **Rivelazione**: Alla fine del turno si rivela chi era lo stronzo!
-7. **Prossimo turno**: Puoi continuare con nuove parole
-
 ## 🎨 Design
 
-- Stile underground/graffiti con colori scuri e accenti rossi
-- Font "Bungee" per un look bold e moderno
-- Animazioni fluide e transizioni smooth
-- Ottimizzato per touch screen mobile
+Modern cyberpunk aesthetic with:
+- Neon cyan (#00FFF0) and pink (#FF006E) accents
+- Orbitron and Rajdhani fonts
+- Scanline effects
+- Smooth animations
+- Fully responsive
 
-## 🔧 Tecnologie
+## 🏗️ Architecture
 
-- React 18
-- Vite (build tool veloce)
-- React Router (navigazione)
-- CSS puro (nessuna dipendenza UI pesante)
+### Current Structure
+```
+src/
+├── config/
+│   └── api.js              # API configuration
+├── services/
+│   └── openaiService.js    # OpenAI integration
+├── screens/
+│   ├── HomeScreen.jsx      # Main menu
+│   ├── StronzoSetupScreen.jsx
+│   ├── StronzoGameScreen.jsx
+│   ├── DragonQuizSetupScreen.jsx
+│   └── DragonQuizGameScreen.jsx
+└── App.jsx                 # Router configuration
+```
 
-## 📝 Note
+### Multiplayer Ready
+The codebase is structured to support future online multiplayer:
+- Game modes: `single`, `local`, `online` (future)
+- Modular game logic
+- State management ready for WebSocket integration
 
-L'app è progettata per essere facilmente espandibile. Puoi aggiungere nuovi minigiochi seguendo la stessa struttura:
-- Crea un nuovo componente nella cartella `screens/`
-- Aggiungi la route in `App.jsx`
-- Aggiungi il gioco alla lista nella `HomeScreen`
+## 🔮 Future Features
 
+- [ ] Online multiplayer with WebSocket
+- [ ] More mini-games
+- [ ] Player profiles and stats
+- [ ] Leaderboards
+- [ ] Custom quiz categories
+- [ ] Voice chat integration
+
+## 📱 Responsive Design
+
+Optimized for:
+- Desktop (1920x1080+)
+- Tablet (768px+)
+- Mobile (375px+)
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18 + Vite
+- **Routing**: React Router DOM
+- **Styling**: CSS3 with custom properties
+- **AI**: OpenAI GPT-4o-mini
+- **Fonts**: Google Fonts (Orbitron, Rajdhani)
+
+## 📄 License
+
+MIT License - feel free to use for your parties!
+
+## 🤝 Contributing
+
+Pull requests welcome! For major changes, please open an issue first.
+
+## 🎉 Credits
+
+Created with ❤️ for epic party nights
+
+---
+
+**Note**: Dragon Quiz requires an OpenAI API key. Usage costs apply based on OpenAI's pricing.
