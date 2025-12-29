@@ -85,26 +85,11 @@
 .app-logo {
   width: clamp(240px, 65vw, 380px);
   height: auto;
-  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
-  animation: logoArcadePulse 3s ease-in-out infinite;
   transition: all 0.3s ease;
 }
 
 .app-logo:hover {
-  filter: drop-shadow(0 0 50px rgba(0, 255, 240, 1))
-    drop-shadow(0 0 20px rgba(255, 0, 255, 0.8));
   transform: scale(1.05);
-}
-
-@keyframes logoArcadePulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.6));
-  }
-  50% {
-    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 1))
-      drop-shadow(0 0 15px rgba(255, 0, 255, 0.6));
-  }
 }
 
 .games-container {
