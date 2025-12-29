@@ -714,7 +714,7 @@ export default function StronzoSetupScreen() {
     <div className="setup-screen">
       <div className="setup-content">
         <button className="back-button" onClick={() => navigate('/')}>
-          ← INDIETRO
+          BACK
         </button>
 
         <div className="game-header">

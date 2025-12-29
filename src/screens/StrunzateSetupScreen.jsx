@@ -72,7 +72,7 @@ export default function StrunzateSetupScreen() {
     <div className="strunzate-setup-screen">
       <div className="strunzate-setup-content">
         <button className="back-button" onClick={() => navigate('/')}>
-          ← INDIETRO
+          BACK
         </button>
 
         <div className="game-header">

@@ -138,11 +138,11 @@
   background: rgba(10, 10, 10, 0.95);
   border: 3px solid #00fff0;
   border-radius: 8px;
-  padding: 14px 28px;
+  padding: 12px 20px;
   color: #00fff0;
-  font-size: clamp(12px, 3vw, 14px);
+  font-size: clamp(13px, 3vw, 15px);
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   cursor: pointer;
   transition: all 0.15s ease;
   text-transform: uppercase;
@@ -159,10 +159,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   position: relative;
-  overflow: visible;
-  white-space: nowrap;
+  overflow: hidden;
 }
 
 .back-button::before {
@@ -208,9 +206,9 @@
   .back-button {
     top: 12px;
     left: 12px;
-    padding: 12px 22px;
-    letter-spacing: 1.5px;
-    font-size: clamp(11px, 2.8vw, 13px);
+    padding: 11px 18px;
+    letter-spacing: 2.5px;
+    font-size: clamp(12px, 3vw, 14px);
   }
 
   .rules-toggle {
@@ -228,9 +226,9 @@
   .back-button {
     top: 10px;
     left: 10px;
-    padding: 10px 20px;
-    font-size: clamp(11px, 2.5vw, 12px);
-    letter-spacing: 1px;
+    padding: 10px 16px;
+    font-size: clamp(12px, 3vw, 13px);
+    letter-spacing: 2px;
   }
 
   .rules-toggle {

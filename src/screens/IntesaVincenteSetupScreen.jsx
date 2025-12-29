@@ -75,7 +75,7 @@ export default function IntesaVincenteSetupScreen() {
     <div className="intesa-setup-screen">
       <div className="intesa-setup-content">
         <button className="back-button" onClick={() => navigate('/')}>
-          ← INDIETRO
+          BACK
         </button>
 
         <div className="game-header">
