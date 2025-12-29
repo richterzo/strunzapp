@@ -17,18 +17,18 @@ export const GAME_MODES = {
 export const QUIZ_CONFIG = {
   NUM_QUESTIONS: 10, // Number of question rounds
   
-  // Difficulty scale 1-10 (one level per question round)
+  // Difficulty scale 5-10 (from Medium to Legend - HARD MODE)
   DIFFICULTY_LEVELS: [
-    { level: 1, name: 'Principiante', multiplier: 1.0, color: '#00FF00' },
-    { level: 2, name: 'Facile', multiplier: 1.2, color: '#33FF33' },
-    { level: 3, name: 'Base', multiplier: 1.5, color: '#66FF66' },
-    { level: 4, name: 'Intermedio', multiplier: 1.8, color: '#99FF99' },
-    { level: 5, name: 'Medio', multiplier: 2.2, color: '#FFFF00' },
-    { level: 6, name: 'Avanzato', multiplier: 2.6, color: '#FFCC00' },
-    { level: 7, name: 'Difficile', multiplier: 3.0, color: '#FF9900' },
-    { level: 8, name: 'Esperto', multiplier: 3.5, color: '#FF6600' },
-    { level: 9, name: 'Maestro', multiplier: 4.0, color: '#FF3300' },
-    { level: 10, name: 'Leggenda', multiplier: 5.0, color: '#FF00FF' },
+    { level: 5, name: 'Medio', multiplier: 1.0, color: '#FFFF00' },
+    { level: 6, name: 'Avanzato', multiplier: 1.3, color: '#FFCC00' },
+    { level: 7, name: 'Difficile', multiplier: 1.7, color: '#FF9900' },
+    { level: 8, name: 'Esperto', multiplier: 2.2, color: '#FF6600' },
+    { level: 9, name: 'Maestro', multiplier: 2.8, color: '#FF3300' },
+    { level: 10, name: 'Leggenda', multiplier: 3.5, color: '#FF00FF' },
+    { level: 11, name: 'Divino', multiplier: 4.5, color: '#CC00FF' },
+    { level: 12, name: 'Impossibile', multiplier: 5.5, color: '#9900FF' },
+    { level: 13, name: 'Demoniaco', multiplier: 7.0, color: '#6600FF' },
+    { level: 14, name: 'Assurdo', multiplier: 9.0, color: '#3300FF' },
   ],
   
   CATEGORIES: [

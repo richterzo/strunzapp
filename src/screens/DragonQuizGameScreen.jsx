@@ -20,9 +20,9 @@ export default function DragonQuizGameScreen() {
   const [usedQuestions, setUsedQuestions] = useState([])
   const [loadingError, setLoadingError] = useState(null)
 
-  // Calculate current difficulty level based on question number (1-10)
+  // Calculate current difficulty level based on question number (5-14)
   const getCurrentDifficultyLevel = () => {
-    return currentQuestionNumber
+    return currentQuestionNumber + 4 // Question 1 = Level 5, Question 10 = Level 14
   }
 
   // Load question for current player
