@@ -25,19 +25,24 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
   background: #000000;
   overflow-x: hidden;
+  overflow-y: auto; /* Ensure vertical scroll is allowed */
   
   /* Prevent pull-to-refresh on mobile */
-  overscroll-behavior: none;
+  overscroll-behavior-y: contain; /* Allow scroll but prevent pull-to-refresh */
+  overscroll-behavior-x: none;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Mobile-optimized scrolling */
