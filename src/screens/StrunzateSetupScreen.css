@@ -63,18 +63,24 @@
 }
 
 .game-logo {
-  width: clamp(120px, 35vw, 200px);
+  width: clamp(180px, 50vw, 280px);
   height: auto;
-  filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.4));
-  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
+  animation: arcadePulse 2s ease-in-out infinite;
+  transition: all 0.3s ease;
 }
 
-@keyframes float {
+.game-logo:hover {
+  filter: drop-shadow(0 0 50px rgba(0, 255, 240, 1)) drop-shadow(0 0 20px rgba(255, 0, 110, 0.8));
+  transform: scale(1.05);
+}
+
+@keyframes arcadePulse {
   0%, 100% {
-    transform: translateY(0px);
+    filter: drop-shadow(0 0 20px rgba(0, 255, 240, 0.6));
   }
   50% {
-    transform: translateY(-10px);
+    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 1)) drop-shadow(0 0 15px rgba(255, 0, 110, 0.6));
   }
 }
 
@@ -102,9 +108,9 @@
 .rules-box {
   background: rgba(0, 255, 240, 0.05);
   border: 2px solid rgba(0, 255, 240, 0.2);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 40px;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
   backdrop-filter: blur(10px);
 }
 
@@ -136,22 +142,23 @@
 }
 
 .setup-section {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .section-title {
-  font-size: clamp(20px, 4vw, 26px);
+  font-size: clamp(16px, 3.5vw, 20px);
   color: #00FFF0;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   font-family: 'Orbitron', sans-serif;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 240, 0.6);
 }
 
 .section-subtitle {
-  font-size: 14px;
+  font-size: 13px;
   color: #999999;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 500;
 }
@@ -206,32 +213,71 @@
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 .category-card {
   background: rgba(10, 10, 10, 0.8);
-  border: 2px solid rgba(0, 255, 240, 0.3);
-  border-radius: 12px;
-  padding: 20px;
+  border: 3px solid rgba(0, 255, 240, 0.3);
+  border-radius: 8px;
+  padding: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 255, 240, 0.1),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 240, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.category-card:hover::before {
+  left: 100%;
 }
 
 .category-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   border-color: #00FFF0;
-  box-shadow: 0 8px 25px rgba(0, 255, 240, 0.3);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(0, 255, 240, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+.category-card:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 240, 0.4),
+    inset 0 0 15px rgba(0, 255, 240, 0.3),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .category-card.active {
   background: rgba(0, 255, 240, 0.15);
   border-color: #00FFF0;
-  box-shadow: 0 0 30px rgba(0, 255, 240, 0.4);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 240, 0.8),
+    inset 0 0 30px rgba(0, 255, 240, 0.3),
+    0 6px 0 rgba(0, 0, 0, 0.5);
+  animation: arcadeSelected 0.3s ease;
+}
+
+@keyframes arcadeSelected {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .category-icon {
@@ -273,28 +319,65 @@
   width: 100%;
   padding: 20px;
   background: linear-gradient(135deg, #00FFF0 0%, #00B8D4 100%);
-  border: none;
-  border-radius: 12px;
+  border: 4px solid #00FFF0;
+  border-radius: 8px;
   color: #000000;
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 900;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Orbitron', sans-serif;
+  transition: all 0.15s ease;
+  font-family: 'Press Start 2P', 'Orbitron', sans-serif;
   text-transform: uppercase;
-  box-shadow: 0 8px 30px rgba(0, 255, 240, 0.4);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 240, 0.8),
+    inset 0 0 20px rgba(255, 255, 255, 0.3),
+    0 8px 0 rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.start-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transition: left 0.5s ease;
 }
 
 .start-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 255, 240, 0.6);
+  transform: translateY(-4px);
+  box-shadow: 
+    0 0 50px rgba(0, 255, 240, 1),
+    0 0 30px rgba(255, 0, 110, 0.6),
+    inset 0 0 30px rgba(255, 255, 255, 0.4),
+    0 12px 0 rgba(0, 0, 0, 0.5);
+  animation: arcadeBlink 0.3s ease infinite;
+}
+
+.start-button:hover::before {
+  left: 100%;
 }
 
 .start-button:active {
-  transform: translateY(0);
+  transform: translateY(4px);
+  box-shadow: 
+    0 0 30px rgba(0, 255, 240, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.2),
+    0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+@keyframes arcadeBlink {
+  0%, 100% { 
+    filter: brightness(1); 
+  }
+  50% { 
+    filter: brightness(1.2);
+  }
 }
 
 @media (max-width: 640px) {
