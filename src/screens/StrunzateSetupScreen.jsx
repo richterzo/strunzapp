@@ -13,25 +13,25 @@ export default function StrunzateSetupScreen() {
       id: 'personali', 
       name: 'Personali', 
       icon: '💭',
-      description: 'Domande intime per conoscersi meglio'
+      description: 'Esperienze vissute, relazioni, emozioni'
     },
     { 
       id: 'filosofiche', 
       name: 'Filosofiche', 
       icon: '🤔',
-      description: 'Riflessioni profonde sulla vita'
+      description: 'Etica, morale, vita, morte'
     },
     { 
       id: 'scottanti', 
       name: 'Piccanti', 
       icon: '🔥',
-      description: 'Domande sessuali e intime'
+      description: 'Sesso, fantasie, intimità fisica'
     },
     { 
       id: 'scomode', 
       name: 'Scomode', 
       icon: '😬',
-      description: 'Situazioni imbarazzanti'
+      description: 'Verità scomode e situazioni ipotetiche'
     },
   ]
 

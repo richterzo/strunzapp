@@ -657,40 +657,87 @@ OUTPUT: Solo JSON con questa struttura:
   "question": "La domanda"
 }
 
-ESEMPI CATEGORIA PERSONALI (introspettive):
+═══════════════════════════════════════════════════
+CATEGORIA: PERSONALI
+Topic: Esperienze personali, relazioni, emozioni vissute
+═══════════════════════════════════════════════════
 - "In quale momento preciso hai capito che un'amicizia era finita?"
-- "Quando è stata l'ultima volta che hai pianto da solo?"
-- "C'è qualcuno a cui vorresti dire 'avevi ragione' ma non lo farai mai?"
-- "Quale versione di te stesso del passato vorresti incontrare?"
+- "Quando è stata l'ultima volta che hai pianto da solo e perché?"
+- "C'è qualcuno del tuo passato che pensi ancora oggi?"
+- "Quale persona hai deluso di più nella tua vita?"
+- "Quando ti sei sentito più solo pur essendo circondato da persone?"
 
-ESEMPI CATEGORIA FILOSOFICHE (esistenziali):
-- "Se scoprissi di avere solo un anno di vita, cosa cambieresti domani?"
-- "Preferiresti sapere quando morirai o come morirai?"
-- "Se potessi rivivere un solo giorno della tua vita, quale sceglieresti?"
-- "Vale la pena vivere una vita felice ma insignificante?"
+═══════════════════════════════════════════════════
+CATEGORIA: FILOSOFICHE
+Topic: Etica, morale, vita, morte, scelte esistenziali profonde
+═══════════════════════════════════════════════════
+- "Se potessi salvare la vita di uno sconosciuto a costo della tua, lo faresti?"
+- "Preferiresti vivere 100 anni infelice o 30 anni pienamente felice?"
+- "È giusto mentire per proteggere qualcuno dalla verità dolorosa?"
+- "Cosa faresti nell'ultimo giorno se sapessi che domani moriresti?"
+- "Può esistere amore senza possesso? O è sempre egoismo mascherato?"
 
-ESEMPI CATEGORIA PICCANTI (sessuali/intime):
-- "Hai mai fantasticato su qualcuno presente in questa stanza?"
-- "Qual è stato il momento più imbarazzante durante un rapporto sessuale?"
-- "Hai mai finto un orgasmo? Per quanto tempo?"
-- "Con chi qui avresti voluto provare qualcosa ma non hai mai osato?"
+═══════════════════════════════════════════════════
+CATEGORIA: PICCANTI
+Topic: SOLO sesso, fantasie sessuali, intimità fisica, dettagli relazioni
+═══════════════════════════════════════════════════
+- "Con chi in questa stanza avresti voluto fare sesso almeno una volta?"
+- "Qual è la fantasia sessuale che non hai mai confessato a nessuno?"
+- "Hai mai fatto sesso pensando a qualcun altro?"
+- "Qual è stato il posto più strano dove hai fatto sesso?"
+- "Hai mai tradito fisicamente? Come è stato dopo?"
 
-ESEMPI CATEGORIA SCOMODE (imbarazzanti):
-- "Qual è la cosa più strana che hai fatto quando eri completamente solo?"
-- "Quale scusa ridicola hai usato per evitare qualcuno?"
-- "Quando hai scoperto qualcosa di imbarazzante su un genitore?"
-- "Hai mai cercato il nome di un ex su internet più volte in un giorno?"
+═══════════════════════════════════════════════════
+CATEGORIA: SCOMODE
+Topic: Verità imbarazzanti su di te, situazioni ipotetiche difficili
+═══════════════════════════════════════════════════
+- "Se potessi cancellare una persona dalla tua vita come se non fosse mai esistita, chi sarebbe?"
+- "Hai mai provato piacere nel vedere qualcuno fallire?"
+- "Se trovassi 10.000 euro per strada cosa faresti davvero?"
+- "Quale parte di te stesso odi ma fingi di accettare?"
+- "Se potessi leggere i pensieri di qualcuno per un giorno, chi sceglieresti?"
 
-VINCOLI ASSOLUTI:
-- VIETATO: segreto, sogni, paure generiche, obiettivi
-- VIETATO: "cosa pensi di", "come ti senti se"
-- VIETATO: domande astratte o filosofiche generiche
-- OBBLIGATORIO: dettagli specifici, tempi precisi, persone concrete
-- OBBLIGATORIO: domande che facciano pensare "cazzo, questa è bella"
-- OGNI domanda deve essere UNICA, SPECIFICA, MEMORABILE
+═══════════════════════════════════════════════════
+VINCOLI ASSOLUTI PER OGNI CATEGORIA:
+═══════════════════════════════════════════════════
 
-GENERA 1 DOMANDA UNICA E NON BANALE per la categoria ${categoryMapping[category]}.
-In italiano. Senza spiegazioni. Solo la domanda nel JSON.`
+PERSONALI:
+✅ Esperienze concrete vissute
+✅ Relazioni specifiche (amicizie, famiglia, amore)
+✅ Emozioni autentiche provate
+❌ NO filosofia, NO etica, NO sesso esplicito
+
+FILOSOFICHE:
+✅ Dilemmi morali ed etici profondi
+✅ Vita, morte, senso esistenziale
+✅ Scelte impossibili e conseguenze
+❌ NO esperienze personali banali, NO sesso
+
+PICCANTI:
+✅ SOLO sesso esplicito
+✅ Fantasie sessuali concrete
+✅ Dettagli intimi di relazioni fisiche
+❌ NO romanticismo generico, NO filosofia
+
+SCOMODE:
+✅ Verità imbarazzanti su se stessi
+✅ Situazioni ipotetiche che mettono in difficoltà
+✅ Pensieri oscuri che non si dicono
+❌ NO sesso esplicito, NO filosofia astratta
+
+SEMPRE VIETATO:
+❌ segreto, sogni, paure generiche, obiettivi
+❌ "cosa pensi di", "come ti senti se", "secondo te"
+❌ Domande risolvibili con sì/no
+
+SEMPRE OBBLIGATORIO:
+✅ Dettagli specifici, tempi precisi, persone concrete
+✅ Domande che facciano pensare "cazzo, questa è forte"
+✅ Linguaggio diretto, niente toni da terapeuta
+
+GENERA 1 DOMANDA UNICA per ${categoryMapping[category]}.
+RISPETTA RIGOROSAMENTE il topic della categoria.
+In italiano. Solo la domanda nel JSON.`
 
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
