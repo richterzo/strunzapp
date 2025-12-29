@@ -27,6 +27,13 @@ export default function HomeScreen() {
       route: '/intesa-vincente/setup',
       image: '/images/games/merda-vincente.png',
     },
+    {
+      id: 'strunzate',
+      name: 'STRUNZATE',
+      description: 'Domande per conversazioni profonde',
+      route: '/strunzate/setup',
+      icon: '💬',
+    },
   ]
 
   return (
@@ -47,11 +54,15 @@ export default function HomeScreen() {
               className="game-card"
               onClick={() => navigate(game.route)}
             >
-              <img 
-                src={game.image} 
-                alt={game.name} 
-                className="game-image"
-              />
+              {game.image ? (
+                <img 
+                  src={game.image} 
+                  alt={game.name} 
+                  className="game-image"
+                />
+              ) : (
+                <div className="game-icon">{game.icon}</div>
+              )}
               <div className="game-info">
                 <span className="game-name">
                   {game.name}

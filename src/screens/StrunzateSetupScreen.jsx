@@ -6,14 +6,34 @@ import './StrunzateSetupScreen.css'
 export default function StrunzateSetupScreen() {
   const navigate = useNavigate()
   const [numQuestions, setNumQuestions] = useState(10)
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedCategories, setSelectedCategories] = useState(['personali'])
   const [error, setError] = useState('')
 
   const categories = [
-    { id: 'personali', name: 'Personali', icon: '💭', description: 'Domande intime e personali' },
-    { id: 'filosofiche', name: 'Filosofiche', icon: '🤔', description: 'Riflessioni profonde sulla vita' },
-    { id: 'scottanti', name: 'Scottanti', icon: '🔥', description: 'Domande provocatorie e audaci' },
-    { id: 'scomode', name: 'Scomode', icon: '😬', description: 'Domande imbarazzanti' },
+    { 
+      id: 'personali', 
+      name: 'Personali', 
+      icon: '💭',
+      description: 'Domande intime per conoscersi meglio'
+    },
+    { 
+      id: 'filosofiche', 
+      name: 'Filosofiche', 
+      icon: '🤔',
+      description: 'Riflessioni profonde sulla vita'
+    },
+    { 
+      id: 'scottanti', 
+      name: 'Scottanti', 
+      icon: '🔥',
+      description: 'Domande provocatorie e audaci'
+    },
+    { 
+      id: 'scomode', 
+      name: 'Scomode', 
+      icon: '😬',
+      description: 'Situazioni imbarazzanti'
+    },
   ]
 
   const handleNumQuestionsChange = (delta) => {
@@ -22,11 +42,14 @@ export default function StrunzateSetupScreen() {
   }
 
   const toggleCategory = (categoryId) => {
-    setSelectedCategories(prev => 
-      prev.includes(categoryId)
-        ? prev.filter(c => c !== categoryId)
-        : [...prev, categoryId]
-    )
+    setSelectedCategories(prev => {
+      if (prev.includes(categoryId)) {
+        // Don't allow removing if it's the last one
+        if (prev.length === 1) return prev
+        return prev.filter(c => c !== categoryId)
+      }
+      return [...prev, categoryId]
+    })
   }
 
   const handleStartGame = () => {
@@ -42,7 +65,6 @@ export default function StrunzateSetupScreen() {
 
     setError('')
 
-    // Navigate to game
     navigate('/strunzate/game', {
       state: {
         numQuestions,
@@ -52,35 +74,25 @@ export default function StrunzateSetupScreen() {
   }
 
   return (
-    <div className="setup-screen">
-      <div className="setup-content">
+    <div className="strunzate-setup-screen">
+      <div className="strunzate-setup-content">
         <button className="back-button" onClick={() => navigate('/')}>
           ← INDIETRO
         </button>
 
         <div className="game-header">
           <h1 className="setup-title">STRUNZATE</h1>
-          <p className="setup-subtitle">Domande per conversazioni profonde</p>
+          <p className="setup-subtitle">Domande per conversazioni autentiche</p>
         </div>
 
         <div className="rules-box">
           <h3 className="rules-title">💬 COME SI GIOCA</h3>
           <ul className="rules-list">
-            <li>
-              🎯 Domande generate dall'AI per <strong>conversazioni autentiche</strong>
-            </li>
-            <li>
-              🗣️ Leggi la domanda ad alta voce e <strong>rispondi onestamente</strong>
-            </li>
-            <li>
-              👥 Perfetto per <strong>conoscersi meglio</strong> con amici, coppia, famiglia
-            </li>
-            <li>
-              💡 Non ci sono risposte giuste o sbagliate, solo <strong>autenticità</strong>
-            </li>
-            <li>
-              🔥 Più coraggioso sei, più <strong>profonda</strong> sarà la conversazione
-            </li>
+            <li>🎯 Domande generate per stimolare <strong>conversazioni profonde</strong></li>
+            <li>🗣️ Leggi ad alta voce e <strong>rispondi con sincerità</strong></li>
+            <li>👥 Perfetto per <strong>serate tra amici, coppie, famiglia</strong></li>
+            <li>💡 Non esistono risposte giuste o sbagliate</li>
+            <li>🔥 Più sei autentico, più la conversazione sarà <strong>memorabile</strong></li>
           </ul>
         </div>
 
@@ -108,7 +120,7 @@ export default function StrunzateSetupScreen() {
         {/* Categories */}
         <div className="setup-section">
           <h3 className="section-title">CATEGORIE</h3>
-          <p className="section-subtitle">Seleziona almeno una categoria</p>
+          <p className="section-subtitle">Seleziona una o più categorie</p>
           <div className="categories-grid">
             {categories.map((category) => (
               <button
@@ -135,4 +147,3 @@ export default function StrunzateSetupScreen() {
     </div>
   )
 }
-

@@ -610,6 +610,83 @@ IMPORTANTE:
   }
 
   /**
+   * Generate a conversation question for Strunzate game
+   */
+  async generateStrunzateQuestion(category) {
+    if (!this.isConfigured()) {
+      throw new Error('API not configured')
+    }
+
+    const categoryPrompts = {
+      personali: 'domande personali e intime che aiutano a conoscersi meglio, parlare di esperienze, sogni, paure, valori',
+      filosofiche: 'domande filosofiche e riflessive sulla vita, il senso dell\'esistenza, la felicità, il tempo, la moralità',
+      scottanti: 'domande provocatorie e audaci su argomenti delicati, opinioni controverse, scelte difficili',
+      scomode: 'domande imbarazzanti e situazioni scomode che mettono alla prova l\'onestà e il coraggio'
+    }
+
+    const systemPrompt = `Sei un esperto di conversazioni profonde e autentiche.
+Genera una domanda aperta e stimolante per la categoria "${category}".
+
+CATEGORIA: ${categoryPrompts[category]}
+
+REGOLE PER LA DOMANDA:
+1. Domanda APERTA (non sì/no)
+2. Stimola riflessione profonda
+3. Non giudicante, rispettosa
+4. Incoraggia autenticità
+5. Adatta a conversazioni tra amici/coppia/famiglia
+6. In italiano naturale
+7. Lunghezza 10-30 parole
+
+OUTPUT: Solo JSON con questa struttura:
+{
+  "question": "La domanda",
+  "context": "Breve contesto o spunto di riflessione (opzionale, max 50 parole)"
+}
+
+ESEMPI CATEGORIA "${category}":
+- Se "personali": "Quale momento della tua vita ti ha cambiato più profondamente e perché?"
+- Se "filosofiche": "Se potessi sapere la data esatta della tua morte, vorresti saperla?"
+- Se "scottanti": "Hai mai mentito per proteggere qualcuno e te ne sei pentito?"
+- Se "scomode": "Qual è il segreto più imbarazzante che non hai mai raccontato a nessuno?"`
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Genera una domanda per la categoria "${category}".` }
+          ],
+          temperature: 0.9,
+          max_tokens: 300,
+          response_format: { type: "json_object" }
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const result = JSON.parse(data.choices[0].message.content)
+
+      return {
+        question: result.question,
+        context: result.context || null
+      }
+    } catch (error) {
+      console.error('Error generating Strunzate question:', error)
+      throw error
+    }
+  }
+
+  /**
    * Validate API key
    * @returns {boolean}
    */
