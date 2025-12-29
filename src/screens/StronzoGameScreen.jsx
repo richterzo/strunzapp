@@ -1,0 +1,224 @@
+import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import './StronzoGameScreen.css'
+
+export default function StronzoGameScreen() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { numPlayers, playerNames, categories, numStronzi, allWords } = location.state || {}
+
+  const [stronzi, setStronzi] = useState([])
+  const [currentWord, setCurrentWord] = useState('')
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
+  const [gamePhase, setGamePhase] = useState('setup') // setup, playing, reveal
+  const [revealedPlayers, setRevealedPlayers] = useState([])
+  const [roundNumber, setRoundNumber] = useState(1)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [usedWords, setUsedWords] = useState([])
+  const [isWordHidden, setIsWordHidden] = useState(false)
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/')
+      return
+    }
+
+    // Seleziona casualmente gli stronzi
+    const players = Array.from({ length: numPlayers }, (_, i) => i)
+    const shuffled = [...players].sort(() => Math.random() - 0.5)
+    const selectedStronzi = shuffled.slice(0, numStronzi)
+    setStronzi(selectedStronzi)
+    
+    // Seleziona parola casuale
+    const randomWord = allWords[Math.floor(Math.random() * allWords.length)]
+    setCurrentWord(randomWord)
+    setUsedWords([randomWord])
+    setIsWordHidden(true) // Inizia con la parola nascosta
+    
+    setGamePhase('playing')
+  }, [])
+
+  const handlePlayerSeen = (playerIndex) => {
+    if (gamePhase !== 'playing' || isTransitioning) return
+    
+    // Vibrazione se supportata
+    if (navigator.vibrate) {
+      navigator.vibrate(50)
+    }
+    
+    setIsTransitioning(true)
+    const newRevealed = [...revealedPlayers, playerIndex]
+    setRevealedPlayers(newRevealed)
+    
+    // Se tutti hanno visto, passa direttamente al prossimo turno
+    if (newRevealed.length >= numPlayers) {
+      setTimeout(() => {
+        nextRound()
+      }, 800)
+    } else {
+      // Passa al prossimo giocatore che non ha ancora visto
+      setTimeout(() => {
+        let nextIndex = (playerIndex + 1) % numPlayers
+        while (newRevealed.includes(nextIndex) && newRevealed.length < numPlayers) {
+          nextIndex = (nextIndex + 1) % numPlayers
+        }
+        setCurrentPlayerIndex(nextIndex)
+        setIsWordHidden(true) // Nascondi la parola per il nuovo giocatore
+        setIsTransitioning(false)
+      }, 500)
+    }
+  }
+
+  const nextRound = () => {
+    // Seleziona nuova parola (evita di ripetere le ultime 3 parole se possibile)
+    let availableWords = allWords.filter(w => !usedWords.slice(-3).includes(w))
+    if (availableWords.length === 0) {
+      availableWords = allWords // Se abbiamo esaurito, riusa tutte
+    }
+    
+    const newWord = availableWords[Math.floor(Math.random() * availableWords.length)]
+    setCurrentWord(newWord)
+    setUsedWords(prev => [...prev, newWord].slice(-10)) // Mantieni solo ultime 10
+    setCurrentPlayerIndex(0)
+    setRevealedPlayers([])
+    setRoundNumber(prev => prev + 1)
+    setIsWordHidden(true) // Nascondi la parola all'inizio del nuovo round
+    setGamePhase('playing')
+    
+    // Vibrazione se supportata
+    if (navigator.vibrate) {
+      navigator.vibrate([100, 50, 100])
+    }
+  }
+
+  const isStronzo = (playerIndex) => {
+    return stronzi.includes(playerIndex)
+  }
+
+  if (gamePhase === 'setup') {
+    return (
+      <div className="game-screen">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Preparazione gioco...</p>
+        </div>
+      </div>
+    )
+  }
+
+
+  return (
+    <div className="game-screen">
+      <div className="game-content">
+        <div className="game-header">
+          <span className="round-badge">TURNO {roundNumber}</span>
+          <span className="progress-indicator">
+            {revealedPlayers.length} / {numPlayers}
+          </span>
+        </div>
+        
+        <div className="current-player-section">
+          <h3 className="current-player-label">TURNO DI</h3>
+          <h2 className={`current-player-name ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+            {playerNames[currentPlayerIndex]}
+          </h2>
+        </div>
+
+        <div 
+          className={`word-section ${isTransitioning ? 'transitioning' : ''} ${isWordHidden ? 'hidden' : ''}`}
+        >
+          {isStronzo(currentPlayerIndex) ? (
+            <div className="stronzo-view">
+              {isWordHidden ? (
+                <div className="word-hidden">
+                  <p className="hide-hint">👆 TOCCA PER MOSTRARE</p>
+                  <button 
+                    className="reveal-word-button"
+                    onClick={() => setIsWordHidden(false)}
+                    onTouchStart={() => setIsWordHidden(false)}
+                  >
+                    MOSTRA INDIZIO
+                  </button>
+                </div>
+              ) : (
+                <div className="stronzo-revealed">
+                  <div className="stronzo-icon">💀</div>
+                  <p className="stronzo-text">SEI LO STRONZO!</p>
+                  <p className="stronzo-hint">Non sai la parola. Fingi di saperla!</p>
+                  <p className="stronzo-warning">⚠️ Non farti scoprire!</p>
+                  <button 
+                    className="hide-word-button"
+                    onClick={() => setIsWordHidden(true)}
+                    onTouchStart={() => setIsWordHidden(true)}
+                  >
+                    👁️ NASCONDI
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="word-view">
+              <p className="word-label">LA PAROLA È:</p>
+              {isWordHidden ? (
+                <div className="word-hidden">
+                  <p className="hide-hint">👆 TOCCA PER MOSTRARE</p>
+                  <button 
+                    className="reveal-word-button"
+                    onClick={() => setIsWordHidden(false)}
+                    onTouchStart={() => setIsWordHidden(false)}
+                  >
+                    MOSTRA PAROLA
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <h1 className={`word-display ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+                    {currentWord}
+                  </h1>
+                  <button 
+                    className="hide-word-button"
+                    onClick={() => setIsWordHidden(true)}
+                    onTouchStart={() => setIsWordHidden(true)}
+                  >
+                    👁️ NASCONDI
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="action-buttons-container">
+          <button
+            className="seen-button"
+            onClick={() => handlePlayerSeen(currentPlayerIndex)}
+            disabled={isTransitioning}
+          >
+            HO VISTO
+          </button>
+          <button
+            className="new-game-button"
+            onClick={() => navigate('/stronzo/setup')}
+          >
+            NUOVA PARTITA
+          </button>
+        </div>
+
+        <div className="players-list">
+          <p className="players-list-title">GIOCATORI</p>
+          <div className="players-grid">
+            {playerNames.map((name, index) => (
+              <div
+                key={index}
+                className={`player-chip ${index === currentPlayerIndex ? 'active' : ''} ${revealedPlayers.includes(index) ? 'seen' : ''}`}
+              >
+                {name}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+

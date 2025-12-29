@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Audiowide&family=Gruppo&display=swap');
+
+/* Cyberpunk Street Underground */
+.home-screen {
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 255, 240, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 0, 110, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0a0a 0%, #000000 50%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanlines effect */
+.home-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 240, 0.03) 2px,
+    rgba(0, 255, 240, 0.03) 4px
+  );
+  pointer-events: none;
+  animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+.home-content {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  z-index: 1;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-title {
+  font-size: clamp(52px, 12vw, 88px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #00FFF0 0%, #FFFFFF 50%, #FF006E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  letter-spacing: 8px;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 40px rgba(0, 255, 240, 0.8));
+  animation: titleGlow 4s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 40px rgba(0, 255, 240, 0.8));
+  }
+  50% { 
+    filter: drop-shadow(0 0 60px rgba(0, 255, 240, 1));
+  }
+}
+
+.home-subtitle {
+  font-size: 12px;
+  color: #666666;
+  margin-bottom: 70px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+
+.games-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: slideUp 1s ease-out 0.3s both;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.game-card {
+  background: 
+    linear-gradient(135deg, rgba(0, 255, 240, 0.03) 0%, rgba(0, 0, 0, 0.5) 100%),
+    rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #00FFF0 0%, #FF006E 100%) 1;
+  padding: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 240, 0.2),
+    inset 0 0 60px rgba(0, 0, 0, 0.5);
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 240, 0.15), transparent);
+  transition: left 0.6s;
+}
+
+.game-card:hover::before {
+  left: 200%;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 60px rgba(0, 255, 240, 0.4),
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 80px rgba(0, 0, 0, 0.5);
+  border-width: 3px;
+}
+
+.game-card:active {
+  transform: translateY(-2px);
+}
+
+.game-name {
+  font-size: clamp(32px, 7vw, 52px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #00FFF0 0%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 4px;
+  font-family: 'Orbitron', sans-serif;
+  filter: drop-shadow(0 0 30px rgba(0, 255, 240, 0.6));
+  transition: filter 0.3s ease;
+}
+
+.game-card:hover .game-name {
+  filter: drop-shadow(0 0 40px rgba(0, 255, 240, 0.9));
+}
+
+.game-description {
+  font-size: 13px;
+  color: #999999;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover .game-description {
+  color: #CCCCCC;
+}
+
+@media (max-width: 480px) {
+  .home-screen {
+    padding: 30px 15px;
+  }
+  
+  .game-card {
+    padding: 35px 25px;
+  }
+
+  .home-title {
+    letter-spacing: 5px;
+  }
+
+  .home-subtitle {
+    margin-bottom: 60px;
+    letter-spacing: 5px;
+  }
+}
