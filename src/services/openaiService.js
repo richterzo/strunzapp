@@ -413,7 +413,7 @@ IMPORTANTE:
   }
 
   /**
-   * Generate random words for party games (Stronzo, Intesa Vincente)
+   * Generate random words for party games (Stronzo, Merda Vincente)
    * @param {string} category - Category of words
    * @param {string} difficulty - Difficulty level (facile, medio, difficile)
    * @param {number} count - Number of words to generate

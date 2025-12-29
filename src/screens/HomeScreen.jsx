@@ -22,7 +22,7 @@ export default function HomeScreen() {
     },
     {
       id: 'intesa-vincente',
-      name: 'INTESA VINCENTE',
+      name: 'MERDA VINCENTE',
       description: 'Fai indovinare le parole al tuo compagno',
       route: '/intesa-vincente/setup',
       image: '/images/games/merda-vincente.png',

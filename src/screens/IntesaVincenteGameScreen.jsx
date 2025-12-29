@@ -95,10 +95,10 @@ export default function IntesaVincenteGameScreen() {
   const handleReady = () => {
     setShowCountdown(true)
     setCountdown(3)
-    
+
     // Start countdown
     countdownRef.current = setInterval(() => {
-      setCountdown(prev => {
+      setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownRef.current)
           setTimeout(() => {
@@ -175,33 +175,53 @@ export default function IntesaVincenteGameScreen() {
             <h3 className="instructions-title">📺 REGOLE DEL GIOCO</h3>
             <ul className="instructions-list">
               <li>
-                👤 <strong>{currentPair.player1}</strong> tiene il telefono e fa indovinare
+                👤 <strong>{currentPair.player1}</strong> tiene il telefono e fa
+                indovinare
               </li>
               <li>
-                🎯 <strong>{currentPair.player2}</strong> deve indovinare le parole
+                🎯 <strong>{currentPair.player2}</strong> deve indovinare le
+                parole
               </li>
               <li>
-                ⏱️ Avete <strong>{timePerRound} secondi</strong> per fare RECORD!
+                ⏱️ Avete <strong>{timePerRound} secondi</strong> per fare
+                RECORD!
               </li>
             </ul>
-            
+
             <div className="rules-allowed">
               <h4 className="rules-subtitle">✅ PUOI:</h4>
-              <p>• Usare <strong>sinonimi</strong> e <strong>perifrasi</strong></p>
-              <p>• Fare <strong>gesti</strong> e <strong>mimiche</strong></p>
-              <p>• Dare <strong>indizi</strong> e <strong>descrizioni</strong></p>
+              <p>
+                • Usare <strong>sinonimi</strong> e <strong>perifrasi</strong>
+              </p>
+              <p>
+                • Fare <strong>gesti</strong> e <strong>mimiche</strong>
+              </p>
+              <p>
+                • Dare <strong>indizi</strong> e <strong>descrizioni</strong>
+              </p>
             </div>
-            
+
             <div className="rules-forbidden">
               <h4 className="rules-subtitle">❌ NON PUOI:</h4>
-              <p>• Dire parole <strong>contenute</strong> nella parola</p>
-              <p>• Dire parole <strong>derivate</strong> o <strong>traduzioni</strong></p>
-              <p>• Fare <strong>assonanze</strong> o <strong>rime</strong></p>
+              <p>
+                • Dire parole <strong>contenute</strong> nella parola
+              </p>
+              <p>
+                • Dire parole <strong>derivate</strong> o{' '}
+                <strong>traduzioni</strong>
+              </p>
+              <p>
+                • Fare <strong>assonanze</strong> o <strong>rime</strong>
+              </p>
             </div>
 
             <div className="controls-info">
-              <p>Premi <strong>✓ CORRETTO</strong> se indovina</p>
-              <p>Premi <strong>→ PASSA</strong> per saltare</p>
+              <p>
+                Premi <strong>✓ CORRETTO</strong> se indovina
+              </p>
+              <p>
+                Premi <strong>→ PASSA</strong> per saltare
+              </p>
             </div>
           </div>
 
@@ -229,7 +249,7 @@ export default function IntesaVincenteGameScreen() {
         </div>
       )
     }
-    
+
     return (
       <div className="intesa-game-screen">
         <div className="intesa-game-content ready-screen">
@@ -238,9 +258,7 @@ export default function IntesaVincenteGameScreen() {
             {currentPair.player1}, tieni il telefono in modo che{' '}
             {currentPair.player2} non veda
           </p>
-          <p className="ready-instruction">
-            📺 Come nella trasmissione TV!
-          </p>
+          <p className="ready-instruction">📺 Come nella trasmissione TV!</p>
           <button className="big-action-button" onClick={handleReady}>
             INIZIA IL COUNTDOWN!
           </button>

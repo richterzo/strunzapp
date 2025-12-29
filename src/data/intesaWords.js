@@ -1,4 +1,4 @@
-// Database parole per Intesa Vincente
+// Database parole per Merda Vincente
 export const INTESA_WORDS = {
   Generale: {
     facile: [

@@ -74,14 +74,14 @@ export default function IntesaVincenteSetupScreen() {
           ← INDIETRO
         </button>
 
-          <h1 className="intesa-setup-title">INTESA VINCENTE</h1>
+          <h1 className="intesa-setup-title">MERDA VINCENTE</h1>
           <p className="intesa-subtitle">
             📺 Il gioco della trasmissione italiana!
           </p>
-          <div className="tv-show-info">
-            <p>🎯 Fai indovinare più parole possibili al tuo compagno!</p>
-            <p>⏱️ Hai tempo limitato - vai a RECORD!</p>
-          </div>
+        <div className="tv-show-info">
+          <p>🎯 Fai indovinare più parole possibili al tuo compagno!</p>
+          <p>⏱️ Hai tempo limitato - vai a RECORD!</p>
+        </div>
 
         {/* Number of Pairs */}
         <div className="setup-section">
