@@ -19,8 +19,8 @@ export default function StronzoGameScreen() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [usedWords, setUsedWords] = useState([])
   const [isWordHidden, setIsWordHidden] = useState(false)
-  const [discussionTime, setDiscussionTime] = useState(180) // 3 minuti default
-  const [timeRemaining, setTimeRemaining] = useState(180)
+  const [discussionTime, setDiscussionTime] = useState(120) // 2 minuti
+  const [timeRemaining, setTimeRemaining] = useState(120)
 
   useEffect(() => {
     if (!location.state) {
@@ -126,12 +126,12 @@ export default function StronzoGameScreen() {
     setGamePhase('discussion')
     setTimeRemaining(discussionTime)
     setIsTransitioning(false)
-    
+
     // Vibrazione per inizio discussione
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100, 50, 100])
     }
-    
+
     console.log(`🎯 Stronzo: Inizio discussione - ${discussionTime}s`)
   }
 
@@ -245,7 +245,11 @@ export default function StronzoGameScreen() {
         <div className="game-content">
           <div className="game-header">
             <span className="round-badge">TURNO {roundNumber}</span>
-            <span className={`discussion-timer ${timeRemaining <= 30 ? 'urgent' : ''} ${timeRemaining === 0 ? 'expired' : ''}`}>
+            <span
+              className={`discussion-timer ${
+                timeRemaining <= 30 ? 'urgent' : ''
+              } ${timeRemaining === 0 ? 'expired' : ''}`}
+            >
               {timeRemaining > 0 ? formatTime(timeRemaining) : 'TEMPO SCADUTO'}
             </span>
           </div>
@@ -265,10 +269,7 @@ export default function StronzoGameScreen() {
               <p className="players-list-title">GIOCATORI IN GARA</p>
               <div className="players-discussion-grid">
                 {playerNames.map((name, index) => (
-                  <div
-                    key={index}
-                    className="player-discussion-chip"
-                  >
+                  <div key={index} className="player-discussion-chip">
                     <span className="player-number">{index + 1}</span>
                     <span className="player-name">{name}</span>
                   </div>
@@ -283,10 +284,7 @@ export default function StronzoGameScreen() {
             </div>
 
             <div className="action-buttons-container">
-              <button
-                className="end-round-button"
-                onClick={nextRound}
-              >
+              <button className="end-round-button" onClick={nextRound}>
                 {timeRemaining === 0 ? 'PROSSIMO ROUND' : 'TERMINA DISCUSSIONE'}
               </button>
               <button
