@@ -2,28 +2,24 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [
-    react({
-      jsxRuntime: 'automatic',
-    })
-  ],
+  plugins: [react()],
   server: {
     port: 3000,
     open: true,
     host: true, // Expose to network for mobile testing
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0'
-    }
   },
   build: {
     target: 'es2015',
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false, // Disable sourcemaps in production
-    minify: 'esbuild', // Use esbuild instead of terser - safer and faster
-    terserOptions: undefined, // Not needed with esbuild
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: {
