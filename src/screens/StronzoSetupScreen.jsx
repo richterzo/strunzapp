@@ -760,63 +760,69 @@ export default function StronzoSetupScreen() {
           <>
             <div className="setup-section">
               <h3 className="section-title">NUMERO GIOCATORI</h3>
-          <div className="num-players-container">
-            <button className="num-button" onClick={() => updateNumPlayers(-1)}>
-              −
-            </button>
-            <input
-              type="number"
-              className="num-input"
-              value={numPlayers}
-              onChange={(e) => {
-                const val = parseInt(e.target.value) || 3
-                setNumPlayers(Math.max(3, Math.min(12, val)))
-                const newNames = Array(val)
-                  .fill('')
-                  .map((_, i) => playerNames[i] || `Giocatore ${i + 1}`)
-                setPlayerNames(newNames)
-              }}
-              min="3"
-              max="12"
-            />
-            <button className="num-button" onClick={() => updateNumPlayers(1)}>
-              +
-            </button>
-          </div>
-        </div>
+              <div className="num-players-container">
+                <button
+                  className="num-button"
+                  onClick={() => updateNumPlayers(-1)}
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  className="num-input"
+                  value={numPlayers}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value) || 3
+                    setNumPlayers(Math.max(3, Math.min(12, val)))
+                    const newNames = Array(val)
+                      .fill('')
+                      .map((_, i) => playerNames[i] || `Giocatore ${i + 1}`)
+                    setPlayerNames(newNames)
+                  }}
+                  min="3"
+                  max="12"
+                />
+                <button
+                  className="num-button"
+                  onClick={() => updateNumPlayers(1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
-        <div className="setup-section">
-          <h3 className="section-title">NOMI GIOCATORI</h3>
-          <div className="names-container">
-            {playerNames.slice(0, numPlayers).map((name, index) => (
-              <input
-                key={index}
-                type="text"
-                className="name-input"
-                placeholder={`Giocatore ${index + 1}`}
-                value={name}
-                onChange={(e) => updatePlayerName(index, e.target.value)}
-              />
-            ))}
-          </div>
-        </div>
+            <div className="setup-section">
+              <h3 className="section-title">NOMI GIOCATORI</h3>
+              <div className="names-container">
+                {playerNames.slice(0, numPlayers).map((name, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    className="name-input"
+                    placeholder={`Giocatore ${index + 1}`}
+                    value={name}
+                    onChange={(e) => updatePlayerName(index, e.target.value)}
+                  />
+                ))}
+              </div>
+            </div>
 
-        <div className="setup-section">
-          <h3 className="section-title">CATEGORIE</h3>
-          <div className="categories-container">
-            {Object.keys(CATEGORIES).map((key) => (
-              <button
-                key={key}
-                className={`category-button ${
-                  selectedCategories[key] ? 'active' : ''
-                }`}
-                onClick={() => toggleCategory(key)}
-              >
-                {CATEGORIES[key].name}
-              </button>
-            ))}
-          </div>
-        </div>
+            <div className="setup-section">
+              <h3 className="section-title">CATEGORIE</h3>
+              <div className="categories-container">
+                {Object.keys(CATEGORIES).map((key) => (
+                  <button
+                    key={key}
+                    className={`category-button ${
+                      selectedCategories[key] ? 'active' : ''
+                    }`}
+                    onClick={() => toggleCategory(key)}
+                  >
+                    {CATEGORIES[key].name}
+                  </button>
+                ))}
+              </div>
+            </div>
           </>
         )}
 
