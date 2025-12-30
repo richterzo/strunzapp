@@ -14,6 +14,7 @@ export default function IntesaVincenteSetupScreen() {
   const [categories, setCategories] = useState(['Generale'])
   const [passLimit, setPassLimit] = useState(3) // 3 or 'unlimited'
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(true)
 
   const CATEGORIES = [
     'Generale',
@@ -117,6 +118,16 @@ export default function IntesaVincenteSetupScreen() {
           </div>
         )}
 
+        <button
+          className="rules-toggle"
+          onClick={() => setSettingsOpen(!settingsOpen)}
+        >
+          <span className="rules-toggle-icon">{settingsOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">IMPOSTAZIONI</span>
+        </button>
+
+        {settingsOpen && (
+          <>
         {/* Number of Pairs */}
         <div className="setup-section">
           <h3 className="section-title">NUMERO DI COPPIE</h3>
@@ -265,6 +276,8 @@ export default function IntesaVincenteSetupScreen() {
             ))}
           </div>
         </div>
+          </>
+        )}
 
         <button className="start-button" onClick={handleStartGame}>
           INIZIA GIOCO

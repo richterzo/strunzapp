@@ -9,6 +9,7 @@ export default function StrunzateSetupScreen() {
   const [selectedCategories, setSelectedCategories] = useState(['personali'])
   const [error, setError] = useState('')
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(true)
 
   const categories = [
     { 
@@ -103,6 +104,16 @@ export default function StrunzateSetupScreen() {
           </div>
         )}
 
+        <button
+          className="rules-toggle"
+          onClick={() => setSettingsOpen(!settingsOpen)}
+        >
+          <span className="rules-toggle-icon">{settingsOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">IMPOSTAZIONI</span>
+        </button>
+
+        {settingsOpen && (
+          <>
         {/* Categories */}
         <div className="setup-section">
           <h3 className="section-title">CATEGORIE</h3>
@@ -123,6 +134,8 @@ export default function StrunzateSetupScreen() {
             ))}
           </div>
         </div>
+          </>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 

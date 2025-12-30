@@ -21,6 +21,7 @@ export default function DragonQuizSetupScreen() {
   const [comboEnabled, setComboEnabled] = useState(true)
   const [error, setError] = useState('')
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(true)
 
   const handleNumPlayersChange = (delta) => {
     const newNum = Math.max(1, Math.min(10, numPlayers + delta))
@@ -187,9 +188,19 @@ export default function DragonQuizSetupScreen() {
 
         {error && <div className="error-message">{error}</div>}
 
-        {/* Game Mode */}
-        <div className="setup-section">
-          <h3 className="section-title">MODALITÀ</h3>
+        <button
+          className="rules-toggle"
+          onClick={() => setSettingsOpen(!settingsOpen)}
+        >
+          <span className="rules-toggle-icon">{settingsOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">IMPOSTAZIONI</span>
+        </button>
+
+        {settingsOpen && (
+          <>
+            {/* Game Mode */}
+            <div className="setup-section">
+              <h3 className="section-title">MODALITÀ</h3>
           <div className="mode-buttons">
             <button
               className={`mode-button ${gameMode === 'single' ? 'active' : ''}`}
@@ -418,6 +429,9 @@ export default function DragonQuizSetupScreen() {
             </div>
           </div>
         </div>
+
+          </>
+        )}
 
         {/* Start Button */}
         <button className="start-button" onClick={handleStartGame}>
