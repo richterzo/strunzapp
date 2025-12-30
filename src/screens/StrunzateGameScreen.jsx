@@ -18,14 +18,14 @@ export default function StrunzateGameScreen() {
   const categoryNames = {
     personali: 'Personali',
     filosofiche: 'Filosofiche',
-    scottanti: 'Scottanti',
+    piccanti: 'Piccanti',
     scomode: 'Scomode'
   }
 
   const categoryIcons = {
     personali: '💭',
     filosofiche: '🤔',
-    scottanti: '🔥',
+    piccanti: '🔥',
     scomode: '😬'
   }
 
