@@ -71,8 +71,8 @@
 }
 
 .game-logo {
-  width: 120px;
-  height: 120px;
+  width: clamp(180px, 45vw, 280px);
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.4));
   animation: float 3s ease-in-out infinite;

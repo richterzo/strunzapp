@@ -656,6 +656,7 @@ export default function StronzoSetupScreen() {
   })
   const [playerNames, setPlayerNames] = useState(['', '', '', ''])
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(true)
 
   const toggleCategory = (category) => {
     setSelectedCategories((prev) => ({
@@ -747,8 +748,18 @@ export default function StronzoSetupScreen() {
           </div>
         )}
 
-        <div className="setup-section">
-          <h3 className="section-title">NUMERO GIOCATORI</h3>
+        <button
+          className="rules-toggle"
+          onClick={() => setSettingsOpen(!settingsOpen)}
+        >
+          <span className="rules-toggle-icon">{settingsOpen ? '▼' : '▶'}</span>
+          <span className="rules-toggle-text">IMPOSTAZIONI</span>
+        </button>
+
+        {settingsOpen && (
+          <>
+            <div className="setup-section">
+              <h3 className="section-title">NUMERO GIOCATORI</h3>
           <div className="num-players-container">
             <button className="num-button" onClick={() => updateNumPlayers(-1)}>
               −
@@ -806,6 +817,8 @@ export default function StronzoSetupScreen() {
             ))}
           </div>
         </div>
+          </>
+        )}
 
         <button className="start-button" onClick={startGame}>
           INIZIA
