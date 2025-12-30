@@ -684,8 +684,15 @@ Topic: SOLO sesso, fantasie sessuali, intimità fisica, dettagli relazioni
 - "Con chi in questa stanza avresti voluto fare sesso almeno una volta?"
 - "Qual è la fantasia sessuale che non hai mai confessato a nessuno?"
 - "Hai mai fatto sesso pensando a qualcun altro?"
-- "Qual è stato il posto più strano dove hai fatto sesso?"
-- "Hai mai tradito fisicamente? Come è stato dopo?"
+- "Qual è la cosa che ti eccita di più durante il sesso?"
+- "Hai mai avuto un threesome? Se no, con chi lo faresti?"
+- "Quale parte del corpo ti eccita di più in un partner?"
+- "Hai mai fatto sexting con qualcuno mentre eri impegnato?"
+- "Qual è il tuo kink o feticcio segreto?"
+- "Preferiresti sesso passionale veloce o lento e romantico?"
+- "Hai mai finto un orgasmo? Perché?"
+- "Con quale celebrità faresti sesso subito se potessi?"
+- "Qual è stata la tua prima esperienza sessuale? Com'è andata davvero?"
 
 ═══════════════════════════════════════════════════
 CATEGORIA: SCOMODE
@@ -718,9 +725,14 @@ FILOSOFICHE:
 
 PICCANTI:
 ✅ SOLO sesso esplicito
-✅ Fantasie sessuali concrete
-✅ Dettagli intimi di relazioni fisiche
+✅ Fantasie sessuali concrete e varie
+✅ Preferenze, kink, feticci
+✅ Esperienze intime specifiche
+✅ Situazioni ipotetiche sessuali
+✅ Prime volte, desideri nascosti
+❌ NO sempre "più strano/folle/intenso"
 ❌ NO romanticismo generico, NO filosofia
+❌ NO domande ripetitive tipo "posto più strano"
 
 SCOMODE:
 ✅ Verità imbarazzanti su se stessi
@@ -732,6 +744,15 @@ SEMPRE VIETATO:
 ❌ segreto, sogni, paure generiche, obiettivi
 ❌ "cosa pensi di", "come ti senti se", "secondo te"
 ❌ Domande risolvibili con sì/no
+
+PER PICCANTI - VARIETÀ OBBLIGATORIA:
+═══════════════════════════════════════════════════
+✅ Alterna tra: fantasie, preferenze, esperienze, kink, situazioni ipotetiche
+✅ Varia il focus: partner, luoghi, atti specifici, feticci, prime volte
+✅ Usa verbi diversi: preferire, desiderare, eccitare, provare, sperimentare
+❌ MAI sempre "posto più strano", "esperienza più folle", "cosa più intensa"
+❌ MAI ripetere lo stesso tipo di domanda
+❌ MAI essere generici o vaghi
 
 SEMPRE OBBLIGATORIO:
 ✅ Dettagli specifici, tempi precisi, persone concrete

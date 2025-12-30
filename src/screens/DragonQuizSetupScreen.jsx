@@ -201,235 +201,238 @@ export default function DragonQuizSetupScreen() {
             {/* Game Mode */}
             <div className="setup-section">
               <h3 className="section-title">MODALITÀ</h3>
-          <div className="mode-buttons">
-            <button
-              className={`mode-button ${gameMode === 'single' ? 'active' : ''}`}
-              onClick={() => setGameMode('single')}
-            >
-              <span className="mode-icon">👤</span>
-              <span>SINGOLO</span>
-            </button>
-            <button
-              className={`mode-button ${gameMode === 'teams' ? 'active' : ''}`}
-              onClick={() => setGameMode('teams')}
-            >
-              <span className="mode-icon">👥</span>
-              <span>SQUADRE</span>
-            </button>
-          </div>
-        </div>
+              <div className="mode-buttons">
+                <button
+                  className={`mode-button ${
+                    gameMode === 'single' ? 'active' : ''
+                  }`}
+                  onClick={() => setGameMode('single')}
+                >
+                  <span className="mode-icon">👤</span>
+                  <span>SINGOLO</span>
+                </button>
+                <button
+                  className={`mode-button ${
+                    gameMode === 'teams' ? 'active' : ''
+                  }`}
+                  onClick={() => setGameMode('teams')}
+                >
+                  <span className="mode-icon">👥</span>
+                  <span>SQUADRE</span>
+                </button>
+              </div>
+            </div>
 
-        {/* Number of Players/Teams */}
-        {gameMode === 'single' ? (
-          <div className="setup-section">
-            <h3 className="section-title">GIOCATORI</h3>
-            <div className="num-players-container">
-              <button
-                className="num-button"
-                onClick={() => handleNumPlayersChange(-1)}
-              >
-                −
-              </button>
-              <input
-                type="number"
-                className="num-input"
-                value={numPlayers}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 1
-                  setNumPlayers(Math.max(1, Math.min(10, val)))
-                  setPlayerNames(
-                    Array.from(
-                      { length: val },
-                      (_, i) => playerNames[i] || `Giocatore ${i + 1}`
-                    )
-                  )
-                }}
-                min="1"
-                max="10"
-              />
-              <button
-                className="num-button"
-                onClick={() => handleNumPlayersChange(1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="setup-section">
-            <h3 className="section-title">SQUADRE</h3>
-            <div className="num-players-container">
-              <button
-                className="num-button"
-                onClick={() => handleNumTeamsChange(-1)}
-              >
-                −
-              </button>
-              <input
-                type="number"
-                className="num-input"
-                value={numTeams}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 2
-                  setNumTeams(Math.max(2, Math.min(4, val)))
-                  setTeamNames(
-                    Array.from(
-                      { length: val },
-                      (_, i) => teamNames[i] || `Squadra ${i + 1}`
-                    )
-                  )
-                }}
-                min="2"
-                max="4"
-              />
-              <button
-                className="num-button"
-                onClick={() => handleNumTeamsChange(1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Names */}
-        {gameMode === 'single' ? (
-          <div className="setup-section">
-            <h3 className="section-title">NOMI GIOCATORI</h3>
-            <div className="names-container">
-              {playerNames.map((name, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  className="name-input"
-                  placeholder={`Giocatore ${index + 1}`}
-                  value={name}
-                  onChange={(e) =>
-                    handlePlayerNameChange(index, e.target.value)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="setup-section">
-            <h3 className="section-title">SQUADRE E GIOCATORI</h3>
-            <div className="teams-container">
-              {teams.map((team, teamIndex) => (
-                <div key={teamIndex} className="team-config">
+            {/* Number of Players/Teams */}
+            {gameMode === 'single' ? (
+              <div className="setup-section">
+                <h3 className="section-title">GIOCATORI</h3>
+                <div className="num-players-container">
+                  <button
+                    className="num-button"
+                    onClick={() => handleNumPlayersChange(-1)}
+                  >
+                    −
+                  </button>
                   <input
-                    type="text"
-                    className="team-name-input"
-                    placeholder={`Squadra ${teamIndex + 1}`}
-                    value={team.name}
-                    onChange={(e) =>
-                      handleTeamNameChangeNew(teamIndex, e.target.value)
-                    }
+                    type="number"
+                    className="num-input"
+                    value={numPlayers}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 1
+                      setNumPlayers(Math.max(1, Math.min(10, val)))
+                      setPlayerNames(
+                        Array.from(
+                          { length: val },
+                          (_, i) => playerNames[i] || `Giocatore ${i + 1}`
+                        )
+                      )
+                    }}
+                    min="1"
+                    max="10"
                   />
-                  <div className="team-players">
-                    {team.players.map((player, playerIndex) => (
-                      <div key={playerIndex} className="team-player-row">
-                        <input
-                          type="text"
-                          className="team-player-input"
-                          placeholder={`Giocatore ${playerIndex + 1}`}
-                          value={player}
-                          onChange={(e) =>
-                            handleTeamPlayerNameChange(
-                              teamIndex,
-                              playerIndex,
-                              e.target.value
-                            )
-                          }
-                        />
-                        {team.players.length > 1 && (
-                          <button
-                            className="remove-player-button"
-                            onClick={() =>
-                              removePlayerFromTeam(teamIndex, playerIndex)
-                            }
-                          >
-                            ×
-                          </button>
-                        )}
+                  <button
+                    className="num-button"
+                    onClick={() => handleNumPlayersChange(1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="setup-section">
+                <h3 className="section-title">SQUADRE</h3>
+                <div className="num-players-container">
+                  <button
+                    className="num-button"
+                    onClick={() => handleNumTeamsChange(-1)}
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    className="num-input"
+                    value={numTeams}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 2
+                      setNumTeams(Math.max(2, Math.min(4, val)))
+                      setTeamNames(
+                        Array.from(
+                          { length: val },
+                          (_, i) => teamNames[i] || `Squadra ${i + 1}`
+                        )
+                      )
+                    }}
+                    min="2"
+                    max="4"
+                  />
+                  <button
+                    className="num-button"
+                    onClick={() => handleNumTeamsChange(1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Names */}
+            {gameMode === 'single' ? (
+              <div className="setup-section">
+                <h3 className="section-title">NOMI GIOCATORI</h3>
+                <div className="names-container">
+                  {playerNames.map((name, index) => (
+                    <input
+                      key={index}
+                      type="text"
+                      className="name-input"
+                      placeholder={`Giocatore ${index + 1}`}
+                      value={name}
+                      onChange={(e) =>
+                        handlePlayerNameChange(index, e.target.value)
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="setup-section">
+                <h3 className="section-title">SQUADRE E GIOCATORI</h3>
+                <div className="teams-container">
+                  {teams.map((team, teamIndex) => (
+                    <div key={teamIndex} className="team-config">
+                      <input
+                        type="text"
+                        className="team-name-input"
+                        placeholder={`Squadra ${teamIndex + 1}`}
+                        value={team.name}
+                        onChange={(e) =>
+                          handleTeamNameChangeNew(teamIndex, e.target.value)
+                        }
+                      />
+                      <div className="team-players">
+                        {team.players.map((player, playerIndex) => (
+                          <div key={playerIndex} className="team-player-row">
+                            <input
+                              type="text"
+                              className="team-player-input"
+                              placeholder={`Giocatore ${playerIndex + 1}`}
+                              value={player}
+                              onChange={(e) =>
+                                handleTeamPlayerNameChange(
+                                  teamIndex,
+                                  playerIndex,
+                                  e.target.value
+                                )
+                              }
+                            />
+                            {team.players.length > 1 && (
+                              <button
+                                className="remove-player-button"
+                                onClick={() =>
+                                  removePlayerFromTeam(teamIndex, playerIndex)
+                                }
+                              >
+                                ×
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <button
+                          className="add-player-button"
+                          onClick={() => addPlayerToTeam(teamIndex)}
+                        >
+                          + Aggiungi Giocatore
+                        </button>
                       </div>
-                    ))}
-                    <button
-                      className="add-player-button"
-                      onClick={() => addPlayerToTeam(teamIndex)}
-                    >
-                      + Aggiungi Giocatore
-                    </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Categories */}
+            <div className="setup-section">
+              <h3 className="section-title">CATEGORIE (opzionale)</h3>
+              <p className="section-subtitle">
+                Lascia vuoto per tutte le categorie
+              </p>
+              <div className="categories-container">
+                {QUIZ_CONFIG.CATEGORIES.map((category) => (
+                  <button
+                    key={category}
+                    className={`category-button ${
+                      selectedCategories.includes(category) ? 'active' : ''
+                    }`}
+                    onClick={() => toggleCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Game Options */}
+            <div className="setup-section">
+              <h3 className="section-title">⚙️ OPZIONI DI GIOCO</h3>
+              <div className="game-options-grid">
+                <div className="option-card">
+                  <div className="option-header">
+                    <span className="option-icon">⏱️</span>
+                    <div className="option-info">
+                      <h4 className="option-name">TIMER</h4>
+                      <p className="option-description">
+                        30 secondi per rispondere
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    className={`toggle-button ${timerEnabled ? 'active' : ''}`}
+                    onClick={() => setTimerEnabled(!timerEnabled)}
+                  >
+                    {timerEnabled ? 'ON' : 'OFF'}
+                  </button>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* Categories */}
-        <div className="setup-section">
-          <h3 className="section-title">CATEGORIE (opzionale)</h3>
-          <p className="section-subtitle">
-            Lascia vuoto per tutte le categorie
-          </p>
-          <div className="categories-container">
-            {QUIZ_CONFIG.CATEGORIES.map((category) => (
-              <button
-                key={category}
-                className={`category-button ${
-                  selectedCategories.includes(category) ? 'active' : ''
-                }`}
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Game Options */}
-        <div className="setup-section">
-          <h3 className="section-title">⚙️ OPZIONI DI GIOCO</h3>
-          <div className="game-options-grid">
-            <div className="option-card">
-              <div className="option-header">
-                <span className="option-icon">⏱️</span>
-                <div className="option-info">
-                  <h4 className="option-name">TIMER</h4>
-                  <p className="option-description">
-                    30 secondi per rispondere
-                  </p>
+                <div className="option-card">
+                  <div className="option-header">
+                    <span className="option-icon">🔥</span>
+                    <div className="option-info">
+                      <h4 className="option-name">COMBO</h4>
+                      <p className="option-description">
+                        Moltiplicatore per risposte consecutive
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    className={`toggle-button ${comboEnabled ? 'active' : ''}`}
+                    onClick={() => setComboEnabled(!comboEnabled)}
+                  >
+                    {comboEnabled ? 'ON' : 'OFF'}
+                  </button>
                 </div>
               </div>
-              <button
-                className={`toggle-button ${timerEnabled ? 'active' : ''}`}
-                onClick={() => setTimerEnabled(!timerEnabled)}
-              >
-                {timerEnabled ? 'ON' : 'OFF'}
-              </button>
             </div>
-
-            <div className="option-card">
-              <div className="option-header">
-                <span className="option-icon">🔥</span>
-                <div className="option-info">
-                  <h4 className="option-name">COMBO</h4>
-                  <p className="option-description">
-                    Moltiplicatore per risposte consecutive
-                  </p>
-                </div>
-              </div>
-              <button
-                className={`toggle-button ${comboEnabled ? 'active' : ''}`}
-                onClick={() => setComboEnabled(!comboEnabled)}
-              >
-                {comboEnabled ? 'ON' : 'OFF'}
-              </button>
-            </div>
-          </div>
-        </div>
-
           </>
         )}
 
