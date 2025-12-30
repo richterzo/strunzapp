@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getRandomWords, getRandomWordsWithAI } from '../data/intesaWords'
-import openaiService from '../services'
+import openaiService from '../services/openaiService'
 import { getUsedWords, saveWord } from '../utils/wordsMemory'
 import './IntesaVincenteGameScreen.css'
 

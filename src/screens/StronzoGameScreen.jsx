@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import openaiService from '../services'
+import openaiService from '../services/openaiService'
 import { getUsedWords, saveWord } from '../utils/wordsMemory'
 import './StronzoGameScreen.css'
 
@@ -21,7 +21,6 @@ export default function StronzoGameScreen() {
   const [isWordHidden, setIsWordHidden] = useState(false)
   const [discussionTime, setDiscussionTime] = useState(120) // 2 minuti
   const [timeRemaining, setTimeRemaining] = useState(120)
-  const [startingPlayer, setStartingPlayer] = useState(null)
 
   useEffect(() => {
     if (!location.state) {
@@ -124,10 +123,6 @@ export default function StronzoGameScreen() {
   }
 
   const startDiscussion = () => {
-    // Seleziona casualmente chi inizia
-    const randomPlayer = Math.floor(Math.random() * numPlayers)
-    setStartingPlayer(randomPlayer)
-    
     setGamePhase('discussion')
     setTimeRemaining(discussionTime)
     setIsTransitioning(false)
@@ -265,28 +260,13 @@ export default function StronzoGameScreen() {
               <p className="discussion-subtitle">Trovate l'impostore!</p>
             </div>
 
-            {startingPlayer !== null && (
-              <div className="starting-player-announcement">
-                <span className="starting-icon">🎤</span>
-                <p className="starting-text">
-                  Inizia <strong>{playerNames[startingPlayer]}</strong>
-                </p>
-              </div>
-            )}
-
             <div className="players-discussion-list">
               <p className="players-list-title">GIOCATORI IN GARA</p>
               <div className="players-discussion-grid">
                 {playerNames.map((name, index) => (
-                  <div 
-                    key={index} 
-                    className={`player-discussion-chip ${index === startingPlayer ? 'starting' : ''}`}
-                  >
+                  <div key={index} className="player-discussion-chip">
                     <span className="player-number">{index + 1}</span>
                     <span className="player-name">{name}</span>
-                    {index === startingPlayer && (
-                      <span className="starting-badge">INIZIA</span>
-                    )}
                   </div>
                 ))}
               </div>

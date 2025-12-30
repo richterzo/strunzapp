@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG, GAME_MODES } from '../config/api'
-import openaiService from '../services'
+import openaiService from '../services/openaiService'
 import './DragonQuizSetupScreen.css'
 import './shared-setup.css'
 
