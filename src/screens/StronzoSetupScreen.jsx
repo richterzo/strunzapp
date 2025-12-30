@@ -649,6 +649,7 @@ const CATEGORIES = {
 export default function StronzoSetupScreen() {
   const navigate = useNavigate()
   const [numPlayers, setNumPlayers] = useState(4)
+  const [numStronzi, setNumStronzi] = useState(1)
   const [selectedCategories, setSelectedCategories] = useState({
     cibi: true,
     oggetti: true,
@@ -672,6 +673,15 @@ export default function StronzoSetupScreen() {
       .fill('')
       .map((_, i) => playerNames[i] || `Giocatore ${i + 1}`)
     setPlayerNames(newNames)
+    // Aggiorna numStronzi se necessario (max = numPlayers - 1)
+    if (numStronzi >= newNum) {
+      setNumStronzi(Math.max(1, newNum - 1))
+    }
+  }
+
+  const updateNumStronzi = (delta) => {
+    const newNum = Math.max(1, Math.min(numPlayers - 1, numStronzi + delta))
+    setNumStronzi(newNum)
   }
 
   const updatePlayerName = (index, name) => {
@@ -695,15 +705,15 @@ export default function StronzoSetupScreen() {
       return
     }
 
-    // Calcola numero di stronzi (circa 1 ogni 4 giocatori, minimo 1)
-    const numStronzi = Math.max(1, Math.floor(numPlayers / 4))
+    // Valida numero di stronzi
+    const validNumStronzi = Math.min(numStronzi, numPlayers - 1)
 
     navigate('/stronzo/game', {
       state: {
         numPlayers,
         playerNames: playerNames.slice(0, numPlayers),
         categories: activeCategories,
-        numStronzi,
+        numStronzi: validNumStronzi,
         allWords: activeCategories.reduce((acc, cat) => {
           return [...acc, ...CATEGORIES[cat].words]
         }, []),
@@ -792,6 +802,41 @@ export default function StronzoSetupScreen() {
             </div>
 
             <div className="setup-section">
+              <h3 className="section-title">NUMERO IMPOSTORI</h3>
+              <p className="section-description">
+                🤫 Quanti giocatori NON vedranno la parola?
+              </p>
+              <div className="num-players-container">
+                <button
+                  className="num-button"
+                  onClick={() => updateNumStronzi(-1)}
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  className="num-input"
+                  value={numStronzi}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value) || 1
+                    setNumStronzi(Math.max(1, Math.min(numPlayers - 1, val)))
+                  }}
+                  min="1"
+                  max={numPlayers - 1}
+                />
+                <button
+                  className="num-button"
+                  onClick={() => updateNumStronzi(1)}
+                >
+                  +
+                </button>
+              </div>
+              <p className="section-hint">
+                Max: {numPlayers - 1} (almeno 1 giocatore deve vedere la parola)
+              </p>
+            </div>
+
+            <div className="setup-section">
               <h3 className="section-title">NOMI GIOCATORI</h3>
               <div className="names-container">
                 {playerNames.slice(0, numPlayers).map((name, index) => (
@@ -801,6 +846,12 @@ export default function StronzoSetupScreen() {
                     className="name-input"
                     placeholder={`Giocatore ${index + 1}`}
                     value={name}
+                    onFocus={(e) => {
+                      // Auto-clear se è il placeholder default
+                      if (e.target.value === `Giocatore ${index + 1}`) {
+                        e.target.select()
+                      }
+                    }}
                     onChange={(e) => updatePlayerName(index, e.target.value)}
                   />
                 ))}
