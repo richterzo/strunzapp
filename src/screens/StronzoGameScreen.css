@@ -627,44 +627,6 @@
   letter-spacing: 2px;
 }
 
-.discussion-word-reminder {
-  background: 
-    linear-gradient(135deg, rgba(255, 107, 0, 0.03) 0%, rgba(0, 0, 0, 0.5) 100%),
-    rgba(10, 10, 10, 0.8);
-  backdrop-filter: blur(20px);
-  border: 2px solid;
-  border-image: linear-gradient(135deg, #FF6B00 0%, #FF006E 100%) 1;
-  padding: 30px;
-  margin-bottom: 40px;
-  text-align: center;
-  box-shadow: 
-    0 0 40px rgba(255, 107, 0, 0.2),
-    inset 0 0 60px rgba(0, 0, 0, 0.5);
-}
-
-.reminder-label {
-  font-size: 10px;
-  color: #666666;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin-bottom: 15px;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
-}
-
-.reminder-word {
-  font-size: clamp(32px, 8vw, 56px);
-  font-weight: 900;
-  background: linear-gradient(135deg, #FF6B00 0%, #FFFFFF 50%, #FF006E 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 4px;
-  font-family: 'Orbitron', sans-serif;
-  text-transform: uppercase;
-  filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.6));
-}
-
 .players-discussion-list {
   margin-bottom: 40px;
 }
@@ -925,15 +887,6 @@
 
   .discussion-subtitle {
     font-size: 12px;
-  }
-
-  .discussion-word-reminder {
-    padding: 20px;
-    margin-bottom: 25px;
-  }
-
-  .reminder-word {
-    font-size: clamp(24px, 6vw, 40px);
   }
 
   .players-discussion-grid {
