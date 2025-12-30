@@ -24,13 +24,13 @@
         "url": "https://github.com/richterzo/strunzapp.git"
     },
     "dependencies": {
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "react-router-dom": "^6.30.2"
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-router-dom": "^7.1.1"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.7.0",
         "terser": "^5.44.1",
-        "vite": "^5.4.21"
+        "vite": "^6.0.7"
     }
 }
