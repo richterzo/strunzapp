@@ -118,6 +118,50 @@
     inset 0 0 20px rgba(255, 0, 110, 0.05);
 }
 
+.discussion-timer {
+  background: rgba(255, 107, 0, 0.05);
+  border: 2px solid #FF6B00;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FF6B00;
+  letter-spacing: 2px;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 
+    0 0 20px rgba(255, 107, 0, 0.3),
+    inset 0 0 20px rgba(255, 107, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.discussion-timer.urgent {
+  border-color: #FF006E;
+  color: #FF006E;
+  animation: timerPulse 1s ease-in-out infinite;
+  box-shadow: 
+    0 0 30px rgba(255, 0, 110, 0.5),
+    inset 0 0 30px rgba(255, 0, 110, 0.1);
+}
+
+.discussion-timer.expired {
+  border-color: #666666;
+  color: #666666;
+  animation: none;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+@keyframes timerPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 0, 110, 0.7);
+  }
+}
+
 .current-player-section {
   margin-bottom: 50px;
 }
@@ -544,6 +588,205 @@
   transform: translateY(-2px);
 }
 
+/* Discussion Phase Styles */
+.discussion-section {
+  width: 100%;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.discussion-title-container {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.discussion-title {
+  font-size: clamp(32px, 7vw, 48px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FF6B00 0%, #FF006E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.6));
+  animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.discussion-subtitle {
+  font-size: 14px;
+  color: #999999;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.discussion-word-reminder {
+  background: 
+    linear-gradient(135deg, rgba(255, 107, 0, 0.03) 0%, rgba(0, 0, 0, 0.5) 100%),
+    rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #FF6B00 0%, #FF006E 100%) 1;
+  padding: 30px;
+  margin-bottom: 40px;
+  text-align: center;
+  box-shadow: 
+    0 0 40px rgba(255, 107, 0, 0.2),
+    inset 0 0 60px rgba(0, 0, 0, 0.5);
+}
+
+.reminder-label {
+  font-size: 10px;
+  color: #666666;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+
+.reminder-word {
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FF6B00 0%, #FFFFFF 50%, #FF006E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 4px;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.6));
+}
+
+.players-discussion-list {
+  margin-bottom: 40px;
+}
+
+.players-discussion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.player-discussion-chip {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid #1a1a1a;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.player-discussion-chip:hover {
+  border-color: #FF6B00;
+  background: rgba(255, 107, 0, 0.05);
+  box-shadow: 
+    0 0 30px rgba(255, 107, 0, 0.3),
+    inset 0 0 30px rgba(255, 107, 0, 0.05);
+}
+
+.player-number {
+  background: rgba(255, 107, 0, 0.1);
+  border: 1px solid #FF6B00;
+  color: #FF6B00;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.player-name {
+  font-size: 14px;
+  color: #FFFFFF;
+  font-weight: 600;
+  letter-spacing: 1px;
+  flex: 1;
+}
+
+.discussion-instructions {
+  background: rgba(10, 10, 10, 0.4);
+  border: 1px solid #1a1a1a;
+  border-radius: 4px;
+  padding: 25px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.discussion-instructions p {
+  font-size: 13px;
+  color: #999999;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.end-round-button {
+  width: 100%;
+  max-width: 340px;
+  background: rgba(255, 107, 0, 0.08);
+  padding: 22px;
+  border: 2px solid #FF6B00;
+  color: #FF6B00;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  margin: 0 auto;
+  font-family: 'Rajdhani', sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 40px rgba(255, 107, 0, 0.3),
+    inset 0 0 40px rgba(255, 107, 0, 0.05);
+}
+
+.end-round-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 107, 0, 0.2);
+  transition: left 0.4s;
+}
+
+.end-round-button:hover::before {
+  left: 100%;
+}
+
+.end-round-button:hover {
+  background: rgba(255, 107, 0, 0.15);
+  box-shadow: 
+    0 0 50px rgba(255, 107, 0, 0.5),
+    inset 0 0 50px rgba(255, 107, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.end-round-button:active {
+  transform: translateY(0);
+}
+
 .players-list {
   margin-top: 40px;
 }
@@ -656,10 +899,78 @@
   }
 
   .round-badge,
-  .progress-indicator {
+  .progress-indicator,
+  .discussion-timer {
     padding: 8px 16px;
     font-size: 10px;
     min-height: 36px;
+  }
+
+  .discussion-timer {
+    font-size: 16px;
+  }
+
+  .discussion-timer.urgent {
+    font-size: 16px;
+  }
+
+  .discussion-timer.expired {
+    font-size: 10px;
+  }
+
+  .discussion-title {
+    font-size: clamp(24px, 6vw, 36px);
+    margin-bottom: 10px;
+  }
+
+  .discussion-subtitle {
+    font-size: 12px;
+  }
+
+  .discussion-word-reminder {
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+
+  .reminder-word {
+    font-size: clamp(24px, 6vw, 40px);
+  }
+
+  .players-discussion-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .player-discussion-chip {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .player-number {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .player-name {
+    font-size: 12px;
+  }
+
+  .discussion-instructions {
+    padding: 18px;
+    margin-bottom: 25px;
+    gap: 10px;
+  }
+
+  .discussion-instructions p {
+    font-size: 12px;
+  }
+
+  .end-round-button {
+    font-size: 15px;
+    padding: 18px;
+    max-width: 280px;
+    min-height: 54px;
   }
 
   .current-player-section {

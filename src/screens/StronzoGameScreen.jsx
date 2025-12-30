@@ -13,12 +13,14 @@ export default function StronzoGameScreen() {
   const [stronzi, setStronzi] = useState([])
   const [currentWord, setCurrentWord] = useState('')
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
-  const [gamePhase, setGamePhase] = useState('setup') // setup, playing, reveal
+  const [gamePhase, setGamePhase] = useState('setup') // setup, playing, discussion
   const [revealedPlayers, setRevealedPlayers] = useState([])
   const [roundNumber, setRoundNumber] = useState(1)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [usedWords, setUsedWords] = useState([])
   const [isWordHidden, setIsWordHidden] = useState(false)
+  const [discussionTime, setDiscussionTime] = useState(180) // 3 minuti default
+  const [timeRemaining, setTimeRemaining] = useState(180)
 
   useEffect(() => {
     if (!location.state) {
@@ -98,10 +100,10 @@ export default function StronzoGameScreen() {
     const newRevealed = [...revealedPlayers, playerIndex]
     setRevealedPlayers(newRevealed)
 
-    // Se tutti hanno visto, passa direttamente al prossimo turno
+    // Se tutti hanno visto, inizia la fase di discussione
     if (newRevealed.length >= numPlayers) {
       setTimeout(() => {
-        nextRound()
+        startDiscussion()
       }, 800)
     } else {
       // Passa al prossimo giocatore che non ha ancora visto
@@ -119,6 +121,37 @@ export default function StronzoGameScreen() {
       }, 500)
     }
   }
+
+  const startDiscussion = () => {
+    setGamePhase('discussion')
+    setTimeRemaining(discussionTime)
+    setIsTransitioning(false)
+    
+    // Vibrazione per inizio discussione
+    if (navigator.vibrate) {
+      navigator.vibrate([100, 50, 100, 50, 100])
+    }
+    
+    console.log(`🎯 Stronzo: Inizio discussione - ${discussionTime}s`)
+  }
+
+  // Timer countdown per la discussione
+  useEffect(() => {
+    if (gamePhase !== 'discussion' || timeRemaining <= 0) return
+
+    const timer = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          // Timer finito, può passare al prossimo round manualmente
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [gamePhase, timeRemaining])
 
   const nextRound = async () => {
     let newWord = null
@@ -188,6 +221,12 @@ export default function StronzoGameScreen() {
     return stronzi.includes(playerIndex)
   }
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   if (gamePhase === 'setup') {
     return (
       <div className="game-screen">
@@ -199,6 +238,71 @@ export default function StronzoGameScreen() {
     )
   }
 
+  // Discussion Phase
+  if (gamePhase === 'discussion') {
+    return (
+      <div className="game-screen">
+        <div className="game-content">
+          <div className="game-header">
+            <span className="round-badge">TURNO {roundNumber}</span>
+            <span className={`discussion-timer ${timeRemaining <= 30 ? 'urgent' : ''} ${timeRemaining === 0 ? 'expired' : ''}`}>
+              {timeRemaining > 0 ? formatTime(timeRemaining) : 'TEMPO SCADUTO'}
+            </span>
+          </div>
+
+          <div className="discussion-section">
+            <div className="discussion-title-container">
+              <h2 className="discussion-title">🎯 DISCUSSIONE</h2>
+              <p className="discussion-subtitle">Trovate l'impostore!</p>
+            </div>
+
+            <div className="discussion-word-reminder">
+              <p className="reminder-label">PAROLA SEGRETA:</p>
+              <h3 className="reminder-word">{currentWord}</h3>
+            </div>
+
+            <div className="players-discussion-list">
+              <p className="players-list-title">GIOCATORI IN GARA</p>
+              <div className="players-discussion-grid">
+                {playerNames.map((name, index) => (
+                  <div
+                    key={index}
+                    className="player-discussion-chip"
+                  >
+                    <span className="player-number">{index + 1}</span>
+                    <span className="player-name">{name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="discussion-instructions">
+              <p>💬 Discutete tra di voi</p>
+              <p>🕵️ Trovate chi non sa la parola</p>
+              <p>🎭 L'impostore deve fingersi esperto</p>
+            </div>
+
+            <div className="action-buttons-container">
+              <button
+                className="end-round-button"
+                onClick={nextRound}
+              >
+                {timeRemaining === 0 ? 'PROSSIMO ROUND' : 'TERMINA DISCUSSIONE'}
+              </button>
+              <button
+                className="new-game-button"
+                onClick={() => navigate('/stronzo/setup')}
+              >
+                NUOVA PARTITA
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Playing Phase (word reveal)
   return (
     <div className="game-screen">
       <div className="game-content">
