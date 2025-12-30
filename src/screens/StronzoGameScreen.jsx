@@ -260,11 +260,6 @@ export default function StronzoGameScreen() {
               <p className="discussion-subtitle">Trovate l'impostore!</p>
             </div>
 
-            <div className="discussion-word-reminder">
-              <p className="reminder-label">PAROLA SEGRETA:</p>
-              <h3 className="reminder-word">{currentWord}</h3>
-            </div>
-
             <div className="players-discussion-list">
               <p className="players-list-title">GIOCATORI IN GARA</p>
               <div className="players-discussion-grid">
