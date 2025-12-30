@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { QUIZ_CONFIG } from '../config/api'
-import openaiService from '../services/openaiService'
+import openaiService from '../services'
 import {
   getUsedQuestions,
   saveQuestion,
