@@ -65,18 +65,19 @@ export default function DragonQuizGameScreen() {
     }
 
     // Load all questions for this round when:
-    // 1. We're at player 0 AND no questions loaded
-    // 2. OR at game start (round 1, no questions, not in final phase)
+    // 1. We're at player 0 AND no questions loaded AND not in final phase
+    // 2. This triggers for every round (1, 2, 3, ..., 10)
     const shouldLoadRound =
-      (currentPlayerIndex === 0 && roundQuestions.length === 0) ||
-      (currentQuestionNumber === 1 &&
-        roundQuestions.length === 0 &&
-        gamePhase !== 'final')
+      currentPlayerIndex === 0 &&
+      roundQuestions.length === 0 &&
+      gamePhase !== 'final' &&
+      currentQuestionNumber <= QUIZ_CONFIG.NUM_QUESTIONS
 
     if (shouldLoadRound) {
+      console.log(`🔄 Triggering loadRoundQuestions for Round ${currentQuestionNumber}`)
       loadRoundQuestions()
     }
-  }, [currentQuestionNumber, gamePhase])
+  }, [currentQuestionNumber, currentPlayerIndex, roundQuestions.length, gamePhase])
 
   // Load question for current player from pre-loaded questions
   useEffect(() => {
@@ -326,6 +327,8 @@ export default function DragonQuizGameScreen() {
         return
       }
 
+      console.log(`🔄 Passaggio al Round ${currentQuestionNumber + 1}`)
+
       // FLUSH COMPLETO prima del nuovo round
       setCurrentQuestion(null)
       setRoundQuestions([])
@@ -333,6 +336,7 @@ export default function DragonQuizGameScreen() {
       setShowResult(false)
       setLoadingProgress(0)
       setQuestionsGenerated(0)
+      setGamePhase('loading') // Important: set to loading BEFORE incrementing
 
       // Move to next question round (increase difficulty)
       setCurrentQuestionNumber((prev) => prev + 1)
