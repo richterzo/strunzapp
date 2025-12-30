@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import openaiService from '../services/openaiService'
+import openaiService from '../services'
 import { getUsedWords, saveWord } from '../utils/wordsMemory'
 import './StronzoGameScreen.css'
 

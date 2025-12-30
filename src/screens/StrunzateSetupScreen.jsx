@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import openaiService from '../services/openaiService'
+import openaiService from '../services'
 import './StrunzateSetupScreen.css'
 import './shared-setup.css'
 
