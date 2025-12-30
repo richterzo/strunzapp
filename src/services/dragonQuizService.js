@@ -192,29 +192,27 @@ ${difficultyLevel === 10 ? '🐉 DOMANDA DA DRAGONE! Deve essere la domanda più
 Se anche UNA SOLA risposta è NO → RICREA la domanda!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📋 ESEMPI DI FORMATO CORRETTO:
+📋 FORMATO OUTPUT RICHIESTO:
 
-ESEMPIO 1 - Livello 2/10:
 {
-  "question": "In che anno Cristoforo Colombo scoprì l'America?",
-  "options": ["1492", "1498", "1485", "1490", "1502"],
+  "question": "La tua domanda qui",
+  "options": ["Opzione A", "Opzione B", "Opzione C", "Opzione D", "Opzione E"],
   "correctAnswer": 0,
-  "difficultyLevel": 2,
-  "difficultyName": "Facile",
-  "category": "Storia",
-  "explanation": "Cristoforo Colombo sbarcò nelle Americhe il 12 ottobre 1492, credendo di aver raggiunto le Indie."
+  "difficultyLevel": ${difficultyLevel},
+  "difficultyName": "${difficultyName}",
+  "category": "${selectedCategory}",
+  "explanation": "Spiegazione dettagliata qui"
 }
 
-ESEMPIO 2 - Livello 5/10:
-{
-  "question": "Quale gas costituisce circa il 78% dell'atmosfera terrestre?",
-  "options": ["Azoto", "Ossigeno", "Anidride carbonica", "Argon", "Idrogeno"],
-  "correctAnswer": 0,
-  "difficultyLevel": 5,
-  "difficultyName": "Medio",
-  "category": "Scienza",
-  "explanation": "L'azoto (N₂) costituisce circa il 78% dell'atmosfera terrestre, seguito dall'ossigeno al 21%."
-}
+IMPORTANTE - CREATIVITÀ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ NON copiare esempi esistenti
+⚠️ NON usare domande comuni tipo "capitale", "anno scoperta America"
+⚠️ GENERA domande ORIGINALI e VARIE
+⚠️ Usa la categoria "${selectedCategory}" in modo CREATIVO
+⚠️ Pensa a dettagli SPECIFICI e INTERESSANTI
+⚠️ Evita domande troppo generiche o ovvie
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 ORA GENERA LA TUA DOMANDA CON QUESTI PARAMETRI ESATTI:
 - Categoria: "${selectedCategory}"
@@ -247,8 +245,12 @@ RISPONDI CON UN SINGOLO OGGETTO JSON (SOLO JSON, niente testo extra)`
     )
 
     try {
-      const content = await this.makeAPICall(systemPrompt, userPrompt, {
-        temperature: 0.7,
+      // Add randomness seed to ensure variety
+      const randomSeed = Math.random().toString(36).substring(7)
+      const enrichedUserPrompt = `${userPrompt}\n\n🎲 VARIAZIONE ID: ${randomSeed}\n\nGENERA UNA DOMANDA COMPLETAMENTE UNICA E ORIGINALE!`
+
+      const content = await this.makeAPICall(systemPrompt, enrichedUserPrompt, {
+        temperature: 0.95, // Increased for more creativity
         maxTokens: 600,
         responseFormat: { type: "json_object" }
       })

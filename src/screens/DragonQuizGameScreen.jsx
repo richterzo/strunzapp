@@ -74,10 +74,17 @@ export default function DragonQuizGameScreen() {
       currentQuestionNumber <= QUIZ_CONFIG.NUM_QUESTIONS
 
     if (shouldLoadRound) {
-      console.log(`🔄 Triggering loadRoundQuestions for Round ${currentQuestionNumber}`)
+      console.log(
+        `🔄 Triggering loadRoundQuestions for Round ${currentQuestionNumber}`
+      )
       loadRoundQuestions()
     }
-  }, [currentQuestionNumber, currentPlayerIndex, roundQuestions.length, gamePhase])
+  }, [
+    currentQuestionNumber,
+    currentPlayerIndex,
+    roundQuestions.length,
+    gamePhase,
+  ])
 
   // Load question for current player from pre-loaded questions
   useEffect(() => {
